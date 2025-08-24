@@ -1,0 +1,31 @@
+.section-heading {
+    h2 {
+        line-height: 29px;
+        font-weight: 600;
+    }
+    p {
+        line-height: 24px;
+    }
+}
+
+.fg-subtle {
+    color: $muted;
+}
+
+.footer-item:hover {
+    border-bottom: 1px solid $black !important;
+    color: $black;
+    font-weight: 500;
+}
+
+@include media-breakpoint-down(sm) {
+    .section-heading {
+        h2 {
+            line-height: 27px;
+            font-weight: 600;
+        }
+        p {
+            line-height: 24px;
+        }
+    }
+}

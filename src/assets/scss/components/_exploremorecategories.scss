@@ -1,0 +1,155 @@
+.explore-categories-section {
+    // background-color: $white;
+    // padding-top: 64px; // Use Bootstrap py-5 or this custom padding
+    // padding-bottom: 64px; // Use Bootstrap py-5 or this custom padding
+    .section-title {
+        color: $textBlack; // Your primary text color
+        // font-size: $h2-font-size; // Use your heading font size variables
+        margin-bottom: $spacer * 0.5;
+    }
+    .lead.text-muted {
+        // font-size: $mobile-p or a bit larger; // Use your paragraph font size variables
+        color: $muted !important; // Ensure your muted color is applied
+    }
+    .category-card {
+        position: relative;
+        border: none; // No default card border
+        border-radius: 15px; // Or a custom value for the rounded corners on image
+        overflow: hidden; // Crucial for the Image with layout="fill" and rounded corners
+        box-shadow: 0 5px 15px rgba($black, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        min-height: 400px; // Give cards a consistent minimum height, adjust as needed
+        &:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 25px rgba($black, 0.12);
+        }
+        .category-card-image-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            // The Image component with layout="fill" will fill this.
+            // The parent .category-card needs overflow:hidden for border-radius to apply to the image.
+        }
+        // .category-img is applied to the next/image component itself
+        // Styles here might be for fallback <img> or specific tweaks
+        // .category-img {
+        //   // next/image handles object-fit via prop
+        // }
+        .card-img-overlay {
+            // The overlay itself is transparent, allowing the image to show.
+            // It's used to position the label at the bottom.
+            // background: linear-gradient(to bottom, rgba($black,0) 60%, rgba($black,0.5) 100%); /* Optional: subtle gradient for label readability */
+        }
+        .category-label {
+            // Container for the label text, positioned at the bottom of the overlay
+            padding-bottom: $spacer * 1; // Spacing from the bottom edge of the card
+            .label-text {
+                background-color: rgba($black, 0.7); // Semi-transparent dark background for the label
+                // Or a solid color from your variables if preferred:
+                // background-color: $lightBlue;
+                color: $white;
+                padding: $spacer * 0.5 $spacer * 1.5;
+                border-radius: $border-radius-pill; // Pill shape, or regular $border-radius
+                font-size: 0.9rem; // Adjust as needed
+                font-weight: 600; // Boldish
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                // box-shadow: 0 2px 5px rgba($black, 0.2); // Optional subtle shadow for the label itself
+            }
+        }
+    }
+}
+
+// SCSS for the circular back button
+.back-button-circle {
+    // --- Step 1: Reset Bootstrap's default button styles ---
+    padding: 0;
+    background: transparent;
+    border: none;
+    // Remove Bootstrap's blue box-shadow on focus
+    &:focus,
+    &:active {
+        outline: none;
+        box-shadow: none !important;
+    }
+    // --- Step 2: Define the circular shape and size ---
+    // The icon is 40px, so we make the button slightly larger for padding.
+    // width: 52px;
+    // height: 52px;
+    border-radius: 50%; // This makes it a perfect circle.
+    // --- Step 3: Add a custom border and transitions ---
+    // Use a variable for the border color, e.g., your $light or $second-light
+    border: 2px solid $second-light;
+    // Add smooth transitions for all changes (background, transform, border-color)
+    transition: all 0.25s ease-in-out;
+    // --- Step 4: Center the icon perfectly ---
+    display: inline;
+    align-items: center;
+    justify-content: center;
+    // --- Step 5: Style the SVG icon inside ---
+    svg {
+        // The icon should inherit its color from the button's text color property
+        color: $black; // Use your $black variable
+        transition: color 0.25s ease-in-out, transform 0.25s ease-in-out;
+    }
+    // --- Step 6: Create the interactive :hover state ---
+    &:hover {
+        // Change background and border color for feedback
+        background-color: $light; // Your light gray background variable
+        border-color: $muted; // A slightly darker border on hover
+        // Give the button a subtle "lift" effect
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba($black, 0.1); // Add a soft shadow
+        // Change the icon's color on hover
+        svg {
+            color: $lightBlue; // Your primary blue color
+        }
+    }
+    // --- Step 7: Create the interactive :active (click) state ---
+    &:active {
+        // Make the button feel like it's being pressed down
+        transform: translateY(0px) scale(0.95);
+        box-shadow: 0 2px 6px rgba($black, 0.12); // A smaller shadow when pressed
+        // We can also make the icon "react" to the click
+        svg {
+            transform: scale(0.9);
+        }
+    }
+    // --- Step 8: Add an accessible focus ring for keyboard navigation ---
+    &:focus-visible {
+        // This style only appears when a user is tabbing with a keyboard
+        outline: 2px solid $lightBlue;
+        outline-offset: 2px;
+    }
+}
+
+// Responsive adjustments
+@include media-breakpoint-down(md) {
+    .explore-categories-section {
+        margin-top: 10rem;
+        .category-card {
+            min-height: 350px; // Slightly smaller cards on tablet
+        }
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .explore-categories-section {
+        .section-title {
+            font-size: $mobile-h2; // Use your mobile heading sizes
+        }
+        .lead.text-muted {
+            font-size: $mobile-p;
+        }
+        .category-card {
+            min-height: 300px; // And smaller on mobile
+            margin-bottom: $spacer * 1.5; // Ensure spacing if they stack fully
+        }
+        .row.g-4 {
+            --bs-gutter-x: #{$spacer * 1}; // Reduce horizontal gap on small screens
+            --bs-gutter-y: #{$spacer * 1.5}; // Ensure vertical gap
+        }
+    }
+}
