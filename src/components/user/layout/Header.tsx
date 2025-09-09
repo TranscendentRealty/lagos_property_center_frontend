@@ -15,7 +15,9 @@ const Header = () => {
         <nav className="navbar navbar-expand-lg px-lg-5">
             <div className="container-fluid">
                 <Link className="navbar-brand py-0" href="/">
-                    <Image src={images.Logo} alt='brand logo' className='my-2' />
+                    <Image src={images.Logo} alt='brand logo' className='my-2 img-fluid'
+                    height={60}
+                    />
                 </Link>
 
                 <button

@@ -111,7 +111,7 @@
 // --- ProductInfo ---
 .product-info-section {
     .product-title {
-        // font-size: $h1-font-size; // Or your specific title size
+        font-size: $h3-font-size; // Or your specific title size
         color: $textBlack;
     }
     .product-tag {
@@ -121,7 +121,7 @@
         font-weight: 500;
     }
     .product-price {
-        color: $primary; // Or your price color
+        color: $textBlack;
     }
     .product-location {
         // color: $muted;
@@ -150,7 +150,7 @@
 
 // --- Book A Tour Button ---
 .book-tour-btn {
-    background-color: $black; // Dark button as per Figma
+    background-color: $black;
     border-color: $black;
     color: $white;
     font-weight: 500;

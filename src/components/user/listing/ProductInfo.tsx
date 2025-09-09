@@ -19,7 +19,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ title, tags, price, location 
           </Badge>
         ))}
       </div>
-      <p className="product-price display-4 fw-bolder text-primary mb-1">₦{price.toLocaleString()}</p>
+      <p className="product-price display-4 fw-bolder mb-1">₦{price.toLocaleString()}</p>
       <p className="product-location text-muted">{location}</p>
     </div>
   );

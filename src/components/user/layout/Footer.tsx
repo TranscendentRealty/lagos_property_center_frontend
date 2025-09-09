@@ -15,7 +15,7 @@ const Footer = () => {
             <div className="container-fluid row px-0 mx-0 main-footer">
 
                 <div className="col-12 col-md-3 fg-subtle px-5">
-                    <Image src={images.Logo} alt='brand logo' className='my-2 ' />
+                    <Image src={images.Logo} alt='brand logo' className='my-2 ' height={60} />
 
                     {/* <div className='mt-2'>
                         <Image src={Telephone} alt='telephone' className='my-2' />

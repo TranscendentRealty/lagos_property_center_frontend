@@ -179,7 +179,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                         )}
 
                         <div className="my-3 d-grid"> {/* d-grid makes button full-width */}
-                            <Button variant="dark" size="lg" className="book-tour-btn">
+                            <Button variant="dark" size="lg" className="book-tour-btn" href='https://calendly.com/polalekan/30min' target='_blank'>
                                 Book A Tour
                             </Button>
                         </div>
