@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 // You might use next-auth's getSession or a simple localStorage check
-import { getSession } from 'next-auth/react';
+// import { getSession } from 'next-auth/react';
 
 const api_url = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 

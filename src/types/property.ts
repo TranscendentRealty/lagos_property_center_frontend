@@ -7,12 +7,18 @@ export interface IAdmin {
   name: string;
   email: string;
   avatar: string;
+  phone: string;
+  calendlyLink: string;
+  address: string;
 }
 
 export interface IAgency {
   _id: string;
   name: string;
   email: string;
+  logo: string;
+  address: string;
+  phone: string;
   // add other agency fields if needed
 }
 

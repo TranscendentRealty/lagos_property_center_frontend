@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "global.d.ts", "src/components/user/listing/tsx", "next.config.mjs", "../api_and_admin/backend/utils/ObjectMap.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "global.d.ts", "src/components/user/listing/tsx", "next.config.mjs", "../api_and_admin/backend/utils/ObjectMap.ts", "src/app/search/oldPage.tsx.bak", "src/components/user/listing/OldImageGallery.tsx.bak"],
   "exclude": ["node_modules"]
 }
