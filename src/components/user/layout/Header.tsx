@@ -1,7 +1,7 @@
 // components/layout/Header.tsx
 // NO 'use client' directive here. This is a Server Component.
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,7 +16,7 @@ const Header = () => {
             <div className="container-fluid">
                 <Link className="navbar-brand py-0" href="/">
                     <Image src={images.Logo} alt='brand logo' className='my-2 img-fluid'
-                    height={60}
+                        height={60}
                     />
                 </Link>
 
@@ -40,12 +40,14 @@ const Header = () => {
                     <NavigationLinks />
 
                     <div className="search-wrapper-div">
-                        <Search
-                            classNames='header-search bg-black'
-                            headerSearch={true}
-                            darkButton={false}
-                            key={'header-search'}
-                        />
+                        <Suspense fallback={<div>Loading search...</div>}>
+                            <Search
+                                classNames='header-search bg-black'
+                                headerSearch={true}
+                                darkButton={false}
+                                key={'header-search'}
+                            />
+                        </ Suspense>
                     </div>
                 </div>
             </div>

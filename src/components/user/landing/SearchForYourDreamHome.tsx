@@ -1,5 +1,7 @@
+import React, { Suspense } from 'react';
 import Search from '../layout/Search';
 import styles from '../../../app/page.module.css';
+
 
 const SearchForYourDreamHome = () => {
     return (
@@ -9,7 +11,9 @@ const SearchForYourDreamHome = () => {
                 <p>Simply tell us what you&apos;re looking for, and we&apos;ll help you make it a reality, stress-free.</p>
             </hgroup>
 
-            <Search classNames='landing-main-search rounded-pill mt-4' darkButton aiSearch key={'home-ai-search'} />
+            <Suspense fallback={<div>Loading ai search...</div>}>
+                <Search classNames='landing-main-search rounded-pill mt-4' darkButton aiSearch key={'home-ai-search'} />
+            </ Suspense>
 
             {/* <div className="row">
                 <div className="col-6">
