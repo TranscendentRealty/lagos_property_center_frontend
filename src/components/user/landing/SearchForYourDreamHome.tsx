@@ -11,7 +11,7 @@ const SearchForYourDreamHome = () => {
                 <p>Simply tell us what you&apos;re looking for, and we&apos;ll help you make it a reality, stress-free.</p>
             </hgroup>
 
-            <Suspense fallback={<div>Loading ai search...</div>}>
+            <Suspense fallback={<div className='search-placeholder'/>}>
                 <Search classNames='landing-main-search rounded-pill mt-4' darkButton aiSearch key={'home-ai-search'} />
             </ Suspense>
 

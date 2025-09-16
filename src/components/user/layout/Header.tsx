@@ -40,7 +40,7 @@ const Header = () => {
                     <NavigationLinks />
 
                     <div className="search-wrapper-div">
-                        <Suspense fallback={<div>Loading search...</div>}>
+                        <Suspense fallback={<div className='search-placeholder' />}>
                             <Search
                                 classNames='header-search bg-black'
                                 headerSearch={true}
