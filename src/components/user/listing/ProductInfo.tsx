@@ -24,7 +24,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ title, tags, price, location 
         {tags.map((tag, index) => {
           if (keyFeatures.includes(tag.toLowerCase())) {
             return (
-              <Badge key={index} pill bg="success-subtle" text="success-emphasis" className="me-2 p-2 px-3 product-tag">
+              <Badge key={index} pill bg="success-subtle" text="success-emphasis" className="me-2 mb-2 p-2 px-3 product-tag">
                 {tag}
               </Badge>
             )
