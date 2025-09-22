@@ -59,7 +59,7 @@ export default async function Home() {
     <main>
       {/* <PropertyShowcaseCarousel /> */}
       <HeroSection />
-      <div className="container-fluid px-5 px-md-6">
+      <div className="container-fluid px-2 px-sm-5 px-md-6">
         <SearchForYourDreamHome />
         {/* 3. Pass the server-fetched data down as props to the child components. */}
         {/* These child components can remain Client Components if they need interactivity. */}

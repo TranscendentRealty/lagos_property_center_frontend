@@ -5,7 +5,7 @@ import styles from '../../../app/page.module.css';
 
 const SearchForYourDreamHome = () => {
     return (
-        <section className='py-5'>
+        <section className='py-5 px-2 px-md-0'>
             <hgroup className="section-heading">
                 <h2>Your AI-Powered Property Search</h2>
                 <p>Simply tell us what you&apos;re looking for, and we&apos;ll help you make it a reality, stress-free.</p>
