@@ -161,7 +161,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                         <ProductInfo
                             title={product.title}
                             tags={product.amenities}
-                            price={product.price.amount.toLocaleString()} // Format the price nicely
+                            price={product.price.toLocaleString()} // Format the price nicely
                             location={`${product.location.street}, ${product.location.city}`}
                         />
 

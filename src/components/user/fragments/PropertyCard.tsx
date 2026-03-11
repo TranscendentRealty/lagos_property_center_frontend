@@ -114,7 +114,7 @@ const PropertyCard = ({ property }: { property: IProperty }) => {
   const cardProps: PropertyCardProps = {
     id: property._id,
     imageUrl: imageUrl,
-    price: property.price?.amount,
+    price: property.price,
     beds: property.details?.bedrooms,
     baths: property.details?.bathrooms,
     livingrooms: property.details?.livingrooms,

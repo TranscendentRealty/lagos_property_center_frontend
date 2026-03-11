@@ -61,7 +61,8 @@ export interface IProperty {
   propertySubtype?: string;
 
   location: IPropertyLocation;
-  price: IPropertyPrice;
+  // price: IPropertyPrice;
+  price: number;
   details: IPropertyDetails;
   area: IPropertyArea;
 
