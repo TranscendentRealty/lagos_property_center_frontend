@@ -1,79 +1,123 @@
-// SCSS for _FloatingWhatsAppButton.scss
-// Define WhatsApp brand color for consistency
+// SCSS for _FloatingContactButtons.scss
+
+// Define brand colors
 $whatsapp-green: #25D366;
-.floating-whatsapp-btn {
-    // --- Positioning and Base Styles ---
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 1050; // High z-index to be on top of most elements
-    // --- Appearance ---
-    width: 60px;
-    height: 60px;
-    background-color: $whatsapp-green;
+$call-blue: #007bff; // Example color for the call button
+
+.floating-contact-container {
+  // --- Main container positioning ---
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column; // Stack buttons and label vertically
+  align-items: center; // Center the items
+
+  // --- Animation & Visibility ---
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .buttons-wrapper {
+    display: flex;
+    gap: 0.75rem; // Space between the two buttons
+    margin-bottom: 0.5rem; // Space between buttons and fixed label
+  }
+
+  .floating-btn {
+    // --- Shared button styles ---
+    position: relative; // Needed for the tooltip pseudo-element
+    width: 55px;
+    height: 55px;
     color: #FFF;
-    border-radius: 50%; // Make it a perfect circle
+    border-radius: 50%;
     box-shadow: 0 4px 12px rgba($black, 0.2);
-    // --- Content Alignment ---
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none; // Remove underline from the <a> tag
-    // --- Animation & Visibility ---
-    opacity: 0;
-    transform: scale(0.8) translateY(20px); // Start scaled down and slightly below
-    pointer-events: none; // Not clickable when hidden
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    // --- Hover State for the button itself ---
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
     &:hover {
-        transform: scale(1.1); // Slightly enlarge on hover
-        box-shadow: 0 6px 16px rgba($black, 0.25);
-        // Show the tooltip on hover
-        .tooltip-text {
-            opacity: 1;
-            transform: translateX(0);
-            visibility: visible;
-        }
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 6px 16px rgba($black, 0.25);
     }
-    // --- Visible State ---
-    // This class is added by React when the button should appear
-    &.visible {
-        opacity: 1;
-        transform: scale(1) translateY(0); // Scale to normal size and original position
-        pointer-events: auto; // Make it clickable
+
+    // --- CSS Tooltip ---
+    // Show tooltip on hover
+    &::before {
+      content: attr(data-tooltip); // Get text from data-tooltip attribute
+      position: absolute;
+      bottom: 100%; // Position above the button
+      margin-bottom: 0.75rem;
+
+      background-color: $black;
+      color: $white;
+      padding: 0.4rem 0.8rem;
+      border-radius: $border-radius-sm;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+
+      opacity: 0;
+      transform: translateY(5px);
+      visibility: hidden;
+      transition: all 0.2s ease-in-out;
+      pointer-events: none;
     }
-    // --- Tooltip Styling ---
-    .tooltip-text {
-        position: absolute;
-        right: 100%; // Position to the left of the button
-        margin-right: 1rem; // Spacing between tooltip and button
-        // Appearance
-        background-color: $black;
-        color: $white;
-        padding: 0.5rem 1rem;
-        border-radius: $border-radius-lg;
-        font-size: 0.85rem;
-        font-weight: 500;
-        white-space: nowrap; // Prevent text from wrapping
-        // Animation
-        opacity: 0;
-        transform: translateX(10px); // Start slightly to the right
-        visibility: hidden;
-        pointer-events: none; // Tooltip itself is not clickable
-        transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+
+    &:hover::before {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
     }
+
+    // --- Specific button colors ---
+    &.whatsapp-btn {
+      background-color: $whatsapp-green;
+    }
+    &.call-btn {
+      background-color: $call-blue;
+    }
+  }
+
+  .fixed-label {
+    background-color: rgba($black, 0.7);
+    color: $white;
+    padding: 0.3rem 0.8rem;
+    border-radius: $border-radius-pill; // Pill shape
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
 }
 
 // --- Responsive Adjustment for Mobile ---
 @include media-breakpoint-down(sm) {
-    .floating-whatsapp-btn {
-        bottom: 1.5rem;
-        right: 1.5rem;
-        width: 55px;
-        height: 55px;
-        // Hide the text tooltip on mobile to prevent clutter
-        .tooltip-text {
-            display: none;
-        }
+  .floating-contact-container {
+    bottom: 1.5rem;
+    right: 1.5rem;
+
+    // Hide text tooltips on mobile to prevent clutter
+    .floating-btn::before {
+      display: none;
     }
+
+    .buttons-wrapper {
+      gap: 0.5rem;
+    }
+
+    .floating-btn {
+      width: 50px;
+      height: 50px;
+    }
+  }
 }

@@ -5,13 +5,14 @@ import "../assets/scss/library/style.scss";
 import "./globals.css";
 import "react-image-gallery/styles/css/image-gallery.css";
 import CookieConsentModal from "@/components/user/layout/CookieConsentModal";
-import FloatingWhatsAppButton from "@/components/user/layout/FloatingWhatsAppButton";
+import FloatingContactButtons from "@/components/user/layout/FloatingWhatsAppButton";
 
 import AOSAnimation from "@/utils/AosInit";
 import Header from "@/components/user/layout/Header";
 import Footer from "@/components/user/layout/Footer";
 
 const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+const callNumber = process.env.NEXT_PUBLIC_CALL_NUMBER;
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -46,7 +47,13 @@ export default function RootLayout({
         <AOSAnimation>
           {children}
           <CookieConsentModal />
-          {whatsappNumber && <FloatingWhatsAppButton phoneNumber={whatsappNumber} />}
+          {whatsappNumber && callNumber && (
+          <FloatingContactButtons
+            phoneNumber={whatsappNumber}
+            callNumber={callNumber}
+            fixedLabel="Talk to Bukunmi now." // Customize the label text here
+          />
+        )}
         </AOSAnimation>
 
         <Footer />

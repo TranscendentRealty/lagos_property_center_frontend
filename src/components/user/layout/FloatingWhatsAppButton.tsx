@@ -1,79 +1,96 @@
-// components/layout/FloatingWhatsAppButton.tsx
+// components/layout/FloatingContactButtons.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-// We'll use react-icons for a clean WhatsApp icon
-import { FaWhatsapp } from 'react-icons/fa';
+// Import both WhatsApp and Phone icons
+import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
 
-interface FloatingWhatsAppButtonProps {
+interface FloatingContactButtonsProps {
   /**
-   * Your WhatsApp number in international format, without '+', '-', or spaces.
+   * Your WhatsApp number in international format.
    * e.g., '2348012345678'
    */
   phoneNumber: string;
+  /**
+   * Your direct call number, formatted for the `tel:` link.
+   * e.g., '+2348012345678'
+   */
+  callNumber: string;
   /**
    * The default message that will pre-populate the WhatsApp chat.
    */
   defaultMessage?: string;
   /**
-   * The text that appears on hover.
+   * The fixed label text that appears below the buttons.
    */
-  tooltipText?: string;
+  fixedLabel?: string;
   /**
-   * How far down the user should scroll (in pixels) before the button appears.
+   * How far down the user should scroll (in pixels) before the buttons appear.
    */
   showAtScrollY?: number;
 }
 
-const FloatingWhatsAppButton: React.FC<FloatingWhatsAppButtonProps> = ({
+const FloatingContactButtons: React.FC<FloatingContactButtonsProps> = ({
   phoneNumber,
+  callNumber,
   defaultMessage = "Hello! I'm interested in a property from your website.",
-  tooltipText = "Chat with us",
-  showAtScrollY = 200,
+  fixedLabel = "Talk to Bukunmi now.",
+  showAtScrollY = 0,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Effect to show/hide the button based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > showAtScrollY) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(window.scrollY > showAtScrollY);
     };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [showAtScrollY]);
 
-    // Add event listener when the component mounts
-    window.addEventListener('scroll', handleScroll);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [showAtScrollY]); // Re-run effect if the showAtScrollY prop changes
-
-  if (!phoneNumber) {
-    console.warn("FloatingWhatsAppButton: phoneNumber prop is missing.");
+  if (!phoneNumber || !callNumber) {
+    console.warn("FloatingContactButtons: phoneNumber or callNumber prop is missing.");
     return null;
   }
 
-  // Construct the WhatsApp "Click to Chat" URL
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
+  const callUrl = `tel:${callNumber}`;
 
   return (
-    <Link href={whatsappUrl} passHref legacyBehavior>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`floating-whatsapp-btn ${isVisible ? 'visible' : ''}`}
-        aria-label="Chat with us on WhatsApp"
-      >
-        <span className="tooltip-text">{tooltipText}</span>
-        <FaWhatsapp size={32} />
-      </a>
-    </Link>
+    <div className={`floating-contact-container ${isVisible ? 'visible' : ''}`}>
+      {/* Container for the two buttons */}
+      <div className="buttons-wrapper">
+        {/* Direct Call Button */}
+        <Link href={callUrl} passHref legacyBehavior>
+          <a
+            className="floating-btn call-btn"
+            aria-label="Call us"
+            data-tooltip="Call Us" // Use data attribute for tooltip
+          >
+            <FaPhoneAlt size={24} />
+          </a>
+        </Link>
+
+        {/* WhatsApp Chat Button */}
+        <Link href={whatsappUrl} passHref legacyBehavior>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className="floating-btn whatsapp-btn"
+            aria-label="Chat with us on WhatsApp"
+            data-tooltip="Chat on WhatsApp" // Use data attribute for tooltip
+          >
+            <FaWhatsapp size={28} />
+          </a>
+        </Link>
+      </div>
+
+      {/* Fixed Label Below Buttons */}
+      <div className="fixed-label">
+        {fixedLabel}
+      </div>
+    </div>
   );
 };
 
-export default FloatingWhatsAppButton;
+export default FloatingContactButtons;
