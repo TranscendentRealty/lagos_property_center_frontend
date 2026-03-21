@@ -1,5 +1,8 @@
 // app/search/page.tsx
 
+// Search results are always user-query-specific — never cache at the CDN or ISR level.
+export const dynamic = 'force-dynamic';
+
 import React, { Suspense } from 'react';
 import { Metadata } from 'next';
 import SearchPageClientWrapper from '@/components/user/search/SearchPageClientWrapper';
@@ -47,8 +50,8 @@ export async function generateMetadata({ searchParams }: { searchParams: { [key:
   const category = resolvedSearchParams.category || 'Properties';
 
   return {
-    title: `${category} for Sale in ${location} | Lagos Property Center`,
-    description: `Find the best ${category} listings in ${location}. Browse thousands of properties for sale and rent on Lagos Property Center.`,
+    title: `${category} for Sale in ${location}`,
+    description: `Find the best ${category} listings in ${location}. Browse verified properties for sale and rent with Transcendent Realty.`,
   };
 }
 

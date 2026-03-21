@@ -1,15 +1,31 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    reactStrictMode: true, // This might already be here
-    // Add the images configuration block
+    reactStrictMode: true,
     images: {
         remotePatterns: [{
             protocol: 'https',
-            hostname: 'res.cloudinary.com',
-            port: '', // Keep empty for default port
-            pathname: '/do5lofza7/image/upload/**', // Be more specific if you want
-        }, ],
+            hostname: 'media.transcendentrealty.com',
+            port: '',
+        }],
+    },
+
+    async headers() {
+        return [
+            {
+                // Public folder images (/public/images/*) — safe to cache aggressively since
+                // they are versioned by filename and rarely change between deploys.
+                source: '/images/:path*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        // Serve from cache for 24 h; after expiry, serve stale while
+                        // revalidating in the background for up to 7 days.
+                        value: 'public, max-age=86400, stale-while-revalidate=604800',
+                    },
+                ],
+            },
+        ];
     },
 };
 

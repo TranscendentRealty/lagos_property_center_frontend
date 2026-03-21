@@ -20,7 +20,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ title, tags, price, location 
   return (
     <div className="product-info-section mb-4">
       <h1 className="product-title display-5 fw-bold mb-2">{title}</h1>
-      <div className="tags-container mb-3">
+      {/* <div className="tags-container mb-3">
         {tags.map((tag, index) => {
           if (keyFeatures.includes(tag.toLowerCase())) {
             return (
@@ -30,7 +30,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ title, tags, price, location 
             )
           }
         })}
-      </div>
+      </div> */}
       <p className="product-price display-4 fw-bolder mb-1">₦{price.toLocaleString()}</p>
       <p className="product-location text-muted">{location}</p>
     </div>

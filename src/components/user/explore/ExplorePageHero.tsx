@@ -11,31 +11,35 @@ import { IPropertiesCount, IProperty } from '@/types/property';
 
 
 interface IExplorePageHeroProps {
-  handleExplore: (category: string, value: string, page: number, limit: number) => void;
+  handleExplore: (category: string, value: string | string[], page: number, limit: number) => void;
 }
 
 // Sample data for location cards - pass as props or fetch
 const locationTeasers = [
-  { id: 1, title: 'Ajah', description: 'Explore Ajah...' },
-  { id: 2, title: 'Lekki', description: 'Explore Lekki...' },
-  { id: 3, title: 'Ikoyi', description: 'Explore Ikoyi...' },
-  { id: 3, title: 'Victoria Island', description: 'Explore Victoria Island...' },
-  { id: 3, title: 'Ikeja', description: 'Explore Ikeja...' }
+  { id: 1, title: 'Lekki Phase 1 / Ikate', description: 'Explore properties in Lekki Phase 1 and Ikate...' },
+  { id: 2, title: 'Osapa / Idado', description: 'Explore properties in Osapa and Idado...' },
+  { id: 3, title: 'Chevron / Ologolo', description: 'Explore properties in Chevron and Ologolo...' },
+  { id: 4, title: 'Orchid / Lekki Conservation Road', description: 'Explore properties along Orchid and Lekki Conservation Road...' },
+  { id: 5, title: 'Ikota / VGC', description: 'Explore properties in Ikota and VGC...' }
 ];
 
 const headerLocations = [
+  'LEKKI PHASE 1',
+  'IKATE',
+  'OSAPA',
+  'IDADO',
   'CHEVRON',
-  'ORDHID ROAD',
-  'LEKKI COUNTY',
-  'MAGODO',
-  'OPEBI'
+  'OLOGOLO',
+  'ORCHID',
+  'LEKKI CONSERVATION ROAD',
+  'IKOTA',
+  'VGC'
 ];
 
 async function getListingsCount(): Promise<IPropertiesCount | null> {
   try {
     const url = "/api/v1/properties/count"; // Use the relative URL, Axios will use the baseURL you configured
     const response = await httpClient.get(url);
-    console.log("response:", response);
 
     if (response.data && response.data.status === "success") {
       return response.data.data as IPropertiesCount;
@@ -58,7 +62,7 @@ const ExplorePageHero = ({
   const listingCount = 99;
   const subTitleSuffix = "listings";
   const locations = locationTeasers;
-  const limit = 12;
+  const limit = 9;
 
 
   const [propertiesCount, setPropertyCount] = useState<IPropertiesCount | null>(null);
@@ -136,14 +140,15 @@ const ExplorePageHero = ({
 
         {/* Location Teaser Cards Area */}
         <div className="location-teasers-container pb-4 pt-3 mb-5 mb-lg-0">
-          <div className="row justify-content-center justify-content-md-between g-1 g-md-4">
+          <div className="row justify-content-center g-2 g-lg-3 align-items-stretch">
             {locations.map((loc) => (
-              <div key={loc.id} className="col-6 col-md-2 location-teaser-card-wrapper my-2 my-md-0">
+              <div key={loc.id} className="col-6 col-lg location-teaser-card-wrapper">
                 <Link href="#explore-categories"
-                 onClick={() => handleExplore("location.city", loc.title, 1, limit)}
+                 onClick={() => handleExplore("location.street", loc.title.split('/').map(s => s.trim()), 1, limit)}
+                 className="h-100 d-block text-decoration-none"
                 >
-                  <div className="card location-teaser-card text-decoration-none" data-aos="flip-up" data-aos-ease="ease-in" data-aos-duration="1200">
-                    <div className="card-body text-center">
+                  <div className="card location-teaser-card h-100" data-aos="flip-up" data-aos-ease="ease-in" data-aos-duration="1200">
+                    <div className="card-body text-center d-flex flex-column justify-content-center">
                       <h5 className="card-title fw-semibold">{loc.title}</h5>
                       <p className="card-text small text-muted mb-0">{loc.description}</p>
                     </div>

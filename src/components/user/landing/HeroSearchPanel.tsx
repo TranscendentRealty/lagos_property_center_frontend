@@ -42,7 +42,7 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
     <Card className="hero-search-panel shadow-lg">
       <Card.Header className="bg-white border-0 pt-3 px-3">
         {/* Tabs for Rent/Sale/Shortlet */}
-        <Nav variant="pills" defaultActiveKey="sale" activeKey={activeTab} onSelect={(selectedKey) => setActiveTab(selectedKey as ListingType)}>
+        {/* <Nav variant="pills" defaultActiveKey="sale" activeKey={activeTab} onSelect={(selectedKey) => setActiveTab(selectedKey as ListingType)}>
           <Nav.Item>
             <Nav.Link eventKey="sale">Sale</Nav.Link>
           </Nav.Item>
@@ -52,7 +52,7 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
           <Nav.Item>
             <Nav.Link eventKey="shortlet">Shortlet</Nav.Link>
           </Nav.Item>
-        </Nav>
+        </Nav> */}
       </Card.Header>
       <Card.Body className="p-3 p-md-4">
         <Form onSubmit={handleSearch}>
@@ -63,10 +63,11 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
                 {/* <Form.Control type="text" placeholder="Search Location" value={location} onChange={e => setLocation(e.target.value)} /> */}
                 <Form.Select value={location} onChange={e => setLocation(e.target.value)}>
                   <option value="">Location</option>
-                  <option value="apartment">Lekki</option>
-                  <option value="duplex">Ajah</option>
-                  <option value="house">Ikoyi</option>
-                  <option value="land">Ikeja</option>
+                  <option value="lekki phase 1">Lekki Phase 1</option>
+                  <option value="chevron">Chevron</option>
+                  <option value="osapa">Osapa</option>
+                  <option value="orchid">Orchid Road</option>
+                  <option value="ikota">Ikota</option>
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -77,14 +78,14 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
                   <option value="">Type</option>
                   <option value="apartment">Apartment</option>
                   <option value="duplex">Duplex</option>
-                  <option value="house">House</option>
-                  <option value="land">Land</option>
+                  <option value="semi-detached">Semi-Detached</option>
+                  <option value="fully detached">Fully Detached</option>
                 </Form.Select>
               </Form.Group>
             </Col>
             <Col md={6} lg={2}>
               <Form.Group controlId="formBedroom">
-                <Form.Label>Bedroom</Form.Label>
+                <Form.Label>Bedrooms</Form.Label>
                 <Form.Select value={bedrooms} onChange={e => setBedrooms(e.target.value)}>
                   <option value="">Number</option>
                   <option value="1">1</option>
@@ -99,8 +100,8 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
               <Form.Group controlId="formPrice">
                 <Form.Label>Price</Form.Label>
                 <Form.Control type="text" placeholder="Min - Max" value={`${price.min} - ${price.max}`} readOnly /> */}
-                {/* A real implementation might use a dropdown with a price range slider here */}
-              {/* </Form.Group>
+            {/* A real implementation might use a dropdown with a price range slider here */}
+            {/* </Form.Group>
             </Col> */}
             <Col md={6} lg={2}></Col>
             <Col xs={12} lg={2}>

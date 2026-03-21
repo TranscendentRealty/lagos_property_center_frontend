@@ -104,7 +104,7 @@ const ContactHeroForm: React.FC<ContactHeroFormProps> = ({
                     {/* Left Column: Text and Contact Info */}
                     <div className="col-lg-6 col-md-12 text-white contact-info-column">
                         <h1 className="display-3 fw-bold mb-3 contact-title">{title}</h1>
-                        <p className="lead mb-4 contact-subtitle">{subtitle}</p>
+                        <p className="lead mb-4 contact-subtitle text-white">{subtitle}</p>
                         <div className="d-flex flex-column justify-content-start">
                             {contactInfo.map(item => (
                                 <div key={item.id} className="d-flex contact-detail-item mb-3 align-items-start">

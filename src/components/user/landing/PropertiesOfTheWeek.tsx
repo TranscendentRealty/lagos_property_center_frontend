@@ -46,7 +46,7 @@ const PropertiesOfTheWeek = ({
     ];
 
     return (
-        <section className={styles.landingSection}>
+        <section className={styles.landingSection} id='properties-of-the-week'>
             <hgroup className="section-heading">
                 <h2>Properties of the Week</h2>
                 <p>Our top picks for the week</p>

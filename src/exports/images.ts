@@ -17,6 +17,8 @@ import LinkedIcon from "../assets/svgs/icons/LinkedInIcon.svg";
 import RightUpArrow from "../assets/svgs/icons/RightUpArrow.svg";
 import InfoIcon from "../assets/svgs/icons/InfoIcon.svg";
 
+// import TeamworkHands from "../assets/pngs/TeamworkHands.png";
+
 import PropertyImagePlaceholder from "../../public/images/PropertyImagePlaceholder.png";
 import PropertyImagePlaceholder2 from "../../public/images/PropertyImagePlaceholder2.png";
 import PropertyImagePlaceholder3 from "../../public/images/PropertyImagePlaceholder3.png"

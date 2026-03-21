@@ -18,7 +18,7 @@ const ContactUsEmailTemplate = ({ firstname, surname, email, message }: ContactU
             <p><strong>Message:</strong></p>
             <p>{message}</p>
             <hr />
-            <p><em>This email was sent from the Lagos Property Center contact form.</em></p>
+            <p><em>This email was sent from the Transcendent Realty contact form.</em></p>
         </div>
     )
 }

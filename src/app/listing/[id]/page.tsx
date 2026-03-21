@@ -3,6 +3,7 @@
 import React from 'react';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import ScrollToTop from '@/components/user/fragments/ScrollToTop';
 
 // Import UI Components
 import ImageGallery, { GalleryImage } from '../../../components/user/listing/ImageGallery';
@@ -14,20 +15,42 @@ import { Button } from 'react-bootstrap';
 import { IProperty } from '@/types/property'; // Assuming you have this type defined
 import AmenitiesGrid, { Amenity } from '@/components/user/listing/AmenitiesGrid';
 
-// NOTE: The line "'use server'" is not needed at the top of a Server Component file.
-// It's a server component by default. You only use it for Server Actions.
+// New listings created after a build render on-demand and are then cached.
+export const dynamicParams = true;
+
+// Revalidate every 12 hours so price/status changes eventually propagate without a full rebuild.
+export const revalidate = 43200;
+
+// --- STATIC PARAMS (SSG) ---
+// Called at build time. Next.js pre-renders one page per returned id.
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+    try {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8080';
+        const res = await fetch(`${apiBaseUrl}/api/v1/properties/all`, { cache: 'force-cache' });
+
+        if (!res.ok) {
+            console.error(`generateStaticParams: API error ${res.status}`);
+            return [];
+        }
+
+        const data = await res.json();
+        const properties: { _id: string }[] = data?.data?.properties ?? [];
+        return properties.map((p) => ({ id: p._id }));
+    } catch (error) {
+        console.error('generateStaticParams: failed to fetch property list', error);
+        return [];
+    }
+}
 
 // --- DATA FETCHING FUNCTION ---
-// This function uses native fetch, allowing Next.js to cache and deduplicate requests.
 async function getListingDetails(id: string): Promise<IProperty | null> {
     try {
-        // Construct the full URL. Use environment variables for your API base URL.
         const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8080';
         const url = `${apiBaseUrl}/api/v1/properties/${id}`;
 
-        // Use fetch with 'no-store' to mimic getServerSideProps (dynamic on every request).
-        // For static pages, you would omit this or use `cache: 'force-cache'`.
-        const res = await fetch(url, { cache: 'no-store' });
+        // force-cache: Next.js serves the cached (statically generated) version and revalidates
+        // in the background per the revalidate interval set above.
+        const res = await fetch(url, { cache: 'force-cache' });
 
         // If the request itself fails (e.g., network error, 404 from API), handle it.
         if (!res.ok) {
@@ -57,7 +80,9 @@ async function getSimilarListings(propertyId: string) {
         const url = `${apiBaseUrl}/api/v1/properties/${propertyId}/similar`;
 
 
-        const res = await fetch(url, { next: { revalidate: 3600 } });
+        // Inherits the page-level revalidate = 43200 (12h). Using a shorter value here
+        // would silently override the page-level setting and cause hourly ISR rebuilds.
+        const res = await fetch(url, { cache: 'force-cache' });
 
         if (!res.ok) {
             // This will be caught by the nearest error.js file.
@@ -93,21 +118,33 @@ export async function generateMetadata(
 
     if (!product) {
         return {
-            title: 'Property Not Found | TR Realty',
+            title: 'Property Not Found',
         };
     }
 
-    // Assuming product.photos is an array of objects with a 'url' property
+    // product.photos.sort((a, b) => {
+    //     return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+    // });
+
     const mainImageUrl = product.photos?.[0] || '/images/PropertyImagePlaceholder.png';
 
     return {
-        title: `${product.title} | TR Realty`,
+        title: `${product.title}`,
         description: product.description || `Details for ${product.title}, located in ${product.location.street}.`,
         openGraph: {
-            title: `${product.title} | TR Realty`,
-            description: product.description,
-            images: [mainImageUrl],
+            title: `${product.title} | Transcendent Realty`,
+            images: [
+                {
+                    url: mainImageUrl, // Dynamically injects the R2 image!
+                      width: 900,
+                      height: 1200,
+                },
+            ],
         },
+        twitter: {
+            card: "summary_large_image",
+            images: [mainImageUrl],
+        }
     };
 }
 
@@ -118,11 +155,15 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
     const id = resolvedParams.id;
     const product = await getListingDetails(id);
     const similarListings = await getSimilarListings(id);
-    console.log("Similar Listings:", similarListings);
+    // console.log("Similar Listings:", similarListings);
 
     if (!product) {
         notFound();
     }
+
+    // product.photos.sort((a, b) => {
+    //     return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+    // });
 
     // --- Data Transformation for Child Components ---
     // It's good practice to map your raw API data to the props your components expect.
@@ -133,13 +174,25 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
         type: 'image', // Add logic here if you support videos
     }));
 
-    galleryImagesForComponent.push({
-        id: 'video_1',
-        src: product.photos[0],
-        alt: product.title,
-        type: 'video',
-        videoSrc: product.videoUrl
-    })
+    if (product.videoUrls?.bucket) {
+        galleryImagesForComponent.push({
+            id: 'video_1',
+            src: product.photos[0],
+            alt: product.title,
+            type: 'video',
+            videoType: 'html',
+            videoSrc: product.videoUrls.bucket,
+        });
+    } else if (product.videoUrls?.youtube) {
+        galleryImagesForComponent.push({
+            id: 'video_1',
+            src: product.photos[0],
+            alt: product.title,
+            type: 'video',
+            videoType: 'youtube',
+            videoSrc: product.videoUrls.youtube,
+        });
+    }
 
     const amenitiesForGrid: Amenity[] = product.amenities.map((amenity, idx) => ({
         id: `amenity-${idx}`,
@@ -150,6 +203,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
     return (
         <> {/* Or your main <Layout> component */}
+            <ScrollToTop />
             <main className="container py-4 py-md-5"> {/* Use a standard container */}
                 <div className="row g-4 g-lg-5">
                     <div className="col-lg-7 col-md-12">

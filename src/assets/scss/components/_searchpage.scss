@@ -13,6 +13,9 @@
         // background-color: $transBlue !important; // Use your specific badge color
         // color: $lightBlue !important;
         // border: 1px solid $lightBlue;
+
+        background-color: $themeGreen !important; // Use your specific badge color
+        color: $white !important;
         font-weight: 500;
         .cursor-pointer {
             cursor: pointer;
@@ -40,18 +43,30 @@
         // border-color: $lightBlue;
     }
     .sort-options {
-        .btn-group .btn {
-            // font-size: 0.875rem;
-            // padding: $btn-padding-y-sm $btn-padding-x-sm * 1.5;
+        .sort-button {
+            font-size: 0.85rem;
+            border-radius: 2rem !important; // pill shape — works now that ButtonGroup is gone
+            transition: all 0.2s ease;
+
+            // Inactive: override outline-secondary to be clearly legible
+            &.btn-outline-secondary {
+                color: #495057;
+                border-color: #adb5bd;
+                background-color: transparent;
+
+                &:hover {
+                    background-color: #e9ecef;
+                    border-color: #6c757d;
+                    color: #212529;
+                }
+            }
+
+            // Active: near-black pill
+            &.btn-dark {
+                background-color: $muted;
+                border-color: #1f1f1f;
+            }
         }
-        // .btn.active, .btn:active, .btn:focus {
-        //   background-color: $lightBlue !important;
-        //   border-color: $lightBlue !important;
-        //   color: $white !important;
-        // }
-        // .btn.outline-secondary:not(.active):not(:active):not(:focus){
-        //   color: $muted;
-        // }
     }
 }
 

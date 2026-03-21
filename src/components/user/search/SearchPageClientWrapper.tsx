@@ -23,7 +23,7 @@ interface SearchPageClientWrapperProps {
 const fetchClientSideProperties = async (
   queryString: string,
   page: number,
-  limit: number = 12
+  limit: number = 10
 ): Promise<IPaginatedProperties> => {
   try {
     const url = `/api/v1/properties/search?${queryString}&page=${page}&limit=${limit}`;
@@ -57,7 +57,7 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
   // Let's align the state names more closely with the API expectations
   const [filters, setFilters] = useState<Filters>({
     keywords: (initialSearchParams.search as string)?.split(',') || [],
-    maxPrice: Number(initialSearchParams['price[lte]']) || 1500000000,
+    maxPrice: Number(initialSearchParams['price[lte]']) || 5_000_000_000,
     // Note: locations can be part of the keywords or a separate filter
     // For simplicity, let's treat selected locations as keywords for now.
     locations: [],
@@ -66,10 +66,16 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
   // This is the general text search from the search bar
   const [searchQuery, setSearchQuery] = useState((initialSearchParams.search as string) || '');
 
-  // Sorting state
-  const [sortOption, setSortOption] = useState<SortOption>((initialSearchParams.sort as SortOption) || 'recommended');
+  // Sorting state — map URL-stored UI values back to SortOption; anything else (including
+  // legacy API values like '-createdAt') falls through to the default 'recommended'.
+  const [sortOption, setSortOption] = useState<SortOption>(() => {
+    const urlSort = initialSearchParams.sort as string;
+    if (urlSort === 'price_asc') return 'price_asc';
+    if (urlSort === 'price_desc') return 'price_desc';
+    return 'recommended';
+  });
 
-  const availableLocations = ['Lekki', 'Ajah', 'Ikoyi', 'Victoria Island', 'Ikeja'];
+  const availableLocations = ['Lekki Phase 1', 'Chevron', 'Ikate', 'Ologolo', 'Osapa', 'Idado', 'Lekki Conservation Road', 'Ikota', 'VGC', 'Orchid Road']; // This could also be fetched from the backend for dynamic location lists
 
   // --- REFACTORED URL UPDATE & DATA FETCHING LOGIC ---
   useEffect(() => {
@@ -102,41 +108,72 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
     // 2. Handle advanced filtering for `price`
     // Your backend expects a format like: price[lte]=500000000
     if (filters.maxPrice) {
-      params.set('price[amount][lte]', filters.maxPrice.toString());
+      params.set('price[lte]', filters.maxPrice.toString());
+    }
+
+    // 3a. Handle selected locations from the sidebar checkboxes
+    if (filters.locations.length > 0) {
+      params.set('location.street', filters.locations.join(','));
     }
 
     // 3. Handle `sort`
-    // Your backend expects formats like 'price' (ascending) or '-price' (descending)
-    let apiSortValue = '';
-    if (sortOption === 'price_asc') {
-      apiSortValue = 'price.amount'; // Sort by the amount field inside price
-    } else if (sortOption === 'price_desc') {
-      apiSortValue = '-price.amount'; // Prepend '-' for descending
-    } else if (sortOption === 'recommended') {
-      // 'recommended' might map to a different sort field like '-createdAt' or a special field
-      apiSortValue = '-createdAt';
-    }
+    // Store the UI sort option in the URL (human-readable, restores correctly on page load).
+    // Build a separate API queryString with the backend-expected sort value.
+    params.set('sort', sortOption);
 
-    if (apiSortValue) {
-      params.set('sort', apiSortValue);
-    }
-
-    // Add other filters like page number if you have pagination
-    // if (currentPage) params.set('page', currentPage.toString());
+    const apiSortMap: Record<SortOption, string> = {
+      price_asc: 'price',
+      price_desc: '-price',
+      recommended: '-createdAt',
+    };
+    const apiParams = new URLSearchParams(params.toString());
+    apiParams.set('sort', apiSortMap[sortOption]);
 
     // --- URL and Fetching Logic ---
-    const queryString = params.toString();
-    const newUrl = `${pathname}?${queryString}`;
+    const urlQueryString = params.toString();
+    const apiQueryString = apiParams.toString();
 
-    // Use `replace` instead of `push` to prevent the browser history from getting cluttered with every filter change.
-    router.replace(newUrl, { scroll: false });
+    // Use `replace` instead of `push` to avoid cluttering browser history on every filter change.
+    router.replace(`${pathname}?${urlQueryString}`, { scroll: false });
 
     const fetchData = async () => {
       setLoading(true);
-      const result = await fetchClientSideProperties(queryString, currentPage);
-      console.log("properties result:", result);
-      setProperties(result.properties);
-      SetPagination(result.pagination ?? null)
+
+      if (filters.locations.length > 1) {
+        // The backend does exact matching on location.street — a comma-joined string
+        // matches nothing. Make one call per location in parallel, then merge results.
+        const baseParams = new URLSearchParams(apiQueryString);
+        baseParams.delete('location.street');
+
+        const results = await Promise.all(
+          filters.locations.map(loc => {
+            const p = new URLSearchParams(baseParams.toString());
+            p.set('location.street', loc);
+            return fetchClientSideProperties(p.toString(), currentPage);
+          })
+        );
+
+        const seen = new Set<string>();
+        const merged: IProperty[] = [];
+        let combinedTotal = 0;
+        for (const r of results) {
+          for (const prop of r.properties || []) {
+            if (!seen.has(prop._id)) {
+              seen.add(prop._id);
+              merged.push(prop);
+            }
+          }
+          combinedTotal += r.pagination?.total ?? 0;
+        }
+
+        setProperties(merged);
+        SetPagination({ total: combinedTotal, limit: 10, page: currentPage, totalPages: Math.ceil(combinedTotal / 10) });
+      } else {
+        const result = await fetchClientSideProperties(apiQueryString, currentPage);
+        setProperties(result.properties);
+        SetPagination(result.pagination ?? null);
+      }
+
       setLoading(false);
     };
 

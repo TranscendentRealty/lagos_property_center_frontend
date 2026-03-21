@@ -52,7 +52,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
                         {keyFeatures.map((feature, index) => (
                             <li key={index} className="d-flex align-items-start mb-1">
                                 <span className="feature-bullet me-2">–</span> {/* Using an en-dash as bullet */}
-                                <span className="feature-text small">{feature}</span>
+                                <span className="feature-text">{feature}</span>
                             </li>
                         ))}
                     </ul>

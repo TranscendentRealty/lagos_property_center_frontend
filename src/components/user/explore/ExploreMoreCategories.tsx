@@ -18,10 +18,10 @@ const getHeader = (listings: IPaginatedProperties) => {
   if (value?.toLowerCase() === "available") {
     headerText = "Browse All Available Property Listings"
   }
-  else if (listings.category && ['location.city', 'location.state'].includes(listings.category)) {
+  else if (listings.category && ['location.city', 'location.state', 'location.street'].includes(listings.category)) {
     headerText = `Browse Available Property Listings that are in ${value}`;
   } else {
-    const pluralS = value?.toLowerCase() === 'smart home' ? 's' : '';
+    const pluralS = value?.toLowerCase() === 'apartment' ? 's' : '';
     headerText = `Browse Available Property Listings that are ${value}${pluralS}`;
   }
 
@@ -36,10 +36,10 @@ const getHeader = (listings: IPaginatedProperties) => {
 const categoriesData = [
   {
     id: 1,
-    label: 'SMART HOMES',
-    imageUrl: '/images/SmartHomesPlaceholder.png',
-    altText: 'Smart home technology interface',
-    category: 'Smart Home',
+    label: 'APARTMENT',
+    imageUrl: '/images/ApartmentPlaceholder.png',
+    altText: 'Modern apartment houses',
+    category: 'Apartment',
   },
   {
     id: 2,
@@ -66,7 +66,7 @@ interface IExploreMoreCategoriesProps {
   setListings: React.Dispatch<React.SetStateAction<IPaginatedProperties | null>>;
   showListings: boolean;
   setShowListings: React.Dispatch<React.SetStateAction<boolean>>,
-  handleExplore: (category: string, value: string, page: number, limit: number) => void;
+  handleExplore: (category: string, value: string | string[], page: number, limit: number) => void;
 }
 
 const ExploreMoreCategories = ({
@@ -99,7 +99,7 @@ const ExploreMoreCategories = ({
       if (listings?.properties.length === 0) {
         return (
           <>
-            <button className='back-button-circle' type='button'
+            <button className='back-button-circle mt-3 mt-md-0' type='button'
               onClick={() => setShowListings(false)}
             >
               <FaArrowCircleLeft size={35} className="text-black p-0" />
@@ -115,7 +115,7 @@ const ExploreMoreCategories = ({
       }
       // --- Render Paginated Properties ---
       return (
-        <div >
+        <div className='mt-3 mt-md-0'>
           {getHeader(listings)}
           <button className='back-button-circle' type='button'
             onClick={() => setShowListings(false)}
@@ -133,7 +133,7 @@ const ExploreMoreCategories = ({
           </div>
 
           {/* --- ReactPaginate Component --- */}
-          {listings.pagination && listings.pagination.total > 1 && (
+          {listings.pagination && listings.pagination.totalPages > 1 && (
             <ReactPaginate
               previousLabel={'< Prev'}
               nextLabel={'Next >'}
@@ -163,7 +163,7 @@ const ExploreMoreCategories = ({
     // This will show if loading is false but properties are null or empty
     return (
       <div>
-        <hgroup className="mb-4 mb-md-5 section-heading">
+        <hgroup className="mb-4 mb-md-5 mt-4 mt-md-0 section-heading">
           <h2 className="section-title fw-bold">{title}</h2>
           <p className="lead text-muted">{subtitle}</p>
         </hgroup>
@@ -173,7 +173,7 @@ const ExploreMoreCategories = ({
             <div key={category.id} className="col-12 col-md-6 col-lg-4 d-flex" data-aos="flip-right" data-aos-ease="ease-in" data-aos-duration="1500">
               <Link href={'#explore-categories'} className="card category-card text-decoration-none w-100"
                 onClick={() => {
-                  if (category.category === 'Smart Home') handleExplore("amenities", category.category, 1, limit);
+                  if (category.category === 'Apartment') handleExplore("propertyType", category.category, 1, limit);
                   else handleExplore("propertySubtype", category.category, 1, limit);
                 }}
               >

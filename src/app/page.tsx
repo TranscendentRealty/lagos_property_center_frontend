@@ -2,6 +2,10 @@
 
 import { IProperty } from '@/types/property'; // Assuming your type definition path
 
+// Cache the entire page and all its fetches for 1 hour.
+// Any future data-fetching added to this route automatically inherits this interval.
+export const revalidate = 3600;
+
 // Import your components as before
 import SearchForYourDreamHome from "@/components/user/landing/SearchForYourDreamHome";
 import PropertiesOfTheWeek from "@/components/user/landing/PropertiesOfTheWeek";
@@ -16,10 +20,8 @@ async function getHomepageData() {
     // Use an environment variable for your backend URL for flexibility.
     const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/v1/pages/homepage`;
 
-    // Use the native fetch API. We can add options like caching.
-    // `next: { revalidate: 3600 }` tells Next.js to cache this result for 1 hour (3600 seconds).
-    // This is great for a homepage that doesn't change every second.
-    const res = await fetch(apiUrl, { next: { revalidate: 3600 } });
+    // force-cache inherits the page-level revalidate = 3600 (set above).
+    const res = await fetch(apiUrl, { cache: 'force-cache' });
 
     // It's good practice to check if the response was successful.
     if (!res.ok) {

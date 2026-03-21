@@ -45,7 +45,7 @@ const HotRightNow = ({
     ];
 
     return (
-        <section className={` ${styles.landingSection}`}>
+        <section className={` ${styles.landingSection}`} id='hot-right-now'>
             <hgroup className="section-heading">
                 <h2>Hot Right Now</h2>
                 <p>Our hot selling properties</p>

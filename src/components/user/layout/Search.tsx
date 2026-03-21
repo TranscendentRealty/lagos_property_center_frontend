@@ -22,7 +22,6 @@ const Search = ({ classNames, headerSearch = false, darkButton = true, aiSearch 
     useEffect(() => {
         const queryFromUrl = searchParams.get('search') || '';
 
-        console.log('pathname:', pathName);
         if (queryFromUrl != keyword || queryFromUrl != aiPrompt) {
             if (pathName.includes('search-with-ai')) setAiPrompt(queryFromUrl);
             else setKeyword(queryFromUrl);

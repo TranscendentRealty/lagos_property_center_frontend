@@ -28,9 +28,9 @@ interface StatsAndTestimonialsProps {
 }
 
 const defaultStats: StatItem[] = [
-    { id: 1, count: 8, label: 'PRIME<br />LOCATIONS' },
-    { id: 2, count: 67, label: 'SATISFIED<br />CUSTOMERS' },
-    { id: 3, count: 128, label: 'HOUSES<br />SOLD' },
+    { id: 1, count: 20, label: 'PRIME<br />LOCATIONS' },
+    { id: 2, count: 117, label: 'SATISFIED<br />CUSTOMERS' },
+    { id: 3, count: 121, label: 'HOUSES<br />SOLD' },
 ];
 
 const defaultTestimonials: TestimonialItem[] = [
@@ -70,7 +70,7 @@ const StatsAndTestimonials: React.FC<StatsAndTestimonialsProps> = () => {
 
                 {/* Testimonials Section */}
                 {testimonials && testimonials.length > 0 && (
-                    <div className="testimonials-content">
+                    <div className="testimonials-content" id='testimonials'>
                         <hgroup className="section-heading mb-4 mb-md-6">
                             <h2 className="section-title fw-bold">{testimonialsTitle}</h2>
                             <p className="lead text-muted">{testimonialsSubtitle}</p>

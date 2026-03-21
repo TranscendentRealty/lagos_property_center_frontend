@@ -65,7 +65,7 @@ const FloatingContactButtons: React.FC<FloatingContactButtonsProps> = ({
           <a
             className="floating-btn call-btn"
             aria-label="Call us"
-            data-tooltip="Call Us" // Use data attribute for tooltip
+            data-tooltip="Call Us: +2349169112315" // Use data attribute for tooltip
           >
             <FaPhoneAlt size={24} />
           </a>

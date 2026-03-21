@@ -14,8 +14,10 @@ $all-transition: all 0.5s ease;
 $alertGreen: #169e00;
 $alertRed: #ff5367;
 $hspan: #ffcf00;
+$themeGreen: #525536;
+$themeYellow: #e6df9d;
 // CUSTOM THEME
-$theme-colors: ( "primary": $primary, "secondary": $secondary, "black": $black, "white": $white, "muted": $muted, "light": $light, "lightBlue": $lightBlue, "transBlue": $transBlue, "lightOrange": $lightOrange, "alertGreen": $alertGreen, "alertRed": $alertRed, "hspan": $hspan, );
+$theme-colors: ( "primary": $primary, "secondary": $secondary, "black": $black, "white": $white, "muted": $muted, "light": $light, "lightBlue": $lightBlue, "transBlue": $transBlue, "lightOrange": $lightOrange, "alertGreen": $alertGreen, "alertRed": $alertRed, "hspan": $hspan, "themeGreen": $themeGreen );
 // Grid breakpoints
 $grid-breakpoints: ( xs: 0, sm: 576px, // sm: 385px,
 md: 768px, lg: 992px, xl: 1200px, xxl: 1440px, ) !default;

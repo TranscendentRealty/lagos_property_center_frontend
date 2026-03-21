@@ -11,8 +11,8 @@ import { ListingType } from '@/types/common';
 
 // Simplify the data structure - we only need background images now
 const backgroundImages: { id: number; src: StaticImageData | string; alt: string }[] = [
-    { id: 1, src: images.PropertyImagePlaceholder2, alt: 'Luxurious modern villa backdrop' },
-    { id: 2, src: images.PropertyImagePlaceholder, alt: 'Spacious downtown apartment building' },
+    { id: 1, src: images.PropertyImagePlaceholder, alt: 'Luxurious modern villa backdrop' },
+    { id: 2, src: images.PropertyImagePlaceholder2, alt: 'Spacious downtown apartment building' },
     { id: 3, src: images.PropertyImagePlaceholder3, alt: 'Cozy suburban home exterior' },
 ];
 
@@ -31,6 +31,8 @@ const HeroSection = () => {
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        // console.log({ location, propertyType, bedrooms })
 
         // Construct the query parameters for the search page
         const params = new URLSearchParams();
@@ -57,7 +59,7 @@ const HeroSection = () => {
                 fade
                 controls={false}
                 indicators={false} // Hide indicators for a clean background look
-                interval={500}
+                interval={1000}
                 className="property-showcase-carousel"
             >
                 {backgroundImages.map((image, index) => (

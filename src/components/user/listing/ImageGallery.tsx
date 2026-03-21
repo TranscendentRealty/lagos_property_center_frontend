@@ -14,7 +14,24 @@ export interface GalleryImage {
   alt: string;
   type: 'image' | 'video';
   videoSrc?: string;
+  videoType?: 'html' | 'youtube';
 }
+
+const toYouTubeEmbedUrl = (url: string): string => {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname === 'youtu.be') {
+      return `https://www.youtube.com/embed${parsed.pathname}`;
+    }
+    const videoId = parsed.searchParams.get('v');
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+  } catch {
+    // fall through if URL parsing fails
+  }
+  return url; // already an embed URL or unrecognised format
+};
 
 interface ImageGalleryProps {
   galleryImages: GalleryImage[];
@@ -40,7 +57,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ galleryImages }) => {
     thumbnail: image.src, // We hide this, but it's good practice to have it
     originalAlt: image.alt,
     thumbnailAlt: image.alt,
-    originalHeight: 600
+    originalClass: 'gallery-portrait-img',
   }));
 
   // Handler for when one of our custom image thumbnails is clicked
@@ -58,22 +75,43 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ galleryImages }) => {
   return (
     <div className="custom-gallery-container">
       {/* --- MAIN DISPLAY AREA --- */}
-      <div className="main-display-area shadow-sm">
+      <div
+        className="main-display-area shadow-sm"
+        style={displayMode === 'video' ? { height: 'auto', background: '#000', padding: 0 } : undefined}
+      >
         {displayMode === 'video' && videoItem ? (
-          <video
-            src={videoItem.videoSrc}
-            poster={videoItem.src} // Use thumbnail as poster
-            controls
-            autoPlay
-            muted
-            playsInline
-            className="main-display-media video-player"
-            key={videoItem.id} // Add key to force re-render if video changes
-            height={600}
-            width={600}
-          >
-            Your browser does not support the video tag.
-          </video>
+          /* Portrait video wrapper — 9:16 aspect ratio, centred, capped so it never overflows the column */
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: '420px',
+            margin: '0 auto',
+            aspectRatio: '9 / 16',
+          }}>
+            {videoItem.videoType === 'youtube' ? (
+              <iframe
+                key={videoItem.id}
+                src={toYouTubeEmbedUrl(videoItem.videoSrc!)}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none', display: 'block' }}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={videoItem.alt}
+              />
+            ) : (
+              <video
+                key={videoItem.id}
+                src={videoItem.videoSrc}
+                poster={videoItem.src}
+                controls
+                autoPlay
+                muted
+                playsInline
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              >
+                Your browser does not support the video tag.
+              </video>
+            )}
+          </div>
         ) : (
           <ReactImageGallery
             ref={galleryRef}

@@ -1,0 +1,155 @@
+.not-found-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    // ── Left panel ─────────────────────────────────────────────────────────
+    .not-found-content {
+        background-color: $themeGreen; // dark green background
+        padding: 5rem 4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .not-found-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            color: $muted;
+        }
+
+        .not-found-number {
+            font-size: clamp(7rem, 14vw, 12rem);
+            font-weight: 900;
+            line-height: 0.9;
+            color: $themeYellow; // brand gold #ffcf00
+            margin-bottom: 1.25rem;
+            user-select: none;
+        }
+
+        .not-found-heading {
+            font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+            color: $white;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .not-found-sub {
+            font-size: 1rem;
+            color: $muted;
+            max-width: 420px;
+            line-height: 1.7;
+        }
+
+        .not-found-btn-primary {
+            background-color: $themeYellow;
+            border-color: $themeYellow;
+            color: $themeGreen;
+            font-weight: 700;
+            transition: $all-transition;
+
+            &:hover {
+                background-color: darken($themeYellow, 8%);
+                border-color: darken($themeYellow, 8%);
+            }
+        }
+
+        .not-found-btn-secondary {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: $white;
+            transition: $all-transition;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.08);
+                border-color: rgba(255, 255, 255, 0.6);
+                color: $white;
+            }
+        }
+    }
+
+    // ── Right panel — image mosaic ──────────────────────────────────────────
+    .not-found-image-col {
+        position: relative;
+        min-height: 420px;
+
+        .not-found-image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            height: 100%;
+            min-height: 420px;
+            gap: 3px;
+
+            .not-found-img-item {
+                position: relative;
+                overflow: hidden;
+
+                img {
+                    transition: transform 0.6s ease;
+                }
+
+                &:hover img {
+                    transform: scale(1.04);
+                }
+            }
+        }
+
+        // dark gradient overlay across the whole mosaic
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(15, 26, 42, 0.55) 0%,
+                rgba(15, 26, 42, 0.15) 60%,
+                rgba(15, 26, 42, 0.4) 100%
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .not-found-mosaic-label {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.75rem;
+            z-index: 2;
+            text-align: right;
+
+            p {
+                font-size: 0.8rem;
+                color: rgba(255, 255, 255, 0.7);
+                letter-spacing: 0.05em;
+                margin: 0;
+            }
+        }
+    }
+
+    // ── Responsive ─────────────────────────────────────────────────────────
+    @media (max-width: 991px) {
+        .not-found-content {
+            padding: 3.5rem 2rem;
+
+            .not-found-number {
+                font-size: 6rem;
+            }
+        }
+
+        .not-found-image-col {
+            min-height: 300px;
+
+            .not-found-image-grid {
+                min-height: 300px;
+            }
+        }
+    }
+
+    @media (max-width: 575px) {
+        .not-found-content {
+            padding: 3rem 1.5rem;
+
+            .not-found-sub {
+                max-width: 100%;
+            }
+        }
+    }
+}

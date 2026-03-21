@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { Form, InputGroup, Button, ButtonGroup } from 'react-bootstrap';
+import { Form, InputGroup, Button } from 'react-bootstrap';
 import { FiSearch, FiCheck } from 'react-icons/fi';
 import Search from '../layout/Search';
 
@@ -53,33 +53,35 @@ const SearchBarAndSort: React.FC<SearchBarAndSortProps> = ({
       <Search classNames='landing-main-search rounded-pill my-3' darkButton />
 
       <div className="sort-options d-flex justify-content-end">
-        <ButtonGroup size="sm">
+        <div className="d-flex gap-2 flex-wrap justify-content-end">
           <Button
-            variant={activeSort === 'price_asc' ? 'primary' : 'outline-secondary'}
+            size="sm"
+            variant={activeSort === 'price_asc' ? 'dark' : 'outline-secondary'}
             onClick={() => handleSortClick('price_asc')}
             className="sort-button"
           >
-            {activeSort === 'price_asc' && <FiCheck size={16} className="me-1" />}
-                ;
+            {activeSort === 'price_asc' && <FiCheck size={14} className="me-1" />}
             Price Ascending
           </Button>
           <Button
-            variant={activeSort === 'price_desc' ? 'primary' : 'outline-secondary'}
+            size="sm"
+            variant={activeSort === 'price_desc' ? 'dark' : 'outline-secondary'}
             onClick={() => handleSortClick('price_desc')}
             className="sort-button"
           >
-             {activeSort === 'price_desc' && <FiCheck size={16} className="me-1" />}
+            {activeSort === 'price_desc' && <FiCheck size={14} className="me-1" />}
             Price Descending
           </Button>
           <Button
-            variant={activeSort === 'recommended' ? 'primary' : 'outline-secondary'}
+            size="sm"
+            variant={activeSort === 'recommended' ? 'dark' : 'outline-secondary'}
             onClick={() => handleSortClick('recommended')}
             className="sort-button"
           >
-            {activeSort === 'recommended' && <FiCheck size={16} className="me-1" />}
+            {activeSort === 'recommended' && <FiCheck size={14} className="me-1" />}
             Recommended
           </Button>
-        </ButtonGroup>
+        </div>
       </div>
     </div>
   );

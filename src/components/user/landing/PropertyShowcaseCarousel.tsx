@@ -12,7 +12,7 @@ const slidesData = [
         id: 1,
         imageUrl: images.PropertyImagePlaceholder2,
         altText: 'Luxurious modern villa',
-        title: 'Lagos Property Center',
+        title: 'Transcendent Realty',
         subtitle: 'Discover our featured property of the week',
         buttonText: 'See More',
         buttonLink: '/featured-property/1',

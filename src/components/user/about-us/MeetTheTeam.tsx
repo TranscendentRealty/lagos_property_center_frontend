@@ -4,10 +4,10 @@ import { images } from '@/exports/images';
 
 const MeetTheTeam = () => {
      const title = "Meet the Team";
-  const description = "Our team of dedicated professionals combines deep industry knowledge with a passion for helping clients achieve their goals. From real estate consultants to brokers, we work collaboratively to provide seamless experiences and achieve outstanding results.";
+  const description = "Founded by Bukunmi Olalekan and Pelumi Olalekan, whose backgrounds span marketing, sales, and engineering, Transcendent Realty represents a refined approach to Lagos real estate. With a commitment to excellence and precision, they have curated an exclusive portfolio of premium, verified properties — delivering a seamless, discreet, and elevated experience for discerning buyers, renters, and investors.";
   const teamImages = [
-    { src: images.TeamMemberOnePlaceholder, alt: "Team Member One" },
-    { src: images.TeamMemberTwoPlaceholder, alt: "Team Member Two" },
+    { src: "https://media.transcendentrealty.com/admin/bukunmi_headshot.jpg", alt: "Oluwabukunmi Olalekan", animation: "slide-down" },
+    { src: "https://media.transcendentrealty.com/admin/pelumi_headshot.jpeg", alt: "Oluwapelumi Olalekan", animation: "slide-up" },
   ];
   return (
     <section className="meet-the-team-section py-5">
@@ -25,7 +25,7 @@ const MeetTheTeam = () => {
 
               {/* Team Images - map through them for flexibility */}
               {teamImages.map((img, index) => (
-                <div key={index} className={`team-image-item team-image-${index + 1} shadow-sm`}>
+                <div key={index} className={`team-image-item team-image-${index + 1} shadow-sm`} data-aos={img.animation} data-aos-ease="linear" data-aos-duration="500">
                   <Image
                     src={img.src}
                     alt={img.alt}
@@ -42,9 +42,9 @@ const MeetTheTeam = () => {
 
           {/* Text Content Column */}
           <div className="col-md-6">
-            <div className="team-text-content">
+            <div className="team-text-content" data-aos="zoom-in" data-aos-ease="linear" data-aos-duration="500">
               <h2 className="display-5 fw-bold mb-3">{title}</h2>
-              <p className="lead">{description}</p>
+              <p className="text-black text-justify lead">{description}</p>
             </div>
           </div>
 

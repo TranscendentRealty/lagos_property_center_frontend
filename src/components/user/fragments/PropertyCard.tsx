@@ -55,23 +55,21 @@ const PropertyCardDisplay = ({ id, imageUrl, price, beds, baths, title, livingro
                 />
                 <span className="small text-black">{beds}</span> {/* Or fs-sm */}
               </div>
-              <div className="d-flex align-items-center" style={{ gap: '0.25rem' }}>
-                {/* Replace with your Couch/Living Room SVG Icon */}
+              {/*   <div className="d-flex align-items-center" style={{ gap: '0.25rem' }}>
                 <Image
                   src={icons.SofaIcon}
                   alt='sofa icon'
                 />
                 <span className="small text-black">{livingrooms}</span>
-              </div>
+              </div>  */}
               <div className="d-flex align-items-center" style={{ gap: '0.25rem' }}>
-                {/* Replace with your Third SVG Icon (e.g., Bath) */}
                 <Image
                   src={icons.ShowerIcon}
                   alt='shower icon'
                 />
-                <span className="small text-black">{baths}</span>
+                <span className="small text-black">{beds + 1}</span>
               </div>
-              {/* <div className="d-flex align-items-center" style={{ gap: '0.25rem' }}>
+                   {/*  <div className="d-flex align-items-center" style={{ gap: '0.25rem' }}>
                 <Image
                   src={icons.SwimmingPoolIcon}
                   alt='swimming pool icon'
@@ -104,11 +102,14 @@ const PropertyCard = ({ property }: { property: IProperty }) => {
   // --- Data Transformation Logic ---
   // Transform the rich backend data into a simple format for the display component.
 
-  // 1. Get the first photo as the main image, with a fallback.
+  // property.photos.sort((a, b) => {
+  //   return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+  // });
+
   const imageUrl = property.photos[0] || '/images/default-property.png';
 
   // 2. Create a user-friendly location string.
-  const displayLocation = `${property.location?.street}, ${property.location?.city}`;
+  const displayLocation = property.location?.street ? `${property.location?.street}, ${property.location?.city}` : property.location?.city;
 
   // 3. Extract the simple values.
   const cardProps: PropertyCardProps = {

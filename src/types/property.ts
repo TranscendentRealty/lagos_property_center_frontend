@@ -49,6 +49,10 @@ export interface IPropertyArea {
   unit: string;
 }
 
+export interface IPropertyVideos {
+  youtube: string;
+  bucket: string;
+}
 
 // Full mongoose schema interface
 export interface IProperty {
@@ -67,7 +71,7 @@ export interface IProperty {
   area: IPropertyArea;
 
   photos: string[]; // An array of image URLs
-  videoUrl?: string;
+  videoUrls?: IPropertyVideos;
   amenities: string[];
 
   // These fields will be string ObjectIds unless you .populate() them in your API query

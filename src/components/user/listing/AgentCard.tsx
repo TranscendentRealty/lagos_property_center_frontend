@@ -47,12 +47,12 @@ const AgentCard: React.FC<AgentCardProps> = ({ agentName, agentTitle, agentImage
           <h5 className="agent-name fw-semibold mb-0">{agentName}</h5>
           <p className="agent-title text-muted small mb-1">{agentTitle}</p>
         </div>
-        <div className="agent-rating text-end ms-auto">
+        {/* <div className="agent-rating text-end ms-auto">
           <div className="stars-container d-flex mb-1">
             {renderStars()}
           </div>
           <p className="rating-text small text-muted mb-0">{rating.toFixed(1)} rating</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

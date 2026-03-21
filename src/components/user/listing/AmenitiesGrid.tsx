@@ -4,6 +4,7 @@ import React from 'react';
 import { FaBed, FaCouch, FaBath, FaSwimmingPool, FaDumbbell } from 'react-icons/fa'; // Example general icons
 import { MdElevator } from 'react-icons/md';
 import { HiHomeModern } from 'react-icons/hi2';
+import { GiCctvCamera } from "react-icons/gi";
 // You might need more specific icons like: GiBathtub, GiHomeGarage, MdOutlineOutdoorGrill etc.
 
 export interface Amenity {
@@ -22,27 +23,32 @@ const keyAmenities = [
   'bath',
   'swimming pool',
   'gym',
-  'elevator'
+  'elevator',
+  'inbuilt speakers',
+  'fitted kitchen',
+  'cctv'
 ]
 
 // Example: Create a helper to map text to icons if needed, or pass icons directly
 const getAmenityIcon = (text: string): React.ReactNode => {
-  if (text.toLowerCase().includes('bedroom')) return <FaBed size={20} className="text-primary" />;
-  if (text.toLowerCase().includes('living room')) return <FaCouch size={20} className="text-primary" />;
-  if (text.toLowerCase().includes('bath')) return <FaBath size={20} className="text-primary" />;
+  if (text.toLowerCase().includes('bedroom')) return <FaBed size={20} className="text-black" />;
+  if (text.toLowerCase().includes('living room')) return <FaCouch size={20} className="text-black" />;
+  if (text.toLowerCase().includes('bath')) return <FaBath size={20} className="text-black" />;
   if (text.toLowerCase().includes('swimming pool')) return <FaSwimmingPool size={20}
-    className="text-primary" />;
-  if (text.toLowerCase().includes('gym')) return <FaDumbbell size={20} className="text-primary" />;
-  if (text.toLowerCase().includes('elevator')) return <MdElevator size={20} className="text-primary" />;
+    className="text-black" />;
+  if (text.toLowerCase().includes('gym')) return <FaDumbbell size={20} className="text-black" />;
+  if (text.toLowerCase().includes('elevator')) return <MdElevator size={20} className="text-black" />;
+  if (text.toLowerCase().includes('cctv')) return <GiCctvCamera size={20} className="text-black" />;
 
-  return <HiHomeModern size={20} className="text-primary" />;
+
+  return <HiHomeModern size={20} className="text-black" />;
 };
 
 
 const AmenitiesGrid: React.FC<AmenitiesGridProps> = ({ amenities }) => {
   if (!amenities || amenities.length === 0) return null;
 
-
+// console.log("Amenities passed to AmenitiesGrid:", amenities);
 
   return (
     <div className="amenities-grid-section">

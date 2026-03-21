@@ -6,26 +6,63 @@ import httpClient from '@/services/httpClient';
 
 import ExplorePageHero from '@/components/user/explore/ExplorePageHero';
 import ExploreMoreCategories from '@/components/user/explore/ExploreMoreCategories';
-import { IPaginatedProperties } from '@/types/property';
+import { IPaginatedProperties, IProperty } from '@/types/property';
 import useUpdateEffect from '@/hooks/useUpdateEffect';
 
-// Updated fetch function to accept a page number
-async function getExploreListings(category: string, value: string, page: number, limit: number): Promise<IPaginatedProperties | null> {
+// Fetches a single location value from the explore API
+async function fetchSingleExploreValue(category: string, value: string, page: number, limit: number): Promise<IPaginatedProperties | null> {
   try {
-      // Append the page number as a query parameter
-      const url = `/api/v1/pages/explore?category=${category}&value=${value}&page=${page}&limit=${limit}`;
-      const response = await httpClient.get(url);
-
-      if (response.data && response.data.status === "success") {
-          return response.data.data as IPaginatedProperties;
-      } else {
-          console.warn(`API responded with success=false for explore page ${page}`);
-          return null;
-      }
+    const url = `/api/v1/pages/explore?category=${category}&value=${value}&page=${page}&limit=${limit}`;
+    const response = await httpClient.get(url);
+    if (response.data?.status === 'success') return response.data.data as IPaginatedProperties;
+    return null;
   } catch (error) {
-      console.error(`Exception while fetching explore page ${page} with Axios.`, error);
-      return null;
+    console.error(`Exception while fetching explore listings for "${value}":`, error);
+    return null;
   }
+}
+
+// Fan out one request per value, merge results, deduplicate by _id
+async function getExploreListings(category: string, values: string[], page: number, limit: number): Promise<IPaginatedProperties | null> {
+  if (values.length === 1) {
+    return fetchSingleExploreValue(category, values[0], page, limit);
+  }
+
+  const responses = await Promise.all(
+    values.map(v => fetchSingleExploreValue(category, v.trim(), page, limit))
+  );
+
+  console.log({ exploreCategoryValues: values });
+
+  const allProperties: IProperty[] = [];
+  let combinedTotal = 0;
+
+  for (const result of responses) {
+    if (result) {
+      allProperties.push(...result.properties);
+      combinedTotal += result.pagination?.total ?? 0;
+    }
+  }
+
+  // Deduplicate properties that appear in both location results
+  const seen = new Set<string>();
+  const uniqueProperties = allProperties.filter(p => {
+    if (seen.has(p._id)) return false;
+    seen.add(p._id);
+    return true;
+  });
+
+  return {
+    properties: uniqueProperties,
+    category,
+    value: values.join(' / '),
+    pagination: {
+      total: combinedTotal,
+      limit,
+      page,
+      totalPages: Math.ceil(combinedTotal / limit),
+    },
+  };
 }
 
 
@@ -37,7 +74,7 @@ const Explore = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(1);
   const [category, setCategory] = useState("");
-  const [categoryValue, setCategoryValue] = useState("");
+  const [categoryValues, setCategoryValues] = useState<string[]>([]);
   const [showListings, setShowListings] = useState(false);
 
 
@@ -46,9 +83,10 @@ const Explore = () => {
     const fetchListings = async () => {
         try {
             setIsLoading(true);
-            const data = await getExploreListings(category, categoryValue, currentPage, limit);
+            const data = await getExploreListings(category, categoryValues, currentPage, limit);
             console.log("currentPage:", currentPage);
             if (data) {
+              console.log("Fetched listings data:", data);
               setPaginatedProperties(data);
             } else {
                 setError("Failed to load listings.");
@@ -62,7 +100,7 @@ const Explore = () => {
     };
 
     fetchListings();
-  }, [currentPage, limit, category, categoryValue]);
+  }, [currentPage, limit, category, categoryValues]);
 
 
 
@@ -74,9 +112,10 @@ const Explore = () => {
     window.scrollTo(0, 559);
   };
 
-  const handleExplore = (category: string, value: string, page: number, limit: number) => {
+  const handleExplore = (category: string, value: string | string[], page: number, limit: number) => {
+    const values = Array.isArray(value) ? value.map(v => v.trim()) : [value];
     setCategory(category);
-    setCategoryValue(value);
+    setCategoryValues(values);
     setCurrentPage(page);
     setLimit(limit);
     setShowListings(true);

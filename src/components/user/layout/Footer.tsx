@@ -14,27 +14,20 @@ const Footer = () => {
 
             <div className="container-fluid row px-0 mx-0 main-footer">
 
-                <div className="col-12 col-md-3 fg-subtle px-5">
-                    <Image src={images.Logo} alt='brand logo' className='my-2 ' height={60} />
-
-                    {/* <div className='mt-2'>
-                        <Image src={Telephone} alt='telephone' className='my-2' />
-                        &nbsp;
-                        +012 345 6789
-                        <br />
-                        <Image src={Message} alt='message' className='my-2' />
-                        &nbsp;
-                        Hello@novodeus.co
-                    </div> */}
+                <div className="col-12 col-md-3 fg-subtle ps-5 pe-2 footer-name">
+                    <Link href="/">
+                        <Image src={images.Logo} alt='brand logo' className='my-2' height={60} />
+                        &nbsp; <span>Transcendent Realty</span>
+                    </Link>
 
                     <div className='mb-4'>
-                        <Link href="#" className=''><Image src={icons.XIcon} alt='instagram' className='' /></Link>
+                        <Link href="#!" className='social-link' target="_blank" rel="noopener noreferrer"><Image src={icons.XIcon} alt='twitter X link' /></Link>
                         &nbsp; &nbsp;
-                        <Link href="#" className=''><Image src={icons.InstagramIcon} alt='instagram' className='' /></Link>
+                        <Link href="https://www.instagram.com/transcendent.realty" className='social-link' target="_blank" rel="noopener noreferrer"><Image src={icons.InstagramIcon} alt='instagram' className='' /></Link>
                         &nbsp; &nbsp;
-                        <Link href="#"><Image src={icons.YoutubeIcon} alt='instagram' className='' /></Link>
+                        <Link href="https://www.youtube.com/channel/UCTxMNs6YB4gNPE-4M6aJEQQ" className='social-link' target="_blank" rel="noopener noreferrer"><Image src={icons.YoutubeIcon} alt='youtube link' className='' /></Link>
                         &nbsp; &nbsp;
-                        <Link href="#"><Image src={icons.LinkedIcon} alt='instagram' className='' /></Link>
+                        <Link href="https://www.linkedin.com/company/transcendent-realty" className='social-link' target="_blank" rel="noopener noreferrer"><Image src={icons.LinkedIcon} alt='linkedin link' className='' /></Link>
                     </div>
 
 
@@ -50,11 +43,17 @@ const Footer = () => {
                             <Link href="/search">
                                 <div className="footer-item mb-2">Property Search</div>
                             </Link>
-                            <Link href="#!">
+                            {/* <Link href="#!">
                                 <div className="footer-item mb-2">Saved Properties</div>
                             </Link>
                             <Link href="#!" className="footer-item mb-2">
                                 <div className="footer-item mb-2">Compare Listings</div>
+                            </Link> */}
+                            <Link href="/#properties-of-the-week">
+                                <div className="footer-item mb-2">Properties of the Week</div>
+                            </Link>
+                            <Link href="/#hot-right-now">
+                                <div className="footer-item mb-2">Hot Right Now</div>
                             </Link>
                             <Link href="/contact-us">
                                 <div className="footer-item mb-2">Contact Us</div>
@@ -67,7 +66,7 @@ const Footer = () => {
                             <div className="footer-header mb-3">Resources</div>
                             <Link href="/about-us" className="footer-item mb-2">
                                 <div className="footer-item mb-2">About Us</div></Link>
-                            <Link href="#!" className="footer-item mb-2">
+                            <Link href="/about-us#testimonials" className="footer-item mb-2">
                                 <div className="footer-item mb-2">Testimonials</div></Link>
                             <Link href="/#faq-accordion">
                                 <div className="footer-item mb-2">FAQ</div></Link>
@@ -90,7 +89,7 @@ const Footer = () => {
 
             <div className="py-3 copyright container-fluid d-flex justify-content-end align-items-center mx-0">
                 <div className="px-3 px-md-5 justify-content-md-center fg-subtle">
-                    Lagos Property Center by Transcendent Realty &copy; 2025
+                    Transcendent Realty &copy; 2025
                 </div>
 
             </div>
