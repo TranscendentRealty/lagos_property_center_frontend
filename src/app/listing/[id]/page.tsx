@@ -122,29 +122,15 @@ export async function generateMetadata(
         };
     }
 
-    // product.photos.sort((a, b) => {
-    //     return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
-    // });
-
-    const mainImageUrl = product.photos?.[0] || '/images/PropertyImagePlaceholder.png';
-
     return {
         title: `${product.title}`,
         description: product.description || `Details for ${product.title}, located in ${product.location.street}.`,
         openGraph: {
             title: `${product.title} | Transcendent Realty`,
-            images: [
-                {
-                    url: mainImageUrl, // Dynamically injects the R2 image!
-                      width: 900,
-                      height: 1200,
-                },
-            ],
         },
         twitter: {
-            card: "summary_large_image",
-            images: [mainImageUrl],
-        }
+            card: 'summary_large_image',
+        },
     };
 }
 

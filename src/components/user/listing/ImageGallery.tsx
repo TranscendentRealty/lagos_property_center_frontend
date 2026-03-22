@@ -127,11 +127,11 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ galleryImages }) => {
       </div>
 
       {/* --- CUSTOM THUMBNAIL AREA --- */}
-      <div className="custom-thumbnails-wrapper mt-3 d-flex align-items-center">
-        {/* Video Thumbnail (Left) */}
+      <div className="custom-thumbnails-wrapper mt-3 d-flex align-items-center" style={{ overflowX: 'auto', flexWrap: 'nowrap' }}>
+        {/* Video Thumbnail (first, if present) */}
         {videoItem && (
           <div
-            className={`custom-thumbnail-item video-thumbnail ${displayMode === 'video' ? 'active' : ''}`}
+            className={`custom-thumbnail-item video-thumbnail flex-shrink-0 ${displayMode === 'video' ? 'active' : ''}`}
             onClick={handleVideoThumbnailClick}
             role="button"
           >
@@ -141,21 +141,19 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ galleryImages }) => {
         )}
 
         {/* Separator */}
-        {videoItem && imageItems.length > 0 && <div className="thumbnail-separator mx-2"></div>}
+        {videoItem && imageItems.length > 0 && <div className="thumbnail-separator mx-2 flex-shrink-0"></div>}
 
-        {/* Image Thumbnails (Right) */}
-        <div className="custom-image-thumbnails d-flex flex-wrap">
-          {imageItems.map((img, index) => (
-            <div
-              key={img.id}
-              className={`custom-thumbnail-item image-thumbnail ${displayMode === 'image' && index === currentImageIndex ? 'active' : ''}`}
-              onClick={() => handleImageThumbnailClick(index)}
-              role="button"
-            >
-              <Image src={img.src} alt={img.alt} width={100} height={75} objectFit="cover" />
-            </div>
-          ))}
-        </div>
+        {/* Image Thumbnails — siblings in the same row */}
+        {imageItems.map((img, index) => (
+          <div
+            key={img.id}
+            className={`custom-thumbnail-item image-thumbnail flex-shrink-0 ${displayMode === 'image' && index === currentImageIndex ? 'active' : ''}`}
+            onClick={() => handleImageThumbnailClick(index)}
+            role="button"
+          >
+            <Image src={img.src} alt={img.alt} width={100} height={75} objectFit="cover" />
+          </div>
+        ))}
       </div>
     </div>
   );

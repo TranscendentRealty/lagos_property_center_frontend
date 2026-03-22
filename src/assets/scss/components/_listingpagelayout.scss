@@ -126,6 +126,15 @@
     .product-location {
         // color: $muted;
     }
+
+    @include media-breakpoint-down(sm) {
+        .product-title {
+            font-size: 1.4rem !important;
+        }
+        .product-price {
+            font-size: 1.75rem !important;
+        }
+    }
 }
 
 // --- AgentCard ---

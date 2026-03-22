@@ -86,7 +86,7 @@ const Explore = () => {
             const data = await getExploreListings(category, categoryValues, currentPage, limit);
             console.log("currentPage:", currentPage);
             if (data) {
-              console.log("Fetched listings data:", data);
+              // console.log("Fetched listings data:", data);
               setPaginatedProperties(data);
             } else {
                 setError("Failed to load listings.");
