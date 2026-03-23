@@ -39,7 +39,7 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
 }) => {
 
   return (
-    <Card className="hero-search-panel shadow-lg">
+    <Card className="hero-search-panel shadow-lg d-none d-md-block">
       <Card.Header className="bg-white border-0 pt-3 px-3">
         {/* Tabs for Rent/Sale/Shortlet */}
         {/* <Nav variant="pills" defaultActiveKey="sale" activeKey={activeTab} onSelect={(selectedKey) => setActiveTab(selectedKey as ListingType)}>

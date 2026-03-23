@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata } from 'next';
+import ScrollToTop from '@/components/user/fragments/ScrollToTop';
 
 export const metadata: Metadata = {
   title: '404 — Page Not Found',
@@ -17,6 +18,7 @@ export default function NotFound() {
 
   return (
     <main className="not-found-page">
+      <ScrollToTop />
       <div className="container-fluid px-0 flex-grow-1">
         <div className="row g-0" style={{ minHeight: '100vh' }}>
 

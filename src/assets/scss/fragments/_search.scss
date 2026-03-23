@@ -130,6 +130,7 @@ $aurora-blur: 1.5rem; // Blur effect for the aurora blobs
 
 .input-group {
     border: 2px solid rgba($muted, 0.3) !important;
+    flex-wrap: nowrap !important;
 }
 
 // --- Keyframes (Copied directly from your example) ---

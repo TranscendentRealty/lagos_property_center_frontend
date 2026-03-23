@@ -41,7 +41,7 @@ const staticPages: MetadataRoute.Sitemap = [
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8080';
-    const res = await fetch(`${apiBaseUrl}/api/v1/properties/all`, {
+    const res = await fetch(`${apiBaseUrl}/api/v1/properties/all?page=1&limit=500`, {
       // Same cache strategy as generateStaticParams — built once, reused across the build.
       cache: 'force-cache',
     });

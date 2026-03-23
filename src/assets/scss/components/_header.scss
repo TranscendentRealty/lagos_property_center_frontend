@@ -57,11 +57,5 @@
                 border-bottom: 0px !important;
             }
         }
-        // Prevent the search input + icon button from wrapping onto separate lines
-        .search-wrapper-div {
-            .input-group {
-                flex-wrap: nowrap !important;
-            }
-        }
     }
 }

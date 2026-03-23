@@ -26,7 +26,9 @@ export const revalidate = 43200;
 export async function generateStaticParams(): Promise<{ id: string }[]> {
     try {
         const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8080';
-        const res = await fetch(`${apiBaseUrl}/api/v1/properties/all`, { cache: 'force-cache' });
+        // no-store ensures a fresh fetch at every build — avoids a stale empty cache
+        // limit=500 bypasses any default server-side page size so all listings are returned
+        const res = await fetch(`${apiBaseUrl}/api/v1/properties/all?page=1&limit=500`, { cache: 'no-store' });
 
         if (!res.ok) {
             console.error(`generateStaticParams: API error ${res.status}`);
@@ -35,6 +37,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
 
         const data = await res.json();
         const properties: { _id: string }[] = data?.data?.properties ?? [];
+        console.log(`generateStaticParams: pre-building ${properties.length} listing pages`);
         return properties.map((p) => ({ id: p._id }));
     } catch (error) {
         console.error('generateStaticParams: failed to fetch property list', error);
@@ -127,6 +130,12 @@ export async function generateMetadata(
         description: product.description || `Details for ${product.title}, located in ${product.location.street}.`,
         openGraph: {
             title: `${product.title} | Transcendent Realty`,
+            description: product.description || `Details for ${product.title}, located in ${product.location.street}.`,
+            url: `https://www.transcendentrealty.com/listing/${params.id}`,
+            siteName: "Transcendent Realty",
+            type: "article",
+            publishedTime: product.updatedAt, // e.g., "2026-03-23T01:19:00Z"
+            authors: ["Transcendent Realty"],
         },
         twitter: {
             card: 'summary_large_image',
@@ -142,6 +151,27 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
     const product = await getListingDetails(id);
     const similarListings = await getSimilarListings(id);
     // console.log("Similar Listings:", similarListings);
+
+    const schemaMarkup = {
+        "@context": "https://schema.org/",
+        // Pinterest treats 'Product' schemas as 'Product Rich Pins' (shows price)
+        "@type": "Product",
+        "name": product?.title,
+        "image": product?.photos?.[0] || 'https://placehold.co/600x400/1a1a1a/ffffff.png',
+        "description": product?.description,
+        "brand": {
+            "@type": "Brand",
+            "name": "Transcendent Realty"
+        },
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": "NGN", // Or USD depending on your target market
+            "price": product?.price, // e.g., 150000000
+            "availability": "https://schema.org/InStock",
+            "url": `https://www.transcendentrealty.com/listing/${params.id}`
+        }
+    };
+
 
     if (!product) {
         notFound();
@@ -189,7 +219,12 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
     return (
         <> {/* Or your main <Layout> component */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
+            />
             <ScrollToTop />
+
             <main className="container py-4 py-md-5"> {/* Use a standard container */}
                 <div className="row g-4 g-lg-5">
                     <div className="col-lg-7 col-md-12">
