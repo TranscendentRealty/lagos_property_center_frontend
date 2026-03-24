@@ -59,7 +59,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                     location = `${product.location.street}, ${product.location.city}`;
                 }
                 if (product.price) {
-                    price = `₦${Number(product.price).toLocaleString('en-NG')}`;
+                    price = `#${Number(product.price).toLocaleString('en-NG')}`;
                 }
                 amenities = (product.amenities || []).slice(0, 3);
             }
@@ -158,7 +158,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                                     letterSpacing: '-0.01em',
                                 }}
                             >
-                                {price}
+                               {price}
                             </span>
                         )}
 
