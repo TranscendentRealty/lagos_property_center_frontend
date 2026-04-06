@@ -21,7 +21,7 @@ import InfoIcon from "../assets/svgs/icons/InfoIcon.svg";
 
 import PropertyImagePlaceholder from "../../public/images/PropertyImagePlaceholder.png";
 import PropertyImagePlaceholder2 from "../../public/images/PropertyImagePlaceholder2.png";
-import PropertyImagePlaceholder3 from "../../public/images/PropertyImagePlaceholder3.png"
+import PropertyImagePlaceholder3 from "../../public/images/PropertyImagePlaceholder3.png";
 
 export const images = {
     Logo,

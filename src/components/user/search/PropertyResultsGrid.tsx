@@ -7,9 +7,10 @@ import EmptyStateMessage from '../fragments/EmptyStateMessage';
 interface PropertyResultsGridProps {
   properties: IProperty[];
   loading?: boolean;
+  aiSearch?: boolean;
 }
 
-const PropertyResultsGrid: React.FC<PropertyResultsGridProps> = ({ properties, loading }) => {
+const PropertyResultsGrid: React.FC<PropertyResultsGridProps> = ({ properties, loading, aiSearch = false }) => {
   if (loading) {
     return (
       <div className="text-center py-5">
@@ -34,7 +35,7 @@ const PropertyResultsGrid: React.FC<PropertyResultsGridProps> = ({ properties, l
   return (
     <div className="row g-4 property-results-grid"> {/* g-4 for gap between cards */}
       {properties.map(property => (
-        <div key={property._id} className="col-12 col-md-6 col-lg-4 mx-5 d-flex align-items-between"> {/* d-flex and align-items-stretch for equal height cards */}
+        <div key={property._id} className={`col-12 col-md-6 col-lg-4 mx-5 d-flex justify-content-${aiSearch? 'center' : 'between'}`}> {/* d-flex and align-items-stretch for equal height cards */}
           <PropertyCard property={property} />
         </div>
       ))}

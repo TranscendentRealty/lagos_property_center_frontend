@@ -1,7 +1,7 @@
 // pages/explore.tsx (or wherever your Explore page is)
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import httpClient from '@/services/httpClient';
 
 import ExplorePageHero from '@/components/user/explore/ExplorePageHero';
@@ -32,7 +32,7 @@ async function getExploreListings(category: string, values: string[], page: numb
     values.map(v => fetchSingleExploreValue(category, v.trim(), page, limit))
   );
 
-  console.log({ exploreCategoryValues: values });
+  // console.log({ exploreCategoryValues: values });
 
   const allProperties: IProperty[] = [];
   let combinedTotal = 0;
@@ -70,7 +70,7 @@ async function getExploreListings(category: string, values: string[], page: numb
 const Explore = () => {
   const [paginatedProperties, setPaginatedProperties] = useState<IPaginatedProperties | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(1);
   const [category, setCategory] = useState("");

@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Button, Card, Col, Form, Nav, Row } from 'react-bootstrap';
 import { FiSearch } from 'react-icons/fi';
 import { ListingType } from '@/types/common';
+import { availableLocations } from '@/exports/constants';
 
 
 interface SearchPanelProps {
@@ -39,20 +40,9 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
 }) => {
 
   return (
-    <Card className="hero-search-panel shadow-lg d-none d-md-block">
+    <Card className="hero-search-panel shadow-lg">
       <Card.Header className="bg-white border-0 pt-3 px-3">
-        {/* Tabs for Rent/Sale/Shortlet */}
-        {/* <Nav variant="pills" defaultActiveKey="sale" activeKey={activeTab} onSelect={(selectedKey) => setActiveTab(selectedKey as ListingType)}>
-          <Nav.Item>
-            <Nav.Link eventKey="sale">Sale</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="rent">Rent</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="shortlet">Shortlet</Nav.Link>
-          </Nav.Item>
-        </Nav> */}
+        {/* Listing type tabs (currently not displayed) */}
       </Card.Header>
       <Card.Body className="p-3 p-md-4">
         <Form onSubmit={handleSearch}>
@@ -63,11 +53,9 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
                 {/* <Form.Control type="text" placeholder="Search Location" value={location} onChange={e => setLocation(e.target.value)} /> */}
                 <Form.Select value={location} onChange={e => setLocation(e.target.value)}>
                   <option value="">Location</option>
-                  <option value="lekki phase 1">Lekki Phase 1</option>
-                  <option value="chevron">Chevron</option>
-                  <option value="osapa">Osapa</option>
-                  <option value="orchid">Orchid Road</option>
-                  <option value="ikota">Ikota</option>
+                  { availableLocations.map(loc => (
+                    <option key={loc} value={loc.toLowerCase()}>{loc}</option>
+                  ))}
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -77,7 +65,7 @@ const HeroSearchPanel: React.FC<SearchPanelProps> = ({
                 <Form.Select value={propertyType} onChange={e => setPropertyType(e.target.value)}>
                   <option value="">Type</option>
                   <option value="apartment">Apartment</option>
-                  <option value="duplex">Duplex</option>
+                  <option value="terrace">Terrace</option>
                   <option value="semi-detached">Semi-Detached</option>
                   <option value="fully detached">Fully Detached</option>
                 </Form.Select>

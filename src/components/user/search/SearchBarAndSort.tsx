@@ -52,7 +52,7 @@ const SearchBarAndSort: React.FC<SearchBarAndSortProps> = ({
 
       <Search classNames='landing-main-search rounded-pill my-3' darkButton />
 
-      <div className="sort-options d-flex justify-content-end">
+      <div className="sort-options d-flex justify-content-end mt-3">
         <div className="d-flex gap-2 flex-wrap justify-content-end">
           <Button
             size="sm"

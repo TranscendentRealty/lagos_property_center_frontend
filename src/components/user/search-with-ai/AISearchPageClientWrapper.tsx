@@ -77,7 +77,7 @@ const AISearchPageClientWrapper: React.FC<AISearchPageClientWrapperProps> = ({
     const fetchData = async () => {
       setLoading(true);
       const result = await fetchClientSideProperties(queryString, currentPage);
-      console.log('AI search result:', result);
+      // console.log('AI search result:', result);
       setProperties(result.properties);
       SetPagination(result.pagination ?? null)
       setLoading(false);

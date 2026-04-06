@@ -11,7 +11,6 @@ const Search = ({ classNames, headerSearch = false, darkButton = true, aiSearch 
     const pathName = usePathname();
     const initialKeyword = searchParams.get('search') || '';
 
-
     const [keyword, setKeyword] = useState(initialKeyword);
     const [aiPrompt, setAiPrompt] = useState(initialKeyword);
     const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +25,7 @@ const Search = ({ classNames, headerSearch = false, darkButton = true, aiSearch 
             if (pathName.includes('search-with-ai')) setAiPrompt(queryFromUrl);
             else setKeyword(queryFromUrl);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams]);
 
     const searchHandler = async (event: FormEvent<HTMLFormElement>) => {
@@ -39,7 +39,6 @@ const Search = ({ classNames, headerSearch = false, darkButton = true, aiSearch 
 
         setIsLoading(true);
 
-
         if (trimmedSearchQuery) {
             const newUrl = `${targetPathname}?search=${encodeURIComponent(trimmedSearchQuery)}`;
             router.replace(newUrl);
@@ -48,7 +47,6 @@ const Search = ({ classNames, headerSearch = false, darkButton = true, aiSearch 
         }
 
         setIsLoading(false);
-
     };
 
     return (

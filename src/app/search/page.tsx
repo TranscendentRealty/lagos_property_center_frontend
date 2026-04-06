@@ -46,12 +46,12 @@ async function getInitialSearchResults(
 export async function generateMetadata({ searchParams }: { searchParams: { [key: string]: string | undefined } }): Promise<Metadata> {
     const resolvedSearchParams = await searchParams;
 
-  const location = resolvedSearchParams.location || 'Nigeria';
+  const location = resolvedSearchParams.location || 'Lagos';
   const category = resolvedSearchParams.category || 'Properties';
 
   return {
     title: `${category} for Sale in ${location}`,
-    description: `Find the best ${category} listings in ${location}. Browse verified properties for sale and rent with Transcendent Realty.`,
+    description: `Find the best ${category} listings in ${location}. Browse verified properties for sale with Transcendent Realty.`,
   };
 }
 

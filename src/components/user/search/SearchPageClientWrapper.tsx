@@ -10,6 +10,7 @@ import { IPagination, IProperty } from '@/types/property';
 import httpClient from '@/services/httpClient';
 import { IPaginatedProperties } from '@/types/property';
 import ReactPaginate from 'react-paginate';
+import { availableLocations } from '@/exports/constants';
 
 // Props for our client wrapper
 interface SearchPageClientWrapperProps {
@@ -26,6 +27,7 @@ const fetchClientSideProperties = async (
   limit: number = 10
 ): Promise<IPaginatedProperties> => {
   try {
+    // console.log({ searchQueryString: queryString });
     const url = `/api/v1/properties/search?${queryString}&page=${page}&limit=${limit}`;
 
     const response = await httpClient.get(url);
@@ -58,9 +60,9 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
   const [filters, setFilters] = useState<Filters>({
     keywords: (initialSearchParams.search as string)?.split(',') || [],
     maxPrice: Number(initialSearchParams['price[lte]']) || 5_000_000_000,
-    // Note: locations can be part of the keywords or a separate filter
-    // For simplicity, let's treat selected locations as keywords for now.
-    locations: [],
+    location: (initialSearchParams.location as string) || '',
+    propertyType: (initialSearchParams.propertyType as string) || '',
+    bedrooms: (initialSearchParams.bedrooms as string) || '',
   });
 
   // This is the general text search from the search bar
@@ -75,13 +77,30 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
     return 'recommended';
   });
 
-  const availableLocations = ['Lekki Phase 1', 'Chevron', 'Ikate', 'Ologolo', 'Osapa', 'Idado', 'Lekki Conservation Road', 'Ikota', 'VGC', 'Orchid Road']; // This could also be fetched from the backend for dynamic location lists
+  // const availableLocations = ['Lekki Phase 1', 'Chevron', 'Ikate', 'Ologolo', 'Osapa', 'Idado', 'Lekki Conservation Road', 'Ikota', 'VGC', 'Orchid Road']; // This could also be fetched from the backend for dynamic location lists
 
   // --- REFACTORED URL UPDATE & DATA FETCHING LOGIC ---
   useEffect(() => {
     setSearchQuery(prev => {
-      return initialSearchParams.search ? (initialSearchParams.search as string) : prev
+      // let newSearchParam = initialSearchParams.search ? (initialSearchParams.search as string) : '';
+
+
+      // if (initialSearchParams.search && initialSearchParams.search !== prev) {
+      //   newSearchParam = initialSearchParams.search as string;
+      // }
+
+      // if (filters.location && filters.location !== prev) {
+      //   newSearchParam = filters.location;
+      // }
+
+      // return newSearchParam;
+
+      return initialSearchParams.search && initialSearchParams.search !== prev
+        ? (initialSearchParams.search as string)
+        : prev;
+
     });
+
     // Create a new URLSearchParams object. This class handles encoding automatically.
     const params = new URLSearchParams();
 
@@ -111,10 +130,11 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
       params.set('price[lte]', filters.maxPrice.toString());
     }
 
-    // 3a. Handle selected locations from the sidebar checkboxes
-    if (filters.locations.length > 0) {
-      params.set('location.street', filters.locations.join(','));
-    }
+    // 3a. Property type and bedrooms filters from sidebar
+    // Note: location is handled via searchQuery (search param) since the backend
+    // prioritises `search` over `location.city` when both are present.
+    if (filters.propertyType) params.set('propertyType', filters.propertyType);
+    if (filters.bedrooms) params.set('bedrooms', filters.bedrooms);
 
     // 3. Handle `sort`
     // Store the UI sort option in the URL (human-readable, restores correctly on page load).
@@ -134,46 +154,15 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
     const apiQueryString = apiParams.toString();
 
     // Use `replace` instead of `push` to avoid cluttering browser history on every filter change.
-    router.replace(`${pathname}?${urlQueryString}`, { scroll: false });
+    const searchUrl = `${pathname}?${urlQueryString}`;
+    // console.log({ searchUrl });
+    router.replace(searchUrl, { scroll: false });
 
     const fetchData = async () => {
       setLoading(true);
-
-      if (filters.locations.length > 1) {
-        // The backend does exact matching on location.street — a comma-joined string
-        // matches nothing. Make one call per location in parallel, then merge results.
-        const baseParams = new URLSearchParams(apiQueryString);
-        baseParams.delete('location.street');
-
-        const results = await Promise.all(
-          filters.locations.map(loc => {
-            const p = new URLSearchParams(baseParams.toString());
-            p.set('location.street', loc);
-            return fetchClientSideProperties(p.toString(), currentPage);
-          })
-        );
-
-        const seen = new Set<string>();
-        const merged: IProperty[] = [];
-        let combinedTotal = 0;
-        for (const r of results) {
-          for (const prop of r.properties || []) {
-            if (!seen.has(prop._id)) {
-              seen.add(prop._id);
-              merged.push(prop);
-            }
-          }
-          combinedTotal += r.pagination?.total ?? 0;
-        }
-
-        setProperties(merged);
-        SetPagination({ total: combinedTotal, limit: 10, page: currentPage, totalPages: Math.ceil(combinedTotal / 10) });
-      } else {
-        const result = await fetchClientSideProperties(apiQueryString, currentPage);
-        setProperties(result.properties);
-        SetPagination(result.pagination ?? null);
-      }
-
+      const result = await fetchClientSideProperties(apiQueryString, currentPage);
+      setProperties(result.properties);
+      SetPagination(result.pagination ?? null);
       setLoading(false);
     };
 
@@ -186,6 +175,13 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
     };
 
   }, [searchQuery, sortOption, router, pathname, currentPage, filters, initialSearchParams.search]);
+
+
+   useEffect(() => {
+    setSearchQuery(filters.location);
+   }, [filters.location])
+
+
 
   // useUpdateEffect(() => {
   //   setSearchQuery(prev => {
@@ -201,7 +197,20 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
   // }, [filters, searchQuery, sortOption, router, pathname])
 
   // --- Handler functions ---
-  const handleFilterChange = (newFilters: Filters) => setFilters(newFilters);
+  const handleFilterChange = (newFilters: Filters) => {
+    // When the location dropdown changes, drive searchQuery so the `search` param
+    // (which the backend prioritises) reflects the selected location.
+    // console.log({ newLocation: newFilters.location });
+    // console.log({ currentFilterLocation: filters.location });
+
+    if (newFilters.location !== filters.location) {
+      // console.log("Updating searchQuery to match new location...");
+      setSearchQuery(newFilters.location);
+    }
+    // console.log({ afterQueryUpdate: newFilters.location });
+
+    setFilters(newFilters);
+  };
   const handleSearch = (query: string) => setSearchQuery(query);
   const handleSortChange = (newSortOption: SortOption) => setSortOption(newSortOption);
 
@@ -232,29 +241,29 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
         {/* {children } */}
         <PropertyResultsGrid properties={properties} loading={loading} />
 
-      {/* --- ReactPaginate Component --- */}
-      {pagination && pagination?.total > 1 && (
-            <ReactPaginate
-              previousLabel={'< Prev'}
-              nextLabel={'Next >'}
-              breakLabel={'...'}
-              pageCount={pagination?.totalPages}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={3}
-              onPageChange={handlePageChange}
-              containerClassName={'pagination justify-content-center mt-5'}
-              pageClassName={'page-item'}
-              pageLinkClassName={'page-link'}
-              previousClassName={'page-item'}
-              previousLinkClassName={'page-link'}
-              nextClassName={'page-item'}
-              nextLinkClassName={'page-link'}
-              breakClassName={'page-item'}
-              breakLinkClassName={'page-link'}
-              activeClassName={'active'}
-              forcePage={currentPage - 1} // 0-indexed current page
-            />
-          )}
+        {/* --- ReactPaginate Component --- */}
+        {pagination && pagination?.total > 1 && (
+          <ReactPaginate
+            previousLabel={'< Prev'}
+            nextLabel={'Next >'}
+            breakLabel={'...'}
+            pageCount={pagination?.totalPages}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={3}
+            onPageChange={handlePageChange}
+            containerClassName={'pagination justify-content-center mt-5'}
+            pageClassName={'page-item'}
+            pageLinkClassName={'page-link'}
+            previousClassName={'page-item'}
+            previousLinkClassName={'page-link'}
+            nextClassName={'page-item'}
+            nextLinkClassName={'page-link'}
+            breakClassName={'page-item'}
+            breakLinkClassName={'page-link'}
+            activeClassName={'active'}
+            forcePage={currentPage - 1} // 0-indexed current page
+          />
+        )}
       </div>
     </div>
   );

@@ -157,20 +157,51 @@
     }
 }
 
+$book-btn-radius: 0.5rem;
+
 // --- Book A Tour Button ---
 .book-tour-btn {
     background-color: $black;
     border-color: $black;
     color: $white;
     font-weight: 500;
-    border-radius: $border-radius !important;
+    border-radius: $book-btn-radius 0rem 0rem $book-btn-radius   !important;
     padding: $btn-padding-y-lg $btn-padding-x-lg; // Make it a large button
     &:hover,
     &:focus {
-        background-color: lighten($black, 10%);
-        border-color: lighten($black, 10%);
+        background-color: lighten($black, 30%);
+        border-color: lighten($black, 30%);
     }
 }
+
+.book-whatsapp-btn {
+    background-color: $whatsapp-green !important;
+    border-color: $whatsapp-green;
+    color: $white;
+    font-weight: 500;
+    // border-radius: $border-radius 0px 0px $border-radius   !important;
+    padding: $btn-padding-y-lg $btn-padding-x-lg; // Make it a large button
+    &:hover,
+    &:focus {
+        background-color: darken($whatsapp-green, 30%);
+        border-color: darken($whatsapp-green, 30%);
+    }
+}
+
+.book-call-btn {
+    background-color: $call-blue !important;
+    border-color: $call-blue;
+    color: $white;
+    font-weight: 500;
+    // border-radius: $border-radius 0px 0px $border-radius   !important;
+    padding: $btn-padding-y-lg $btn-padding-x-lg; // Make it a large button
+    &:hover,
+    &:focus {
+        background-color: darken($call-blue, 10%);
+        border-color: darken($call-blue, 10%);
+    }
+}
+
 
 // --- AmenitiesGrid ---
 .amenities-grid-section {

@@ -36,14 +36,13 @@ export const metadata: Metadata = {
     template: "%s | Transcendent Realty", // E.g., "Buy Properties | Transcendent Realty"
   },
 
-  // 3. Precision Description (157 chars: hits AI, Lagos, buy/rent/invest, and stays under Google's 160-char limit)
-  description: "Buy, rent, or invest in premium Lagos properties with Transcendent Realty. Experience a seamless property search powered by innovative AI technology.",
+  // 3. Precision Description (hits AI, Lagos, buy/invest, and stays under Google's 160-char limit)
+  description: "Buy or invest in premium Lagos properties with Transcendent Realty. Experience a seamless property search powered by innovative AI technology.",
 
   // 4. High-Intent Keywords (What clients are actually typing into Google)
   keywords: [
     "real estate Lagos",
     "buy property in Lagos",
-    "rent apartment Lagos",
     "property investment Nigeria",
     "AI property search Lagos",
     "Transcendent Realty",
@@ -52,8 +51,9 @@ export const metadata: Metadata = {
     "Lagos curated property listings",
     "houses for sale in Lagos",
     "property for sale in Lagos",
-    "apartments for rent in Lagos",
     "investing in Lagos real estate",
+    "nigerian property center",
+    "property pro"
   ],
 
   // 5. Advanced Crawling Instructions
@@ -113,7 +113,7 @@ export default function RootLayout({
     "@type": "RealEstateAgent",
     "name": "Transcendent Realty Services",
     "image": "https://media.transcendentrealty.com/logo.png", // Ensure you have this logo in your public folder
-    "description": "A premier real estate company based in Lagos, Nigeria, focused on simplifying how people buy, rent, and invest in property.",
+    "description": "A premier real estate company based in Lagos, Nigeria, focused on simplifying how people buy and invest in property.",
     "url": "https://transcendentrealty.com",
     "telephone": "+2349169112315", // Add the official contact number here
     "address": {

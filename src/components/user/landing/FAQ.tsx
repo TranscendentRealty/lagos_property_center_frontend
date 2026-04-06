@@ -8,24 +8,20 @@ const FAQ = () => {
     const faqs = [
         {
             "question": "What is Transcendent Realty?",
-            "answer": "Transcendent Realty Services is a premier real estate company based in Lagos, Nigeria, focused on simplifying how people buy, rent, and invest in property. We offer a carefully curated selection of high-quality listings, enhanced by innovative technology—including our AI-powered search—to deliver a seamless, efficient, and exceptional property experience for our clients."
+            "answer": "Transcendent Realty Services is a premier real estate company based in Lagos, Nigeria, focused on simplifying how people buy and invest in property. We offer a carefully curated selection of high-quality listings, enhanced by innovative technology—including our AI-powered search—to deliver a seamless, efficient, and exceptional property experience for our clients."
         },
         {
             question: "What services do you offer?",
-            answer: "We offer a comprehensive suite of services for all your real estate needs. Our platform features a curated marketplace for property sales and rentals, advanced search and filtering tools, and our unique AI-powered search to help you find your dream home faster. We also provide a simple process to book property tours directly from our listings."
+            answer: "We offer a comprehensive suite of services for all your real estate needs. Our platform features a curated marketplace for property sales, advanced search and filtering tools. We also provide a simple process to book property tours directly from our listings."
         },
         // {
         //     question: "Do I need an account to use the site?",
         //     answer: "No, you do not need an account to browse our extensive collection of property listings. However, creating a free account unlocks several powerful features, such as the ability to save your favorite properties, manage your profile for a personalized experience, and easily book tours with our expert agents."
         // },
-        {
-            question: "Do I need an account to use the site?",
-            answer: "No, you do not need an account to browse our extensive collection of property listings."
-        },
-        {
-            question: "How can I refine my property search?",
-            answer: "Our search page is equipped with a powerful set of filters to help you pinpoint the perfect property. You can easily refine your search by location, price range, property type (like duplex or apartment), number of bedrooms, and other key features and amenities to match your exact criteria."
-        },
+        // {
+        //     question: "How can I refine my property search?",
+        //     answer: "Our search page is equipped with a powerful set of filters to help you pinpoint the perfect property. You can easily refine your search by location, price range, property type (like duplex or apartment), number of bedrooms, and other key features and amenities to match your exact criteria."
+        // },
         {
             question: "How does the AI-powered search work?",
             answer: "Our AI-powered search allows you to find properties by describing what you're looking for in plain, natural language. Instead of using rigid filters, you can simply type a prompt like 'a modern 4-bedroom duplex in Lekki with a swimming pool,' and our AI will intelligently process your request to find the most relevant listings that match your vision."

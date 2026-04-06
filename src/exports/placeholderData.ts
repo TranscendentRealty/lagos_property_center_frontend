@@ -38,9 +38,9 @@ const dummyProperties: Array<IProperty> = [{
 },
 {
     _id: "2",
-    title: 'Modern 3-Bedroom Apartment for Rent in Ikoyi',
+    title: 'Modern 3-Bedroom Apartment for Sale in Ikoyi',
     description: 'Well-finished 3-bedroom apartment in a secure and serene serviced estate. Comes with 24/7 power and security.',
-    listingType: 'For Rent',
+    listingType: 'For Sale',
     propertyType: 'Apartment',
     propertySubtype: 'Flat',
     location: { street: '456 Orchid Road', city: 'Lekki', state: 'Lagos', country: 'Nigeria' },

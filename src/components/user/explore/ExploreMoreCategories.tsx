@@ -21,7 +21,7 @@ const getHeader = (listings: IPaginatedProperties) => {
   else if (listings.category && ['location.city', 'location.state', 'location.street'].includes(listings.category)) {
     headerText = `Browse Available Property Listings that are in ${value}`;
   } else {
-    const pluralS = value?.toLowerCase() === 'apartment' ? 's' : '';
+    const pluralS = ['apartment', 'terrace'].includes(value?.toLowerCase() ?? '') ? 's' : '';
     headerText = `Browse Available Property Listings that are ${value}${pluralS}`;
   }
 
@@ -43,13 +43,20 @@ const categoriesData = [
   },
   {
     id: 2,
+    label: 'TERRACE',
+    imageUrl: '/images/TerracePlaceholder.png',
+    altText: 'Modern terrace houses',
+    category: 'Terrace',
+  },
+  {
+    id: 3,
     label: 'SEMI DETACHED',
     imageUrl: '/images/SemiDetachedPlaceholder.png',
     altText: 'Modern semi-detached house',
     category: 'Semi-Detached',
   },
   {
-    id: 3,
+    id: 4,
     label: 'FULLY DETACHED',
     imageUrl: '/images/FullyDetachedPlaceholder.png',
     altText: 'Luxurious fully detached villa',

@@ -28,7 +28,7 @@ export interface Property {
   }
 
 
-  export type ListingType = 'rent' | 'sale' | 'shortlet';
+  export type ListingType = 'sale' | 'shortlet';
 
   interface PriceRange {
     min: string;

@@ -43,6 +43,8 @@ const HeroSection = () => {
         // if (price.min) params.set('price[gte]', price.min);
         // if (price.max) params.set('price[lte]', price.max);
 
+        // console.log({ "hero panel search params": params.toString() });
+
         // Navigate to the search page with the constructed query
         router.push(`/search?search=${location}&${params.toString()}`);
     };
@@ -52,7 +54,7 @@ const HeroSection = () => {
             className="position-relative hero-section-wrapper" // Added a class for easier targeting
             data-aos="fade-down"
             data-aos-ease="ease-in"
-            data-aos-duration="1000"
+            data-aos-duration="500"
             data-aos-once
         >
             <Carousel

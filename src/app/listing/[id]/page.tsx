@@ -11,7 +11,8 @@ import ProductInfo from '../../../components/user/listing/ProductInfo';
 import AgentCard from '../../../components/user/listing/AgentCard';
 import ProductDescription from '@/components/user/listing/ProductDescription';
 import SimilarListings from '@/components/user/listing/SimilarListings';
-import { Button } from 'react-bootstrap';
+import ListingPageSidebar from '@/components/user/listing/ListingPageSidebar';
+import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
 import { IProperty } from '@/types/property'; // Assuming you have this type defined
 import AmenitiesGrid, { Amenity } from '@/components/user/listing/AmenitiesGrid';
 
@@ -37,7 +38,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
 
         const data = await res.json();
         const properties: { _id: string }[] = data?.data?.properties ?? [];
-        console.log(`generateStaticParams: pre-building ${properties.length} listing pages`);
+        // console.log(`generateStaticParams: pre-building ${properties.length} listing pages`);
         return properties.map((p) => ({ id: p._id }));
     } catch (error) {
         console.error('generateStaticParams: failed to fetch property list', error);
@@ -225,14 +226,22 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
             />
             <ScrollToTop />
 
-            <main className="container py-4 py-md-5"> {/* Use a standard container */}
-                <div className="row g-4 g-lg-5">
-                    <div className="col-lg-7 col-md-12">
-                        {/* Pass the transformed data to the Client Component */}
+            <main className="container-fluid px-3 px-md-5 py-4 py-md-5">
+                <div className="row g-3 g-lg-4">
+
+                    {/* Filter sidebar — hidden on mobile to keep the listing readable */}
+                    <div className="col-lg-3 d-none d-lg-block ps-0">
+                        <ListingPageSidebar />
+                    </div>
+
+                    {/* Gallery + details take the remaining 9 columns */}
+                    <div className="col-lg-9 col-md-12">
+                <div className="row g-3 g-lg-4">
+                    <div className="col-xl-7 col-md-12">
                         <ImageGallery galleryImages={galleryImagesForComponent} />
                     </div>
 
-                    <div className="col-lg-5 col-md-12 product-details-column">
+                    <div className="col-xl-5 col-md-12 product-details-column">
                         <ProductInfo
                             title={product.title}
                             tags={product.amenities}
@@ -253,10 +262,33 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                             />
                         )}
 
-                        <div className="my-3 d-grid"> {/* d-grid makes button full-width */}
-                            <Button variant="dark" size="lg" className="book-tour-btn" href={product.creator.calendlyLink} target='_blank'>
-                                Book A Tour
-                            </Button>
+                        <div className="my-3">
+                            <div className="btn-group w-100" role="group" aria-label="Contact options">
+                                <a
+                                    href={product.creator.calendlyLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-dark btn-lg book-tour-btn"
+                                >
+                                    Book A Tour
+                                </a>
+                                <a
+                                    href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hello! I'm interested in this property from your website: https://www.transcendentrealty.com/listing/${product._id}`)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn book-whatsapp-btn btn-lg"
+                                    aria-label="Chat on WhatsApp"
+                                >
+                                    <FaWhatsapp size={22} className='text-white'/>
+                                </a>
+                                <a
+                                    href={`tel:${process.env.NEXT_PUBLIC_CALL_NUMBER}`}
+                                    className="btn book-call-btn btn-lg"
+                                    aria-label="Call us"
+                                >
+                                    <FaPhoneAlt size={18} className='text-white' />
+                                </a>
+                            </div>
                         </div>
 
                         {/*
@@ -268,17 +300,20 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                     </div>
                 </div>
 
-                {/* Product Description Section */}
-                {product.description && product.amenities && (
-                    <div className="mt-4 mt-lg-5">
-                        <ProductDescription
-                            initialText={product.description}
-                            fullText={product.description}
-                            keyFeatures={product.amenities}
-                        />
-                    </div>
-                )}
+                    {/* Product Description Section */}
+                    {product.description && product.amenities && (
+                        <div className="mt-4 mt-lg-5">
+                            <ProductDescription
+                                initialText={product.description}
+                                fullText={product.description}
+                                keyFeatures={product.amenities}
+                            />
+                        </div>
+                    )}
+                    </div> {/* col-lg-9 */}
+                </div> {/* outer row */}
 
+                {/* Similar Listings — full width below the sidebar/content split */}
                 <div className="mt-4 mt-lg-5">
                     <SimilarListings properties={similarListings.properties} />
                 </div>

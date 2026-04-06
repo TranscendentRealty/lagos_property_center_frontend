@@ -2,18 +2,19 @@
 
 // components/FiltersSidebar.tsx
 import React, { useState } from 'react';
-import { Form, Badge } from 'react-bootstrap'; // Using react-bootstrap for form controls
-// import { FiX } from 'react-icons/fi';
+import { Form, Badge } from 'react-bootstrap';
 
 export interface Filters {
   keywords: string[];
   maxPrice: number;
-  locations: string[];
+  location: string;
+  propertyType: string;
+  bedrooms: string;
 }
 
 interface FiltersSidebarProps {
   initialFilters: Filters;
-  availableLocations: string[]; // e.g., ['Lekki', 'Ajah', 'Ikoyi']
+  availableLocations: string[];
   onFilterChange: (filters: Filters) => void;
 }
 
@@ -24,31 +25,37 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
 }) => {
   const [keywords, setKeywords] = useState<string[]>(initialFilters.keywords);
   const [maxPrice, setMaxPrice] = useState<number>(initialFilters.maxPrice);
-  const [selectedLocations, setSelectedLocations] = useState<string[]>(initialFilters.locations);
+  const [location, setLocation] = useState<string>(initialFilters.location);
+  const [propertyType, setPropertyType] = useState<string>(initialFilters.propertyType);
+  const [bedrooms, setBedrooms] = useState<string>(initialFilters.bedrooms);
 
-  const handleKeywordRemove = (keywordToRemove: string) => {
-    const updatedKeywords = keywords.filter(k => k !== keywordToRemove);
-    setKeywords(updatedKeywords);
-    onFilterChange({ keywords: updatedKeywords, maxPrice, locations: selectedLocations });
+  const emit = (patch: Partial<Filters>) => {
+    onFilterChange({ keywords, maxPrice, location, propertyType, bedrooms, ...patch });
   };
 
   const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPrice = parseInt(e.target.value, 10);
     setMaxPrice(newPrice);
-    onFilterChange({ keywords, maxPrice: newPrice, locations: selectedLocations });
+    emit({ maxPrice: newPrice });
   };
 
-  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const location = e.target.value;
-    const isChecked = e.target.checked;
-    let updatedLocations;
-    if (isChecked) {
-      updatedLocations = [...selectedLocations, location];
-    } else {
-      updatedLocations = selectedLocations.filter(l => l !== location);
-    }
-    setSelectedLocations(updatedLocations);
-    onFilterChange({ keywords, maxPrice, locations: updatedLocations });
+  const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLocation = e.target.value;
+    setLocation(newLocation);
+    setKeywords(newLocation ? [newLocation] : []); // Sync keywords with location for now
+    emit({ location: newLocation, keywords: newLocation ? [newLocation] : [] });
+  };
+
+  const handlePropertyTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newType = e.target.value;
+    setPropertyType(newType);
+    emit({ propertyType: newType });
+  };
+
+  const handleBedroomsChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newBedrooms = e.target.value;
+    setBedrooms(newBedrooms);
+    emit({ bedrooms: newBedrooms });
   };
 
   return (
@@ -61,14 +68,7 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
             keywords.map(keyword => (
               <Badge key={keyword} pill bg="success" className="me-1 mb-1 p-2 keyword-badge">
                 {keyword}
-                {/* <FiX
-                  size={14}
-                  className="ms-1 cursor-pointer"
-                  onClick={() => handleKeywordRemove(keyword)}
-                  aria-label={`Remove ${keyword} keyword`}
-                /> */}
-                &nbsp;
-                &#10005;
+                &nbsp;&#10005;
               </Badge>
             ))
           ) : (
@@ -76,8 +76,44 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
           )}
         </div>
 
-        {/* Max Price */}
+        {/* Location */}
         <div className="mb-4 filter-section">
+          <h6 className="filter-title fw-semibold mb-2">Location</h6>
+          <Form.Select value={location} onChange={handleLocationChange}>
+            <option value="">All Locations</option>
+            {availableLocations.map(loc => (
+              <option key={loc} value={loc}>{loc}</option>
+            ))}
+          </Form.Select>
+        </div>
+
+        {/* Property Type */}
+        <div className="mb-4 filter-section">
+          <h6 className="filter-title fw-semibold mb-2">Property Type</h6>
+          <Form.Select value={propertyType} onChange={handlePropertyTypeChange}>
+            <option value="">All Types</option>
+            <option value="apartment">Apartment</option>
+            <option value="terrace">Terrace</option>
+            <option value="semi-detached">Semi-Detached</option>
+            <option value="fully detached">Fully Detached</option>
+          </Form.Select>
+        </div>
+
+        {/* Bedrooms */}
+        <div className="mb-4 filter-section">
+          <h6 className="filter-title fw-semibold mb-2">Bedrooms</h6>
+          <Form.Select value={bedrooms} onChange={handleBedroomsChange}>
+            <option value="">Any</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5+</option>
+          </Form.Select>
+        </div>
+
+        {/* Max Price */}
+        {/* <div className="filter-section">
           <h6 className="filter-title fw-semibold mb-2">Max Price</h6>
           <Form.Label htmlFor="maxPriceRange" className="small text-muted">
             Up to ₦{maxPrice.toLocaleString()}
@@ -90,24 +126,7 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
             value={maxPrice}
             onChange={handleMaxPriceChange}
           />
-        </div>
-
-        {/* Location */}
-        <div className="filter-section">
-          <h6 className="filter-title fw-semibold mb-2">Location</h6>
-          {availableLocations.map(location => (
-            <Form.Check
-              key={location}
-              type="checkbox"
-              id={`location-${location.toLowerCase()}`}
-              label={location}
-              value={location}
-              checked={selectedLocations.includes(location)}
-              onChange={handleLocationChange}
-              className="mb-1 location-checkbox"
-            />
-          ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

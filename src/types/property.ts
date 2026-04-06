@@ -59,7 +59,7 @@ export interface IProperty {
   _id: string; // Mongoose ID is a string
   title: string;
   description: string;
-  listingType: 'For Sale' | 'For Rent';
+  listingType: 'For Sale';
   status: 'Available' | 'Sold' | 'Under Offer';
   propertyType: string;
   propertySubtype?: string;

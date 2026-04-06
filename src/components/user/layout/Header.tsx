@@ -1,11 +1,11 @@
 // components/layout/Header.tsx
 // NO 'use client' directive here. This is a Server Component.
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Search from '@/components/user/layout/Search';
+import LocationDropdownSearch from '@/components/user/layout/LocationDropdownSearch';
 import { images } from "@/exports/images";
 import BootstrapClient from '../../utilities/BoostrapClient';
 import NavigationLinks from './NavigationLinks'; // <-- Import the new Client Component
@@ -40,14 +40,7 @@ const Header = () => {
                     <NavigationLinks />
 
                     <div className="search-wrapper-div">
-                        <Suspense fallback={<div className='search-placeholder' />}>
-                            <Search
-                                classNames='header-search bg-black'
-                                headerSearch={true}
-                                darkButton={false}
-                                key={'header-search'}
-                            />
-                        </ Suspense>
+                        <LocationDropdownSearch classNames='header-search bg-black' />
                     </div>
                 </div>
             </div>

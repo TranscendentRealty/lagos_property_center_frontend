@@ -26,8 +26,8 @@ export async function POST(request: Request) {
 
     // 3. Send the email using Resend
     const { data, error } = await resend.emails.send({
-      from: 'Transcendent Realty <noreply@aaronstapleton.org>',
-      to: [emailTo, 'one.pelumi.guy@gmail.com'],
+      from: 'Transcendent Realty <noreply@transcendentrealty.com>',
+      to: [emailTo],
       subject: `New Contact Form Submission from ${firstname} ${surname}`,
       html: `<div><h1>New Inquiry from your Website</h1><p>You have received a new message from the contact form.</p><hr /><p><strong>Name:</strong> ${firstname} ${surname}</p><p><strong>Email:</strong> <a href={mailto:${email}}>${email}</a></p><p><strong>Phone:</strong> ${phone}</p><p><strong>Message:</strong> ${message}</p><hr /><p><em>This email was sent from the Transcendent Realty contact form.</em></p></div>`,
       // react: ContactUsEmailTemplate({firstname: firstname, surname: surname, email: email, message: message})

@@ -15,7 +15,7 @@ const Search = ({ classNames, headerSearch = false, darkButton = true }: SearchP
         // 2. Prevent the default browser form submission (the full page reload)
         event.preventDefault();
 
-        console.log("Submitting search for:", keyword);
+        // console.log("Submitting search for:", keyword);
 
         // Trim the keyword to avoid searching for just whitespace
         const trimmedKeyword = keyword.trim();
