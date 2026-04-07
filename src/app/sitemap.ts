@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://www.transcendentrealty.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
 // Static pages with hand-tuned priority and change frequency.
 // Priority is relative (0–1) and signals importance to crawlers, not ranking.

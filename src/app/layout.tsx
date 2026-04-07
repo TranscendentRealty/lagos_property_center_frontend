@@ -28,7 +28,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   // 1. Base URL (Crucial for Next.js to accurately resolve relative image paths for SEO)
-  metadataBase: new URL('https://www.transcendentrealty.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL!),
 
   // 2. Optimized Title (Targets Location + Intent)
   title: {
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Transcendent Realty | Buy & Invest in Lagos Properties",
     description: "Discover curated, high-quality real estate listings in Lagos. Use our AI-powered search to find your dream home or next great investment.",
-    url: "https://www.transcendentrealty.com",
+    url: process.env.NEXT_PUBLIC_BASE_URL,
     siteName: "Transcendent Realty",
     images: [
       {

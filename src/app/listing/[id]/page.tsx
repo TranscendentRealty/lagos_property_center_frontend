@@ -132,7 +132,7 @@ export async function generateMetadata(
         openGraph: {
             title: `${product.title} | Transcendent Realty`,
             description: product.description || `Details for ${product.title}, located in ${product.location.street}.`,
-            url: `https://www.transcendentrealty.com/listing/${params.id}`,
+            url: `${process.env.NEXT_PUBLIC_BASE_URL}/listing/${params.id}`,
             siteName: "Transcendent Realty",
             type: "article",
             publishedTime: product.updatedAt, // e.g., "2026-03-23T01:19:00Z"
@@ -169,7 +169,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
             "priceCurrency": "NGN", // Or USD depending on your target market
             "price": product?.price, // e.g., 150000000
             "availability": "https://schema.org/InStock",
-            "url": `https://www.transcendentrealty.com/listing/${params.id}`
+            "url": `${process.env.NEXT_PUBLIC_BASE_URL}/listing/${params.id}`
         }
     };
 
@@ -274,7 +274,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                                     Book A Tour
                                 </a>
                                 <a
-                                    href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hello! I'm interested in this property from your website: https://www.transcendentrealty.com/listing/${product._id}`)}`}
+                                    href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hello! I'm interested in this property from your website: ${process.env.NEXT_PUBLIC_BASE_URL}/listing/${product._id}`)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn book-whatsapp-btn btn-lg"

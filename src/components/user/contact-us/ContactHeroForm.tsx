@@ -131,30 +131,30 @@ const ContactHeroForm: React.FC<ContactHeroFormProps> = ({
                     <div className="col-lg-5 col-md-12 col-sm-11">
                         <div className="contact-form-card card shadow-lg">
                             <div className="card-body p-4 p-md-5">
-                                <Form onSubmit={handleSubmit}>
+                                <Form onSubmit={handleSubmit} autoComplete="off">
                                     <Form.Group className="mb-3" controlId="contactFormName">
                                         <Form.Label>First Name</Form.Label>
-                                        <Form.Control type="text" name="firstname" value={formData.firstname} onChange={handleChange} placeholder="Enter your first name" required />
+                                        <Form.Control type="text" name="firstname" value={formData.firstname} onChange={handleChange} placeholder="Enter your first name" autoComplete="given-name" required />
                                     </Form.Group>
 
                                     <Form.Group className="mb-3" controlId="contactFormSurname">
                                         <Form.Label>Surname</Form.Label>
-                                        <Form.Control type="text" name="surname" value={formData.surname} onChange={handleChange} placeholder="Enter your surname" required />
+                                        <Form.Control type="text" name="surname" value={formData.surname} onChange={handleChange} placeholder="Enter your surname" autoComplete="family-name" required />
                                     </Form.Group>
 
                                     <Form.Group className="mb-3" controlId="contactFormEmail">
                                         <Form.Label>Email</Form.Label>
-                                        <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter your email" required />
+                                        <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter your email" autoComplete="email" required />
                                     </Form.Group>
 
-                                    <Form.Group className="mb-3" controlId="contactFormEmail">
+                                    <Form.Group className="mb-3" controlId="contactFormPhone">
                                         <Form.Label>Phone</Form.Label>
-                                        <Form.Control type="textarea" name="phone" value={formData.phone} onChange={handleChange} placeholder="Enter your phone number" required />
+                                        <Form.Control type="textarea" name="phone" value={formData.phone} onChange={handleChange} placeholder="Enter your phone number" autoComplete="tel" required />
                                     </Form.Group>
 
                                     <Form.Group className="mb-3" controlId="contactFormMessage">
                                         <Form.Label>Message</Form.Label>
-                                        <Form.Control as="textarea" name="message" value={formData.message} onChange={handleChange} rows={4} placeholder="Your message..." required />
+                                        <Form.Control as="textarea" name="message" value={formData.message} onChange={handleChange} rows={4} placeholder="Your message..." autoComplete="off" required />
                                     </Form.Group>
 
                                     <Button variant="dark" type="submit" className="w-100 submit-btn" disabled={isSubmitting}>
