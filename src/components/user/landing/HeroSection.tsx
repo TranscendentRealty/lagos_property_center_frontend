@@ -20,7 +20,7 @@ const HeroSection = () => {
     const router = useRouter();
 
     // State for the form inputs
-    const [activeTab, setActiveTab] = useState<ListingType>('sale');
+    const [activeTab] = useState<ListingType>('sale');
     const [location, setLocation] = useState('');
     const [propertyType, setPropertyType] = useState('');
     const [bedrooms, setBedrooms] = useState('');
@@ -84,8 +84,6 @@ const HeroSection = () => {
                         */}
                         <Carousel.Caption className="d-flex flex-column justify-content-center align-items-center h-100 carousel-caption-with-search">
                             <HeroSearchPanel
-                                activeTab={activeTab}
-                                setActiveTab={setActiveTab}
                                 location={location}
                                 setLocation={setLocation}
                                 propertyType={propertyType}

@@ -20,7 +20,7 @@
 // Styling for the new search panel
 .hero-search-panel {
     width: 90%;
-    max-width: 950px;
+    max-width: 900px;
     border: none;
     border-radius: 20px; // Softer, larger radius
     backdrop-filter: blur(5px); // Frosted glass effect (optional but cool)
@@ -69,7 +69,59 @@
 @include media-breakpoint-down(lg) {
     .hero-search-panel {
         .search-submit-btn {
-            margin-top: 1rem; // Give the button its own row on smaller screens
+            margin-top: 1rem;
+        }
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .hero-section-wrapper {
+        .hero-background-carousel {
+            .carousel-caption-with-search {
+                padding-bottom: 2rem;
+            }
+        }
+    }
+    .hero-search-panel {
+        width: 92%;
+        .form-label {
+            font-size: 0.72rem;
+            margin-bottom: 0.3rem;
+        }
+        .search-submit-btn {
+            margin-top: 0;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .hero-section-wrapper {
+        .hero-background-carousel {
+            .carousel-caption-with-search {
+                padding-bottom: 1rem;
+                left: 0;
+                right: 0;
+            }
+        }
+    }
+    .hero-search-panel {
+        width: 88%;
+        margin: 0 auto;
+        .form-label {
+            font-size: 0.7rem;
+            margin-bottom: 0.25rem;
+        }
+        .form-control,
+        .form-select {
+            font-size: 0.85rem;
+            padding: 0.35rem 0.6rem;
+        }
+        .search-submit-btn {
+            font-size: 0.9rem;
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
         }
     }
 }
