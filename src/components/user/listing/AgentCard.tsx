@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { FiStar } from 'react-icons/fi'; // For star ratings
 import { Button } from 'react-bootstrap';
@@ -9,9 +11,19 @@ interface AgentCardProps {
   agentImageUrl: string;
   rating: number; // e.g., 4.0
   ratingCount?: number; // Optional: (120 reviews)
+  agentPhone: string;
 }
 
-const AgentCard: React.FC<AgentCardProps> = ({ agentName, agentTitle, agentImageUrl, rating }) => {
+const AgentCard: React.FC<AgentCardProps> = ({ agentName, agentTitle, agentImageUrl, rating, agentPhone }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyPhone = () => {
+    navigator.clipboard.writeText(agentPhone).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   const renderStars = () => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -44,8 +56,17 @@ const AgentCard: React.FC<AgentCardProps> = ({ agentName, agentTitle, agentImage
           />
         </div>
         <div className="agent-details flex-grow-1">
-          <h5 className="agent-name fw-semibold mb-0">{agentName}</h5>
+          <h6 className="agent-name fw-semibold mb-0">{agentName}</h6>
           <p className="agent-title text-muted small mb-1">{agentTitle}</p>
+          <p
+            className="fw-normal agent-phone mb-0 text-dark"
+            onClick={handleCopyPhone}
+            style={{ cursor: 'pointer' }}
+            title="Click to copy"
+          >
+            Call or Whatsapp: {agentPhone}{' '}
+            <span className="text-muted small">{copied ? '✓ Copied!' : '(tap to copy)'}</span>
+          </p>
         </div>
         {/* <div className="agent-rating text-end ms-auto">
           <div className="stars-container d-flex mb-1">

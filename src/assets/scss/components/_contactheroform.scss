@@ -1,15 +1,13 @@
 .contact-hero-form-section {
     position: relative;
     margin: 0px;
-    padding: 7rem;
+    padding: 7rem 4rem;
     background-image: var(--contact-bg-image);
     background-size: cover;
     background-position: center;
     min-height: 100vh; // Make it take at least full viewport height
     display: flex;
     align-items: center; // Vertically center content
-    // padding-top: 100px; // Figma's Top Space/4000 is large, so substantial padding
-    // padding-bottom: 100px; // Or use flexbox to center for dynamic height
     .contact-hero-overlay {
         position: absolute;
         top: 0;
@@ -23,19 +21,17 @@
         position: relative;
         z-index: 2; // Above overlay
         width: 100%;
-        max-width: 1200px; // Max width from Figma
-        padding-left: 100px; // Horizontal padding from Figma (applied by container or custom)
-        padding-right: 100px; // Bootstrap's .container applies its own padding, so might need to override or use .container-fluid
-        // If using .container-fluid, then these paddings are exact.
-        // If using .container, and its padding is, say, 15px, you'd need ~85px more.
+        max-width: 1200px;
+        padding-left: 3rem;
+        padding-right: 3rem;
     }
     .contact-info-column {
         // Styles for the left column text content
         .contact-title {
-            // font-size: $display-3 or your equivalent for "Contact Us"
+            font-size: clamp(2.25rem, 4vw, 4.5rem);
         }
         .contact-subtitle {
-            // font-size: $lead-font-size;
+            font-size: clamp(0.9rem, 1.5vw, 1.25rem);
             opacity: 0.9;
         }
         .contact-detail-item {
@@ -100,26 +96,35 @@
 // Responsive adjustments
 @include media-breakpoint-down(lg) {
     .contact-hero-form-section {
+        padding: 5rem 2rem;
         .contact-content-container {
-            padding-left: $spacer * 2; // Reduce side padding on smaller screens
-            padding-right: $spacer * 2;
+            padding-left: $spacer * 1.5;
+            padding-right: $spacer * 1.5;
         }
     }
 }
 
 @include media-breakpoint-down(md) {
     .contact-hero-form-section {
-        padding: 3rem;
-        min-height: auto; // Allow height to be defined by content on mobile
-        padding-top: $spacer * 3;
-        padding-bottom: $spacer * 3;
-        align-items: flex-start; // Don't vertically center if height is auto
+        padding: $spacer * 4 $spacer * 1.5;
+        min-height: auto;
+        align-items: flex-start;
+        .contact-content-container {
+            padding-left: $spacer;
+            padding-right: $spacer;
+        }
         .contact-info-column {
             text-align: center;
-            margin-bottom: $spacer * 3; // Space between info and form when stacked
+            margin-bottom: $spacer * 2.5;
+            .contact-title {
+                font-size: 2.5rem;
+            }
+            .contact-subtitle {
+                font-size: 1rem;
+            }
             .contact-detail-item {
                 flex-direction: column;
-                align-items: left !important; // Override d-flex align-items-start
+                align-items: left !important;
                 text-align: left;
                 .contact-icon {
                     margin-right: 0 !important;
@@ -127,14 +132,37 @@
                 }
             }
         }
-        .contact-title {
-            font-size: $mobile-h1 * 1.2; // Adjust main title for mobile
-        }
     }
 }
 
 @include media-breakpoint-down(sm) {
     .contact-hero-form-section {
-        padding: 2rem 0.8rem;
+        padding: $spacer * 3 $spacer;
+        .contact-content-container {
+            padding-left: $spacer * 0.5;
+            padding-right: $spacer * 0.5;
+        }
+        .contact-info-column {
+            .contact-title {
+                font-size: 2rem;
+            }
+            .contact-subtitle {
+                font-size: 0.9rem;
+            }
+            .contact-detail-title {
+                font-size: 1rem;
+            }
+            .contact-detail-line {
+                font-size: 0.85rem;
+            }
+        }
+        .contact-form-card {
+            .form-label {
+                font-size: 0.85rem;
+            }
+            .form-control {
+                font-size: 0.9rem;
+            }
+        }
     }
 }

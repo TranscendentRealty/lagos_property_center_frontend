@@ -258,6 +258,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                                 agentName={`${product.creator.name}`}
                                 agentTitle={`Lead Agent — ${product.agency.name}`}
                                 agentImageUrl={product.creator.avatar || '/images/default_avatar.jpg'}
+                                agentPhone={product.creator.phone}
                                 rating={4.5} // This data needs to come from your API
                             />
                         )}
@@ -265,10 +266,10 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                         <div className="my-3">
                             <div className="btn-group w-100" role="group" aria-label="Contact options">
                                 <a
-                                    href={product.creator.calendlyLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn btn-dark btn-lg book-tour-btn"
+                                    className="btn btn-dark btn-lg text-white book-tour-btn"
+                                    aria-disabled="true"
+                                    tabIndex={-1}
+                                    style={{ pointerEvents: 'none', opacity: 0.9 }}
                                 >
                                     Book A Tour
                                 </a>

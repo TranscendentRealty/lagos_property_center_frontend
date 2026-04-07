@@ -9,5 +9,5 @@ export const availableLocations = [
     'Megamound',
     'Ikota',
     'VGC',
-    'Orchid Road',
+    'Orchid',
 ];

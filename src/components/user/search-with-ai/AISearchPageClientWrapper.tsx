@@ -118,7 +118,7 @@ const AISearchPageClientWrapper: React.FC<AISearchPageClientWrapperProps> = ({
   };
 
   return (
-    <div className="row">
+    <div className="row show-border">
 
       <hgroup className="section-heading">
         <h2>Describe Your Dream Home, Let AI Find It</h2>
@@ -126,7 +126,7 @@ const AISearchPageClientWrapper: React.FC<AISearchPageClientWrapperProps> = ({
       </hgroup>
 
       <Search classNames='landing-main-search rounded-pill mt-4' darkButton aiSearch />
-      <PropertyResultsGrid properties={properties} loading={loading} />
+      <PropertyResultsGrid properties={properties} loading={loading} aiSearch />
 
       {/* --- ReactPaginate Component --- */}
       {pagination && pagination?.total > 1 && (

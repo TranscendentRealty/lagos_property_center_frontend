@@ -8,11 +8,11 @@ const FAQ = () => {
     const faqs = [
         {
             "question": "What is Transcendent Realty?",
-            "answer": "Transcendent Realty Services is a premier real estate company based in Lagos, Nigeria, focused on simplifying how people buy and invest in property. We offer a carefully curated selection of high-quality listings, enhanced by innovative technology—including our AI-powered search—to deliver a seamless, efficient, and exceptional property experience for our clients."
+            "answer": "Transcendent Realty Services is a premier real estate company based in Lagos, Nigeria, focused on simplifying how people buy property and invest in real estate. We offer a carefully curated selection of high-quality listings, and deliver a seamless, efficient, and exceptional property acquisition experience for our clients."
         },
         {
             question: "What services do you offer?",
-            answer: "We offer a comprehensive suite of services for all your real estate needs. Our platform features a curated marketplace for property sales, advanced search and filtering tools. We also provide a simple process to book property tours directly from our listings."
+            answer: "We offer comprehensive real estate brokerage services to give you a seamless and stress-free process for acquiring properties in Lagos."
         },
         // {
         //     question: "Do I need an account to use the site?",
@@ -22,13 +22,17 @@ const FAQ = () => {
         //     question: "How can I refine my property search?",
         //     answer: "Our search page is equipped with a powerful set of filters to help you pinpoint the perfect property. You can easily refine your search by location, price range, property type (like duplex or apartment), number of bedrooms, and other key features and amenities to match your exact criteria."
         // },
-        {
-            question: "How does the AI-powered search work?",
-            answer: "Our AI-powered search allows you to find properties by describing what you're looking for in plain, natural language. Instead of using rigid filters, you can simply type a prompt like 'a modern 4-bedroom duplex in Lekki with a swimming pool,' and our AI will intelligently process your request to find the most relevant listings that match your vision."
-        },
+        // {
+        //     question: "How does the AI-powered search work?",
+        //     answer: "Our AI-powered search allows you to find properties by describing what you're looking for in plain, natural language. Instead of using rigid filters, you can simply type a prompt like 'a modern 4-bedroom duplex in Lekki with a swimming pool,' and our AI will intelligently process your request to find the most relevant listings that match your vision."
+        // },
+        // {
+        //     "question": "How do I book a tour for a property?",
+        //     "answer": "Booking a tour is simple. Once you find a property you’re interested in, go to its details page and click the <b>'Book a Tour'</b> button. You’ll be guided through a quick process to schedule a viewing with the assigned agent at a time that suits you. Alternatively, you can contact us directly via call or WhatsApp using the buttons at the bottom right of your screen, and one of our agents will promptly attend to you."
+        // }
         {
             "question": "How do I book a tour for a property?",
-            "answer": "Booking a tour is simple. Once you find a property you’re interested in, go to its details page and click the <b>'Book a Tour'</b> button. You’ll be guided through a quick process to schedule a viewing with the assigned agent at a time that suits you. Alternatively, you can contact us directly via call or WhatsApp using the buttons at the bottom right of your screen, and one of our agents will promptly attend to you."
+            "answer": "You can book a tour by calling or by sending us a direct WhatsApp message. You can do this by clicking on the call button or the WhatsApp button at the bottom right corner of every page on this website, or by calling or sending a WhatsApp message to the phone number on every property details page."
         }
     ];
 

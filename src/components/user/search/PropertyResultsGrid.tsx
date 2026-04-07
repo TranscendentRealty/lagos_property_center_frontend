@@ -33,9 +33,9 @@ const PropertyResultsGrid: React.FC<PropertyResultsGridProps> = ({ properties, l
   }
 
   return (
-    <div className="row g-4 property-results-grid"> {/* g-4 for gap between cards */}
+    <div className="row g-4 property-results-grid mx-0">
       {properties.map(property => (
-        <div key={property._id} className={`col-12 col-md-6 col-lg-4 mx-5 d-flex justify-content-${aiSearch? 'center' : 'between'}`}> {/* d-flex and align-items-stretch for equal height cards */}
+        <div key={property._id} className={`col-12 col-lg-${aiSearch ? '4' : '6'} d-flex justify-content-center`}>
           <PropertyCard property={property} />
         </div>
       ))}

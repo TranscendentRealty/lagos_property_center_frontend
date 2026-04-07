@@ -6,7 +6,7 @@ const AboutUsIntro = () => {
 
      const introQuestion = "What is Transcendent Realty?";
   const mainHeading = "About Us";
-  const paragraph = "Transcendent Realty is redefining the real estate experience in Lagos by delivering premium services tailored to the unique needs of every client. Built on a foundation of trust, innovation, and excellence, we specialize in premium real estate services, brokerage, and consultancy. Whether you're buying, selling, renting, or investing, we guide you through the process with unmatched expertise and a commitment to exceptional service.</br>Our portfolio spans luxurious residential properties, commercial spaces, and prime real estate opportunities that reflect the dynamic and vibrant landscape of Lagos and beyond.";
+  const paragraph = "Transcendent Realty is redefining the real estate experience in Lagos by delivering premium services tailored to the unique needs of every client. Built on a foundation of trust, innovation, and excellence, we specialize in premium real estate services, brokerage, and consultancy. Whether you're buying, selling, or investing, we guide you through the process with unmatched expertise and a commitment to exceptional service.</br>Our portfolio spans luxurious residential properties, commercial spaces, and prime real estate opportunities that reflect the dynamic and vibrant landscape of Lagos and beyond.";
   const videoSrc = "/videos/Lekki_Drone_Shot.webm";
   const videoPoster = "/images/Lekki_Phase_One.png";
   return (

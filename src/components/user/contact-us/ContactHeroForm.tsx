@@ -103,7 +103,7 @@ const ContactHeroForm: React.FC<ContactHeroFormProps> = ({
 
                     {/* Left Column: Text and Contact Info */}
                     <div className="col-lg-6 col-md-12 text-white contact-info-column">
-                        <h1 className="display-3 fw-bold mb-3 contact-title">{title}</h1>
+                        <h1 className="fw-bold mb-3 contact-title">{title}</h1>
                         <p className="lead mb-4 contact-subtitle text-white">{subtitle}</p>
                         <div className="d-flex flex-column justify-content-start">
                             {contactInfo.map(item => (
@@ -128,7 +128,7 @@ const ContactHeroForm: React.FC<ContactHeroFormProps> = ({
                     </div>
 
                     {/* Right Column: Contact Form */}
-                    <div className="col-lg-5 col-md-12">
+                    <div className="col-lg-5 col-md-12 col-sm-11">
                         <div className="contact-form-card card shadow-lg">
                             <div className="card-body p-4 p-md-5">
                                 <Form onSubmit={handleSubmit}>
