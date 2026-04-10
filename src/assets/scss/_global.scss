@@ -25,6 +25,19 @@
     color: $themeGreen!important;
 }
 
+.footer-header {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.footer-item {
+    font-size: 0.9rem;
+}
+
+.copyright {
+    font-size: 0.875rem;
+}
+
 .social-link {
     color: $muted;
     display: inline-block; // transforms require a block/inline-block formatting context
@@ -33,6 +46,24 @@
     &:hover {
         color: $black;
         transform: scale(1.3);
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .footer-name {
+        font-size: 1.1rem;
+    }
+
+    .footer-header {
+        font-size: 0.925rem;
+    }
+
+    .footer-item {
+        font-size: 0.85rem;
+    }
+
+    .copyright {
+        font-size: 0.8rem;
     }
 }
 
@@ -45,5 +76,21 @@
         p {
             line-height: 24px;
         }
+    }
+
+    .footer-name {
+        font-size: 1rem;
+    }
+
+    .footer-header {
+        font-size: 0.875rem;
+    }
+
+    .footer-item {
+        font-size: 0.8rem;
+    }
+
+    .copyright {
+        font-size: 0.75rem;
     }
 }

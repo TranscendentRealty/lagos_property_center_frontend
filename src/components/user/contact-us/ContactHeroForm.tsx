@@ -31,7 +31,7 @@ interface ContactHeroFormProps {
 }
 
 const defaultContactInfo: ContactInfoItem[] = [
-    { id: 'address', icon: <FiMapPin size={24} />, title: 'Address', lines: ['44/46 Alaramimo Street, Agege,', 'Lagos, Nigeria'] },
+    // { id: 'address', icon: <FiMapPin size={24} />, title: 'Address', lines: ['44/46 Alaramimo Street, Agege,', 'Lagos, Nigeria'] },
     { id: 'phone', icon: <FiPhone size={24} />, title: 'Phone', lines: ['+234-916-911-2315'], href: 'tel:2349169112315' },
     { id: 'email', icon: <FiMail size={24} />, title: 'Email', lines: ['info@transcendentrealty.com'], href: 'mailto:info@transcendentrealty.com' },
 ];

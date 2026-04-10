@@ -69,7 +69,7 @@ const StatsAndTestimonials: React.FC<StatsAndTestimonialsProps> = () => {
                 )}
 
                 {/* Testimonials Section */}
-                {testimonials && testimonials.length > 0 && (
+                {/* {testimonials && testimonials.length > 0 && (
                     <div className="testimonials-content" id='testimonials'>
                         <hgroup className="section-heading mb-4 mb-md-6">
                             <h2 className="section-title fw-bold">{testimonialsTitle}</h2>
@@ -92,7 +92,7 @@ const StatsAndTestimonials: React.FC<StatsAndTestimonialsProps> = () => {
                             ))}
                         </div>
                     </div>
-                )}
+                )} */}
             </div>
         </section>
     );

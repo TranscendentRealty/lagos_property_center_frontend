@@ -16,12 +16,14 @@ interface FiltersSidebarProps {
   initialFilters: Filters;
   availableLocations: string[];
   onFilterChange: (filters: Filters) => void;
+  onApply?: () => void;
 }
 
 const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
   initialFilters,
   availableLocations,
   onFilterChange,
+  onApply,
 }) => {
   const [keywords, setKeywords] = useState<string[]>(initialFilters.keywords);
   const [maxPrice, setMaxPrice] = useState<number>(initialFilters.maxPrice);
@@ -127,6 +129,13 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
             onChange={handleMaxPriceChange}
           />
         </div> */}
+
+        {/* Mobile-only apply button */}
+        <div className="d-md-none mt-2">
+          <button type="button" className="btn btn-primary w-100" onClick={onApply}>
+            Show Results
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -228,10 +228,13 @@ const SearchPageClientWrapper: React.FC<SearchPageClientWrapperProps> = ({
           initialFilters={filters}
           availableLocations={availableLocations}
           onFilterChange={handleFilterChange}
+          onApply={() => {
+            document.getElementById('search-results')?.scrollIntoView({ behavior: 'smooth' });
+          }}
         />
       </div>
 
-      <div className="col-lg-9 col-md-8">
+      <div className="col-lg-9 col-md-8" id="search-results">
         <SearchBarAndSort
           initialSearchQuery={searchQuery}
           initialSortOption={sortOption}
