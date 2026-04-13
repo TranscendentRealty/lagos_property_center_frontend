@@ -118,7 +118,7 @@ const AISearchPageClientWrapper: React.FC<AISearchPageClientWrapperProps> = ({
   };
 
   return (
-    <div className="row show-border">
+    <div className="row">
 
       <hgroup className="section-heading">
         <h2>Describe Your Dream Home, Let AI Find It</h2>
