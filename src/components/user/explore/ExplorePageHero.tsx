@@ -50,7 +50,7 @@ async function getListingsCount(): Promise<IPropertiesCount | null> {
 }
 
 const ExplorePageHero = () => {
-  const backgroundImageUrl = "/images/PropertyImagePlaceholder2.png";
+  const backgroundImageUrl = "/images/PropertyImagePlaceholder2.jpeg";
   const subTitlePrefix = "Discover all";
   const subTitleSuffix = "listings";
   const locations = locationTeasers;

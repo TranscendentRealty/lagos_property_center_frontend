@@ -19,9 +19,9 @@ import InfoIcon from "../assets/svgs/icons/InfoIcon.svg";
 
 // import TeamworkHands from "../assets/pngs/TeamworkHands.png";
 
-import PropertyImagePlaceholder from "../../public/images/PropertyImagePlaceholder.png";
-import PropertyImagePlaceholder2 from "../../public/images/PropertyImagePlaceholder2.png";
-import PropertyImagePlaceholder3 from "../../public/images/PropertyImagePlaceholder3.png";
+import PropertyImagePlaceholder from "../../public/images/PropertyImagePlaceholder.jpeg";
+import PropertyImagePlaceholder2 from "../../public/images/PropertyImagePlaceholder2.jpeg";
+import PropertyImagePlaceholder3 from "../../public/images/PropertyImagePlaceholder3.jpeg";
 
 export const images = {
     Logo,

@@ -12,7 +12,8 @@ import AgentCard from '../../../components/user/listing/AgentCard';
 import ProductDescription from '@/components/user/listing/ProductDescription';
 import SimilarListings from '@/components/user/listing/SimilarListings';
 import ListingPageSidebar from '@/components/user/listing/ListingPageSidebar';
-import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
+import ListingWhatsAppButton from '@/components/user/listing/ListingWhatsAppButton';
+import ListingCallButton from '@/components/user/listing/ListingCallButton';
 import { IProperty } from '@/types/property'; // Assuming you have this type defined
 import AmenitiesGrid, { Amenity } from '@/components/user/listing/AmenitiesGrid';
 
@@ -273,22 +274,12 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                                 >
                                     Book A Tour
                                 </a>
-                                <a
+                                <ListingWhatsAppButton
                                     href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hello! I'm interested in this property from your website: ${process.env.NEXT_PUBLIC_BASE_URL}/listing/${product._id}`)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn book-whatsapp-btn btn-lg"
-                                    aria-label="Chat on WhatsApp"
-                                >
-                                    <FaWhatsapp size={22} className='text-white'/>
-                                </a>
-                                <a
+                                />
+                                <ListingCallButton
                                     href={`tel:${process.env.NEXT_PUBLIC_CALL_NUMBER}`}
-                                    className="btn book-call-btn btn-lg"
-                                    aria-label="Call us"
-                                >
-                                    <FaPhoneAlt size={18} className='text-white' />
-                                </a>
+                                />
                             </div>
                         </div>
 

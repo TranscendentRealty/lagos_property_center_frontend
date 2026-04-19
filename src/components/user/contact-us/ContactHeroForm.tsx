@@ -40,7 +40,7 @@ const ContactHeroForm: React.FC<ContactHeroFormProps> = ({
     onSubmitForm
 }) => {
 
-    const backgroundImageUrl = "/images/PropertyImagePlaceholder3.png";
+    const backgroundImageUrl = "/images/PropertyImagePlaceholder3.jpeg";
     const title = "Contact Us";
     const subtitle = "Let's bring your dream property to life. Share your enquiry with us, and one of our dedicated agents will respond promptly to provide you with the premium service you deserve."
     const contactInfo = defaultContactInfo;
