@@ -6,12 +6,6 @@ import Link from 'next/link';
 // Import both WhatsApp and Phone icons
 import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
 
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
 interface FloatingContactButtonsProps {
   /**
    * Your WhatsApp number in international format.
