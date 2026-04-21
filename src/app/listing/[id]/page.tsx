@@ -257,7 +257,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                         {product.creator && (
                             <AgentCard
                                 agentName={`${product.creator.name}`}
-                                agentTitle={`Lead Agent — ${product.agency.name}`}
+                                agentTitle={`Principal Broker — ${product.agency.name}`}
                                 agentImageUrl={product.creator.avatar || '/images/default_avatar.jpg'}
                                 agentPhone={product.creator.phone}
                                 rating={4.5} // This data needs to come from your API
