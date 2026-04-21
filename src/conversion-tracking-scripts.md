@@ -1,6 +1,6 @@
 # Conversion Tracking Scripts
 
-## Floating Whatsapp Button:
+## GLobal Tag
 ```
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18071781411"></script>
@@ -11,8 +11,10 @@
 
   gtag('config', 'AW-18071781411');
 </script>
+```
 
-
+## Floating Whatsapp Button:
+```
 <!-- Event snippet for Lead - Floating WhatsApp Click conversion page
 In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
 <script>
