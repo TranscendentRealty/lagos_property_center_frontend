@@ -11,7 +11,7 @@ export default function ListingWhatsAppButton({ href }: ListingWhatsAppButtonPro
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'conversion', {
         send_to: 'AW-18071781411/2Y-WCIWKtp4cEKOApqlD',
-        value: 1.0,
+        value: 35.0,
         currency: 'USD',
       });
     }

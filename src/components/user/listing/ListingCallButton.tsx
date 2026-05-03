@@ -11,7 +11,7 @@ export default function ListingCallButton({ href }: ListingCallButtonProps) {
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'conversion', {
         send_to: 'AW-18071781411/vu3sCL_Ttp4cEKOApqlD',
-        value: 1.0,
+        value: 35.0,
         currency: 'USD',
       });
     }
