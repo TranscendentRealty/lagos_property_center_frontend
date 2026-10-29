@@ -93,9 +93,9 @@ const Footer = () => {
 
             </div>
 
-            <div className="privacy-controls text-center">
+            {/* <div className="privacy-controls text-center">
                 <CookiePreferencesButton />
-            </div>
+            </div> */}
 
             <div className="py-1 copyright container-fluid d-flex justify-content-end align-items-center mx-0">
                 <div className="px-3 px-md-5 justify-content-md-center fg-subtle">

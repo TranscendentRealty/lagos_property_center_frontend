@@ -13,6 +13,9 @@ export default function CookieConsentModal() {
     if (!readConsent()) show();
     window.addEventListener('tr-open-consent', show);
     return () => window.removeEventListener('tr-open-consent', show);
+
+    // () => choose({ analytics: true, ads: true });
+
   }, []);
   function choose(next: { analytics: boolean; ads: boolean }) { setOpen(false); saveConsent(next); }
   if (!open) return null;

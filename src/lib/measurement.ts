@@ -5,24 +5,41 @@ export const ADS_ID = 'AW-18071781411';
 // Enable only after disabling automatic enhanced-measurement events in the GA stream.
 export const GA_ID = process.env.NEXT_PUBLIC_GA_MANUAL_EVENTS_VERIFIED === 'true' && /^G-[A-Z0-9]+$/.test(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '') ? process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID! : '';
 const denied: Consent = { analytics: false, ads: false };
+const granted: Consent = { analytics: true, ads: true };
 let initialized = false;
 let visitConsent: Consent | undefined;
 
+// export function readConsent(): Consent | null {
+//   if (typeof window === 'undefined') return null;
+//   if (visitConsent) return visitConsent;
+//   try {
+//     const stored = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null');
+//     if (!stored || typeof stored.analytics !== 'boolean' || typeof stored.ads !== 'boolean' ||
+//       typeof stored.savedAt !== 'number' || Date.now() - stored.savedAt > 180 * 86400000) return null;
+//     return { analytics: stored.analytics, ads: stored.ads };
+//   } catch { return null; }
+// }
+
 export function readConsent(): Consent | null {
-  if (typeof window === 'undefined') return null;
-  if (visitConsent) return visitConsent;
-  try {
-    const stored = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null');
-    if (!stored || typeof stored.analytics !== 'boolean' || typeof stored.ads !== 'boolean' ||
-      typeof stored.savedAt !== 'number' || Date.now() - stored.savedAt > 180 * 86400000) return null;
-    return { analytics: stored.analytics, ads: stored.ads };
-  } catch { return null; }
+  return { analytics: true, ads: true };
 }
+
+// export function consentValues(consent: Consent) {
+//   return { analytics_storage: consent.analytics ? 'granted' : 'denied',
+//     ad_storage: consent.ads ? 'granted' : 'denied', ad_user_data: consent.ads ? 'granted' : 'denied',
+//     ad_personalization: 'denied' }; // Remarketing/personalization is outside this repair.
+// }
+
+
 export function consentValues(consent: Consent) {
-  return { analytics_storage: consent.analytics ? 'granted' : 'denied',
-    ad_storage: consent.ads ? 'granted' : 'denied', ad_user_data: consent.ads ? 'granted' : 'denied',
-    ad_personalization: 'denied' }; // Remarketing/personalization is outside this repair.
+  return {
+    analytics_storage: 'granted',
+    ad_storage: 'granted',
+    ad_user_data: 'granted',
+    ad_personalization: 'granted'
+  };
 }
+
 export function safePath(path: string): string {
   if (/^\/listing\/[a-f\d]{24}\/?$/i.test(path)) return path.replace(/\/$/, '');
   if (/^\/(search|search-with-ai|explore|contact-us|about-us|privacy-policy)\/?$/.test(path) || path === '/') return path;
@@ -35,13 +52,13 @@ export function pageContext(pathname = window.location.pathname) {
   return { page_location: window.location.origin + path, page_referrer: '', page_title: path === '/' ? 'Home' : path.split('/')[1] };
 }
 export function initializeMeasurement() {
-  const consent = readConsent() || denied;
+  const consent = granted;
   if (initialized || (!consent.ads && !(consent.analytics && GA_ID))) return;
   initialized = true;
   window.dataLayer = [];
   // eslint-disable-next-line prefer-rest-params -- Google's command queue uses an Arguments object.
   window.gtag = function (..._args: Parameters<Window['gtag']>) { window.dataLayer.push(arguments); };
-  window.gtag('consent', 'default', consentValues(denied));
+  window.gtag('consent', 'default', consentValues(granted));
   window.gtag('consent', 'update', consentValues(consent));
   window.gtag('set', { ...pageContext(), ads_data_redaction: true, allow_google_signals: false, allow_ad_personalization_signals: false });
   window.gtag('js', new Date());
@@ -88,8 +105,12 @@ export function trackContact(channel: 'whatsapp' | 'call', placement: 'listing' 
   trackEvent('contact_intent', { channel, placement, ...(propertyId ? { property_id: propertyId } : {}) });
   if (!readConsent()?.ads) return;
   initializeMeasurement();
-  const labels = { listing: { whatsapp: '2Y-WCIWKtp4cEKOApqlD', call: 'vu3sCL_Ttp4cEKOApqlD' },
-    floating: { whatsapp: 'fMnfCIjkmZwcEKOApqlD', call: 'jTWDCN-VyZ4cEKOApqlD' } };
-  window.gtag?.('event', 'conversion', { ...pageContext(), send_to: `${ADS_ID}/${labels[placement === 'listing' ? 'listing' : 'floating'][channel]}`,
-    value: 35, currency: 'USD' }); // Preserve legacy value pending account audit; not verified revenue.
+  const labels = {
+    listing: { whatsapp: '2Y-WCIWKtp4cEKOApqlD', call: 'vu3sCL_Ttp4cEKOApqlD' },
+    floating: { whatsapp: 'fMnfCIjkmZwcEKOApqlD', call: 'jTWDCN-VyZ4cEKOApqlD' }
+  };
+  window.gtag?.('event', 'conversion', {
+    ...pageContext(), send_to: `${ADS_ID}/${labels[placement === 'listing' ? 'listing' : 'floating'][channel]}`,
+    value: 35, currency: 'USD'
+  }); // Preserve legacy value pending account audit; not verified revenue.
 }

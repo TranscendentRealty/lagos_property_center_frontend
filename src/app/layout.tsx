@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     template: "%s | Transcendent Realty",
   },
   description: "Buy or invest in premium Lagos properties with Transcendent Realty. Experience a seamless property search powered by innovative AI technology.",
-  keywords:[
+  keywords: [
     "real estate Lagos",
     "buy property in Lagos",
     "property investment Nigeria",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     description: "Discover curated, high-quality real estate listings in Lagos. Use our AI-powered search to find your dream home or next great investment.",
     url: process.env.NEXT_PUBLIC_BASE_URL,
     siteName: "Transcendent Realty",
-    images:[
+    images: [
       {
         url: "/images/opengraph-image.png",
         width: 1200,
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Transcendent Realty | Premium Real Estate in Lagos",
     description: "Find your dream home or investment property in Lagos with our seamless, AI-powered real estate platform.",
-    images:["/images/opengraph-image.png"],
+    images: ["/images/opengraph-image.png"],
   },
   alternates: {
     canonical: '/',
@@ -121,7 +121,7 @@ export default function RootLayout({
         </AOSAnimation>
 
         {/* --- FIX 1: Moved fixed/absolute components OUTSIDE the animation wrapper --- */}
-        <CookieConsentModal />
+        {/* <CookieConsentModal /> */}
         {(whatsappNumber || callNumber) && (
           <FloatingContactButtons
             phoneNumber={whatsappNumber}
