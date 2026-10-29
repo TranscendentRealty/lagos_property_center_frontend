@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"; // <-- Added Viewport import
 import { Inter } from "next/font/google";
-import Script from "next/script";
+import JourneyMeasurement from "@/components/user/layout/JourneyMeasurement";
+import { CookiePreferencesButton } from "@/components/user/layout/CookieConsentModal";
 import "../assets/scss/main.scss";
 import "../assets/scss/library/style.scss";
 import "./globals.css";
@@ -27,7 +28,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL!),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://transcendentrealty.com"),
+  referrer: "no-referrer",
   title: {
     default: "Transcendent Realty | Premium Real Estate in Lagos, Nigeria",
     template: "%s | Transcendent Realty",
@@ -111,50 +113,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
         />
 
-        {/* --- FIX 3: dangerouslySetInnerHTML for Next.js Scripts --- */}
-        <Script
-          id="google-consent"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer ||[];
-              function gtag(){dataLayer.push(arguments);}
-
-              gtag('consent', 'default', {
-                'ad_storage': 'granted',
-                'ad_user_data': 'granted',
-                'ad_personalization': 'granted',
-                'analytics_storage': 'granted'
-              });
-
-              gtag('consent', 'default', {
-                'ad_storage': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'analytics_storage': 'denied',
-                'region':['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB', 'CH']
-              });
-            `
-          }}
-        />
-
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18071781411"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="google-ads-config"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer ||[];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'AW-18071781411');
-            `
-          }}
-        />
-
+        <JourneyMeasurement />
         <Header />
 
         <AOSAnimation>
@@ -163,15 +122,16 @@ export default function RootLayout({
 
         {/* --- FIX 1: Moved fixed/absolute components OUTSIDE the animation wrapper --- */}
         <CookieConsentModal />
-        {whatsappNumber && callNumber && (
+        {(whatsappNumber || callNumber) && (
           <FloatingContactButtons
             phoneNumber={whatsappNumber}
             callNumber={callNumber}
-            fixedLabel="Talk to Bukunmi now."
+            fixedLabel="Speak with Bukunmi now."
           />
         )}
 
         <Footer />
+
       </body>
     </html>
   );

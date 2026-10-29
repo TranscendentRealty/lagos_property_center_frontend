@@ -70,7 +70,7 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
             keywords.map(keyword => (
               <Badge key={keyword} pill bg="success" className="me-1 mb-1 p-2 keyword-badge">
                 {keyword}
-                &nbsp;&#10005;
+
               </Badge>
             ))
           ) : (
@@ -81,7 +81,7 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
         {/* Location */}
         <div className="mb-4 filter-section">
           <h6 className="filter-title fw-semibold mb-2">Location</h6>
-          <Form.Select value={location} onChange={handleLocationChange}>
+          <Form.Select aria-label="Location" value={location} onChange={handleLocationChange}>
             <option value="">All Locations</option>
             {availableLocations.map(loc => (
               <option key={loc} value={loc}>{loc}</option>
@@ -92,7 +92,7 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
         {/* Property Type */}
         <div className="mb-4 filter-section">
           <h6 className="filter-title fw-semibold mb-2">Property Type</h6>
-          <Form.Select value={propertyType} onChange={handlePropertyTypeChange}>
+          <Form.Select aria-label="Property type" value={propertyType} onChange={handlePropertyTypeChange}>
             <option value="">All Types</option>
             <option value="apartment">Apartment</option>
             <option value="terrace">Terrace</option>
@@ -104,13 +104,13 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
         {/* Bedrooms */}
         <div className="mb-4 filter-section">
           <h6 className="filter-title fw-semibold mb-2">Bedrooms</h6>
-          <Form.Select value={bedrooms} onChange={handleBedroomsChange}>
+          <Form.Select aria-label="Bedrooms" value={bedrooms} onChange={handleBedroomsChange}>
             <option value="">Any</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option value="5">5+</option>
+            <option value="5+">5+</option>
           </Form.Select>
         </div>
 

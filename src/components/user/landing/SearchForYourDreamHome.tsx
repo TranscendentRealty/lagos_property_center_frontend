@@ -1,43 +1,14 @@
-import React, { Suspense } from 'react';
+import Image from 'next/image';
 import Search from '../layout/Search';
-import styles from '../../../app/page.module.css';
-
-
-const SearchForYourDreamHome = () => {
-    return (
-        <section className='py-5 px-2 px-md-0'>
-            <hgroup className="section-heading">
-                <h2>Your AI-Powered Property Search</h2>
-                <p>Simply tell us what you&apos;re looking for, and we&apos;ll help you make it a reality, stress-free.</p>
-            </hgroup>
-
-            <Suspense fallback={<div className='search-placeholder'/>}>
-                <Search classNames='landing-main-search rounded-pill mt-4' darkButton aiSearch key={'home-ai-search'} />
-            </ Suspense>
-
-            {/* <div className="row">
-                <div className="col-6">
-                    <select name='Location' id='location' title='location' className='landing-search-filter'>
-                        <option value="" disabled selected hidden>Location</option>
-                        <option value="Lagos">Lekki Phase One</option>
-                        <option value="Abuja">Ikate</option>
-                        <option value="Abuja">Orchid</option>
-                    </select>
-                </div>
-                <div className="col-6">
-                    <select name='Property Type' id='propertyType' title='propertyType' className='landing-search-filter'>
-                        <option value="" disabled selected hidden>Property Type</option>
-                        <option value="Lagos">Terrace</option>
-                        <option value="Abuja">Semi-detached</option>
-                        <option value="Abuja">Fully Detached</option>
-                    </select>
-                </div>
-            </div> */}
-
-
-
-        </section>
-    )
+import MeasuredSection from '../layout/MeasuredSection';
+export default function SearchForYourDreamHome() {
+  return <MeasuredSection>
+    <div className="compact-ai-image"><Image src="/images/FullyDetachedPlaceholder.png" alt="A Lagos home" fill sizes="(max-width: 767px) 100vw, 320px" style={{ objectFit: 'cover' }} /></div>
+    <div className="compact-ai-content">
+      <h2 id="ai-search-heading">Describe the home you want</h2>
+      <p>Tell us what matters to you. Our AI-assisted search will check available listings.</p>
+      <Search aiSearch />
+      <p className="small text-muted mt-3 mb-0">Try “4-bedroom semi-detached in Ikate” or “Apartment in Lekki Phase 1 with a pool”.</p>
+    </div>
+  </MeasuredSection>;
 }
-
-export default SearchForYourDreamHome

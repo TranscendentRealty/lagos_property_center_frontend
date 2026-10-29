@@ -42,7 +42,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
     let description = '';
 
     try {
-        const res = await fetch(`${apiBaseUrl}/api/v1/properties/${id}`, { cache: 'force-cache' });
+        const res = await fetch(`${apiBaseUrl}/api/v1/properties/${id}`, { cache: 'no-store' });
         if (res.ok) {
             const data = await res.json();
             if (data.success && data.data) {

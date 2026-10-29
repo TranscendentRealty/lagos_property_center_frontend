@@ -8,6 +8,7 @@ import { images } from '@/exports/images';
 import Carousel from 'react-bootstrap/Carousel';
 import HeroSearchPanel from './HeroSearchPanel'; // <-- Import the new component
 import { ListingType } from '@/types/common';
+import { trackEvent } from '@/lib/measurement';
 
 // Simplify the data structure - we only need background images now
 const backgroundImages: { id: number; src: StaticImageData | string; alt: string }[] = [
@@ -31,6 +32,7 @@ const HeroSection = () => {
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        trackEvent('search_submit', { search_mode: 'standard' });
 
         // console.log({ location, propertyType, bedrooms })
 
@@ -46,7 +48,7 @@ const HeroSection = () => {
         // console.log({ "hero panel search params": params.toString() });
 
         // Navigate to the search page with the constructed query
-        router.push(`/search?search=${location}&${params.toString()}`);
+        router.push(`/search?${params.toString()}`);
     };
 
     return (

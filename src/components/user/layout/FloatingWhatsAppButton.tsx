@@ -1,118 +1,32 @@
-// components/layout/FloatingContactButtons.tsx
 'use client';
-
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-// Import both WhatsApp and Phone icons
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
-
-interface FloatingContactButtonsProps {
-  /**
-   * Your WhatsApp number in international format.
-   * e.g., '2348012345678'
-   */
-  phoneNumber: string;
-  /**
-   * Your direct call number, formatted for the `tel:` link.
-   * e.g., '+2348012345678'
-   */
-  callNumber: string;
-  /**
-   * The default message that will pre-populate the WhatsApp chat.
-   */
-  defaultMessage?: string;
-  /**
-   * The fixed label text that appears below the buttons.
-   */
-  fixedLabel?: string;
-  /**
-   * How far down the user should scroll (in pixels) before the buttons appear.
-   */
-  showAtScrollY?: number;
-}
-
-const FloatingContactButtons: React.FC<FloatingContactButtonsProps> = ({
-  phoneNumber,
-  callNumber,
-  defaultMessage = "Hello! I'm interested in a property from your website.",
-  fixedLabel = "Talk to Bukunmi now.",
-  showAtScrollY = 0,
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
-
+import { contactNumber, whatsappLink } from '@/lib/contact';
+import { trackContact } from '@/lib/measurement';
+export default function FloatingContactButtons({ phoneNumber, callNumber, fixedLabel = 'Speak with Bukunmi', defaultMessage = 'Hello! I’d like help finding a property.', showAtScrollY = 0 }: {
+  phoneNumber?: string; callNumber?: string; fixedLabel?: string; defaultMessage?: string; showAtScrollY?: number;
+}) {
+  const path = usePathname();
+  const [context, setContext] = useState<{ id?: string; title?: string; url?: string }>({});
+  const [visible, setVisible] = useState(showAtScrollY === 0);
   useEffect(() => {
-    const handleScroll = () => {
-      setIsVisible(window.scrollY > showAtScrollY);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [showAtScrollY]);
-
-  if (!phoneNumber || !callNumber) {
-    console.warn("FloatingContactButtons: phoneNumber or callNumber prop is missing.");
-    return null;
-  }
-
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
-  const callUrl = `tel:${callNumber}`;
-
-  const handleWhatsAppClick = () => {
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-18071781411/fMnfCIjkmZwcEKOApqlD',
-        value: 35.0,
-        currency: 'USD',
-      });
-    }
-  };
-
-  const handleCallClick = () => {
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-18071781411/jTWDCN-VyZ4cEKOApqlD',
-        value: 35.0,
-        currency: 'USD',
-      });
-    }
-  };
-
-  return (
-    <div className={`floating-contact-container ${isVisible ? 'visible' : ''}`}>
-      {/* Container for the two buttons */}
-      <div className="buttons-wrapper">
-        {/* Direct Call Button */}
-        <Link href={callUrl} passHref legacyBehavior>
-          <a
-            className="floating-btn call-btn"
-            aria-label="Call us"
-            data-tooltip="Call Us: +2349169112315" // Use data attribute for tooltip
-            onClick={handleCallClick}
-          >
-            <FaPhoneAlt size={24} />
-          </a>
-        </Link>
-
-        {/* WhatsApp Chat Button */}
-        <Link href={whatsappUrl} passHref legacyBehavior>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            className="floating-btn whatsapp-btn"
-            aria-label="Chat with us on WhatsApp"
-            data-tooltip="Chat on WhatsApp" // Use data attribute for tooltip
-            onClick={handleWhatsAppClick}
-          >
-            <FaWhatsapp size={28} />
-          </a>
-        </Link>
-      </div>
-
-      {/* Fixed Label Below Buttons */}
-      <div className="fixed-label">
-        {fixedLabel}
-      </div>
-    </div>
-  );
-};
-
-export default FloatingContactButtons;
+    const listing = document.querySelector<HTMLElement>('[data-listing-id]');
+    setContext(listing ? { id: listing.dataset.listingId, title: listing.dataset.listingTitle, url: window.location.origin + path } : {});
+    const update = () => setVisible(window.scrollY >= showAtScrollY);
+    update(); window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, [path, showAtScrollY]);
+  const message = context.id ? `Hello! I'd like to discuss ${context.title}: ${context.url}. Could we speak about availability and my needs before arranging a viewing?` : defaultMessage;
+  const whatsapp = whatsappLink(phoneNumber, message);
+  const call = contactNumber(callNumber);
+  if (!whatsapp && !call) return null;
+  return <div className={`floating-contact-container ${visible ? 'visible' : ''}`}>
+    <div className="buttons-wrapper">
+      {call && <a href={`tel:+${call}`} className="floating-btn call-btn" aria-label={`Call the agent: +${call}`} title={`Call the agent: +${call}`}
+        onClick={() => trackContact('call', 'floating', context.id)}><FaPhoneAlt size={22} aria-hidden="true" /></a>}
+      {whatsapp && <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="floating-btn whatsapp-btn" aria-label="Chat on WhatsApp" title="Chat on WhatsApp"
+        onClick={() => trackContact('whatsapp', 'floating', context.id)}><FaWhatsapp size={26} aria-hidden="true" /></a>}
+    </div><div className="fixed-label">{fixedLabel}</div>
+  </div>;
+}

@@ -7,7 +7,7 @@ import { availableLocations } from '@/exports/constants';
 
 const emptyFilters: Filters = {
     keywords: [],
-    maxPrice: 5_000_000_000,
+    maxPrice: 0,
     location: '',
     propertyType: '',
     bedrooms: '',
@@ -19,7 +19,7 @@ const ListingPageSidebar = () => {
     const handleFilterChange = (filters: Filters) => {
         const params = new URLSearchParams();
         // Location drives the search keyword (consistent with search page behaviour)
-        if (filters.location) params.set('search', filters.location);
+        if (filters.location) params.set('location', filters.location);
         if (filters.propertyType) params.set('propertyType', filters.propertyType);
         if (filters.bedrooms) params.set('bedrooms', filters.bedrooms);
 

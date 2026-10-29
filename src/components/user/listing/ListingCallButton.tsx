@@ -1,30 +1,7 @@
 'use client';
-
 import { FaPhoneAlt } from 'react-icons/fa';
-
-interface ListingCallButtonProps {
-  href: string;
-}
-
-export default function ListingCallButton({ href }: ListingCallButtonProps) {
-  const handleClick = () => {
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-18071781411/vu3sCL_Ttp4cEKOApqlD',
-        value: 35.0,
-        currency: 'USD',
-      });
-    }
-  };
-
-  return (
-    <a
-      href={href}
-      className="btn book-call-btn btn-lg"
-      aria-label="Call us"
-      onClick={handleClick}
-    >
-      <FaPhoneAlt size={18} className="text-white" />
-    </a>
-  );
+import { trackContact } from '@/lib/measurement';
+export default function ListingCallButton({ href, propertyId }: { href: string; propertyId?: string }) {
+  return <a href={href} className="btn btn-dark d-inline-flex align-items-center gap-2"
+    onClick={() => trackContact('call', 'listing', propertyId)}><FaPhoneAlt aria-hidden="true" />Call the agent</a>;
 }

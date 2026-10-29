@@ -52,9 +52,9 @@ $call-blue: #007bff; // Example color for the call button
     }
 
     // --- CSS Tooltip ---
-    // Show tooltip on hover
+    // Reuse the accessible label so visible and screen-reader text stay in sync.
     &::before {
-      content: attr(data-tooltip); // Get text from data-tooltip attribute
+      content: attr(aria-label);
       position: absolute;
       bottom: 100%; // Position above the button
       margin-bottom: 0.75rem;
@@ -74,7 +74,8 @@ $call-blue: #007bff; // Example color for the call button
       pointer-events: none;
     }
 
-    &:hover::before {
+    &:hover::before,
+    &:focus-visible::before {
       opacity: 1;
       transform: translateY(0);
       visibility: visible;

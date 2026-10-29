@@ -5,7 +5,8 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap");
+// The root layout already serves Inter locally through next/font.
+// Avoid a second runtime font request, including on the not-found page.
 @import "colorVariables";
 @import "functions";
 @import "variables";

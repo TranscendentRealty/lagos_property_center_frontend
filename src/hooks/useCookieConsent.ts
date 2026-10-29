@@ -1,29 +1,13 @@
-// hooks/useCookieConsent.ts
 'use client';
-
-import { useState, useEffect } from 'react';
-import { getCookie } from 'cookies-next';
-
-interface ConsentStatus {
-  hasConsented: boolean | null; // null means not yet determined
-  isLoading: boolean;
-}
-
-export const useCookieConsent = (): ConsentStatus => {
-  const [consent, setConsent] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
+import { useEffect, useState } from 'react';
+import { Consent, CONSENT_EVENT, readConsent } from '@/lib/measurement';
+export function useCookieConsent() {
+  const [consent, setConsent] = useState<Consent | null>(null);
   useEffect(() => {
-    const consentCookie = getCookie('lpc-cookie-consent');
-    if (consentCookie === 'true') {
-      setConsent(true);
-    } else if (consentCookie === 'false') {
-      setConsent(false);
-    } else {
-      setConsent(null); // No choice has been made
-    }
-    setIsLoading(false);
+    const update = () => setConsent(readConsent()); update();
+    window.addEventListener(CONSENT_EVENT, update);
+    return () => window.removeEventListener(CONSENT_EVENT, update);
   }, []);
-
-  return { hasConsented: consent, isLoading };
-};
+  return consent;
+}
+export default useCookieConsent;

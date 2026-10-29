@@ -3,6 +3,7 @@ import PropertyCard from '../fragments/PropertyCard';
 import { Property } from '@/types/common';
 import { IProperty } from '@/types/property';
 import EmptyStateMessage from '../fragments/EmptyStateMessage';
+import SearchContactHelp from './SearchContactHelp';
 
 interface PropertyResultsGridProps {
   properties: IProperty[];
@@ -27,7 +28,8 @@ const PropertyResultsGrid: React.FC<PropertyResultsGridProps> = ({ properties, l
       <div className='px-3 px-lg-0'>
         <EmptyStateMessage
           title="No Properties Found"
-          message="Try adjusting your search filters or keywords." />
+          message="We couldn’t find available properties matching this request. Try a different location or property type, or let an agent help." />
+        <SearchContactHelp />
       </div>
     );
   }

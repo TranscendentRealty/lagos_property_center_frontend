@@ -1,5 +1,7 @@
 // components/agent/AgentProfileHeader.tsx
 import React from 'react';
+import ContactLink from '../layout/ContactLink';
+import { contactNumber, whatsappLink } from '@/lib/contact';
 import Image from 'next/image';
 import { Button } from 'react-bootstrap';
 // Using react-icons for icons
@@ -31,6 +33,8 @@ const renderStars = (rating: number) => {
 
 
 const AgentProfileHeader: React.FC<AgentProfileHeaderProps> = ({ agent }) => {
+  const call = contactNumber(agent.phone);
+  const whatsapp = whatsappLink(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, 'Hello! Could we discuss my requirements before arranging a property viewing?');
   return (
     <section className="agent-profile-header-section py-5">
       <div className="container" style={{ maxWidth: '1200px' }}>
@@ -45,10 +49,10 @@ const AgentProfileHeader: React.FC<AgentProfileHeaderProps> = ({ agent }) => {
                 <p className="agent-title text-muted fs-5 mb-3">{agent.title}</p>
 
                 <div className="contact-info d-flex flex-wrap align-items-center mb-3">
-                  <a href={`tel:${agent.phone}`} className="d-flex align-items-center text-decoration-none me-4 contact-link">
+                  {call && <ContactLink href={`tel:+${call}`} channel="call" placement="agent" className="d-flex align-items-center text-decoration-none me-4 contact-link">
                     <FiPhone size={18} className="me-2 flex-shrink-0" />
                     <span>{agent.phone}</span>
-                  </a>
+                  </ContactLink>}
                   <a href={`mailto:${agent.email}`} className="d-flex align-items-center text-decoration-none contact-link">
                     <FiMail size={18} className="me-2 flex-shrink-0" />
                     <span>{agent.email}</span>
@@ -68,9 +72,7 @@ const AgentProfileHeader: React.FC<AgentProfileHeaderProps> = ({ agent }) => {
 
                 {/* This button might eventually open a modal, requiring it to be a Client Component.
                     For now, it can be a simple button or link. */}
-                <Button variant="dark" size="lg" className="book-a-tour-btn">
-                  Book A Tour
-                </Button>
+                {whatsapp && <ContactLink href={whatsapp} channel="whatsapp" placement="agent" className="btn btn-dark">Discuss a viewing</ContactLink>}
               </div>
             </div>
 

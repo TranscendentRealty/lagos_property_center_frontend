@@ -2,6 +2,8 @@
 'use client'
 
 import React, { useState } from 'react';
+import { trackContact } from '@/lib/measurement';
+import { contactNumber } from '@/lib/contact';
 import { Form, Button } from 'react-bootstrap'; // Using react-bootstrap for form
 // Assuming you have icons, e.g., react-icons
 import { FiMapPin, FiPhone, FiMail, FiSend } from 'react-icons/fi';
@@ -30,9 +32,10 @@ interface ContactHeroFormProps {
     onSubmitForm?: (data: ContactFormData) => Promise<void> | void;
 }
 
+const configuredPhone = contactNumber(process.env.NEXT_PUBLIC_CALL_NUMBER);
 const defaultContactInfo: ContactInfoItem[] = [
     // { id: 'address', icon: <FiMapPin size={24} />, title: 'Address', lines: ['44/46 Alaramimo Street, Agege,', 'Lagos, Nigeria'] },
-    { id: 'phone', icon: <FiPhone size={24} />, title: 'Phone', lines: ['+234-916-911-2315'], href: 'tel:2349169112315' },
+    ...(configuredPhone ? [{ id: 'phone', icon: <FiPhone size={24} />, title: 'Phone', lines: [`+${configuredPhone}`], href: `tel:+${configuredPhone}` }] : []),
     { id: 'email', icon: <FiMail size={24} />, title: 'Email', lines: ['info@transcendentrealty.com'], href: 'mailto:info@transcendentrealty.com' },
 ];
 
@@ -113,7 +116,7 @@ const ContactHeroForm: React.FC<ContactHeroFormProps> = ({
                                         <h5 className="mb-0 fw-medium contact-detail-title">{item.title}</h5>
                                         {item.lines.map((line, index) =>
                                             item.href && index === 0 ? (
-                                                <a key={index} href={item.href} className="d-block text-white contact-detail-line">
+                                                <a key={index} href={item.href} onClick={() => { if (item.id === 'phone') trackContact('call', 'contact_page'); }} className="d-block text-white contact-detail-line">
                                                     {line}
                                                 </a>
                                             ) : (

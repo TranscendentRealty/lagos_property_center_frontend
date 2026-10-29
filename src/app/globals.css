@@ -24,7 +24,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-     :root {
+    :root {
         --background: #ffffff;
         --foreground: #171717;
         --bg-primary: #F5F5F5;
@@ -142,7 +142,121 @@ a {
     section {
         margin-bottom: 0px;
     }
+
     .landing-search-filter {
         width: 65%;
+    }
+}
+
+/* Compact search and contact controls remain usable at narrow phone widths. */
+.compact-ai-section {
+    display: grid;
+    grid-template-columns: minmax(200px, 320px) minmax(0, 1fr);
+    max-width: 1040px;
+    margin-inline: auto;
+    background: #f5f5ee;
+    border: 1px solid #deded4;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.compact-ai-image {
+    position: relative;
+    min-height: 280px;
+}
+
+.compact-ai-content {
+    padding: clamp(20px, 3vw, 36px);
+    min-width: 0;
+}
+
+.compact-ai-content h2 {
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.12;
+}
+
+.compact-ai-content>p {
+    color: #4a5148;
+}
+
+/* .privacy-controls { padding-bottom: 120px !important; } */
+.floating-contact-container.visible {
+    pointer-events: none;
+}
+
+.floating-contact-container.visible .floating-btn {
+    pointer-events: auto;
+}
+
+.property-search-form .form-control {
+    min-height: 48px;
+}
+
+.property-search-form .btn {
+    min-height: 48px;
+    white-space: normal;
+}
+
+.consent-panel {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 1100;
+    max-width: min(570px, calc(100vw - 32px));
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+body:has(.consent-panel) .floating-contact-container {
+    bottom: auto;
+    top: 110px;
+}
+
+.floating-contact-container a:focus-visible,
+.property-search-form :focus-visible {
+    outline: 3px solid #9b7024;
+    outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+    .compact-ai-section {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .compact-ai-image {
+        min-height: 160px;
+        max-height: 190px;
+    }
+
+    .compact-ai-content {
+        padding: 20px;
+    }
+
+    .floating-contact-container {
+        right: 12px !important;
+        bottom: max(12px, env(safe-area-inset-bottom)) !important;
+    }
+
+    .floating-contact-container .floating-btn {
+        width: 46px;
+        height: 46px;
+    }
+
+    .floating-contact-container .fixed-label {
+        font-size: 11px;
+    }
+
+    body:has(.consent-panel) .floating-contact-container {
+        top: 100px;
+        bottom: auto !important;
+    }
+
+    body:has(input:focus, textarea:focus, select:focus) .floating-contact-container {
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    main {
+        padding-bottom: 110px;
     }
 }

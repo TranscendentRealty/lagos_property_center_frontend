@@ -2,9 +2,8 @@
 
 import { IProperty } from '@/types/property'; // Assuming your type definition path
 
-// Cache the entire page and all its fetches for 1 hour.
-// Any future data-fetching added to this route automatically inherits this interval.
-export const revalidate = 3600;
+// Read current availability on each request.
+export const dynamic = 'force-dynamic';
 
 // Import your components as before
 import SearchForYourDreamHome from "@/components/user/landing/SearchForYourDreamHome";
@@ -20,8 +19,8 @@ async function getHomepageData() {
     // Use an environment variable for your backend URL for flexibility.
     const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/v1/pages/homepage`;
 
-    // force-cache inherits the page-level revalidate = 3600 (set above).
-    const res = await fetch(apiUrl, { cache: 'force-cache' });
+    // No inventory cache: status changes appear on the next request.
+    const res = await fetch(apiUrl, { cache: 'no-store', signal: AbortSignal.timeout(12000) });
 
     // It's good practice to check if the response was successful.
     if (!res.ok) {
@@ -62,11 +61,11 @@ export default async function Home() {
       {/* <PropertyShowcaseCarousel /> */}
       <HeroSection />
       <div className="container-fluid px-2 px-sm-5 px-md-6">
-        <SearchForYourDreamHome />
         {/* 3. Pass the server-fetched data down as props to the child components. */}
         {/* These child components can remain Client Components if they need interactivity. */}
         <PropertiesOfTheWeek properties={propertiesOfTheWeek} />
         <HotRightNow properties={hotProperties} />
+        <SearchForYourDreamHome />
         <FAQ />
       </div>
     </main>

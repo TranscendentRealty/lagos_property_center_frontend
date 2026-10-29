@@ -1,104 +1,31 @@
-// components/Search.tsx
-'use client'
-
-import React, { useState, FormEvent, useEffect } from 'react';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { HiOutlineSparkles } from "react-icons/hi";
-
-const Search = ({ classNames, headerSearch = false, darkButton = true, aiSearch = false }: SearchProps) => {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const pathName = usePathname();
-    const initialKeyword = searchParams.get('search') || '';
-
-    const [keyword, setKeyword] = useState(initialKeyword);
-    const [aiPrompt, setAiPrompt] = useState(initialKeyword);
-    const [isLoading, setIsLoading] = useState(false);
-
-    // This state will help us control when the aurora is visible
-    const [isFocused, setIsFocused] = useState(false);
-
-    useEffect(() => {
-        const queryFromUrl = searchParams.get('search') || '';
-
-        if (queryFromUrl != keyword || queryFromUrl != aiPrompt) {
-            if (pathName.includes('search-with-ai')) setAiPrompt(queryFromUrl);
-            else setKeyword(queryFromUrl);
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams]);
-
-    const searchHandler = async (event: FormEvent<HTMLFormElement>) => {
-        const targetPathname = aiSearch ? '/search-with-ai' : '/search';
-        const searchQuery = aiSearch ? aiPrompt : keyword;
-
-        event.preventDefault();
-        const trimmedSearchQuery = searchQuery.trim();
-
-        if (!trimmedSearchQuery || isLoading) return;
-
-        setIsLoading(true);
-
-        if (trimmedSearchQuery) {
-            const newUrl = `${targetPathname}?search=${encodeURIComponent(trimmedSearchQuery)}`;
-            router.replace(newUrl);
-        } else {
-            router.push(targetPathname);
-        }
-
-        setIsLoading(false);
-    };
-
-    return (
-        <form onSubmit={searchHandler}>
-            <div className={`input-group search-wrapper ${classNames}`}>
-                {/* --- This is the new structure for the input field --- */}
-                <div className="aurora-input-wrapper">
-                    <input
-                        type="text"
-                        name="search_query"
-                        className={`form-control search-field ${darkButton ? 'text-black' : 'text-white'}`}
-                        placeholder={`${aiSearch ? 'e.g., "a modern 4-bedroom semi-detached duplex in Lekki with a swimming pool"' : 'Search properties, locations...'}`}
-                        value={aiSearch ? aiPrompt : keyword}
-                        onChange={(e) => aiSearch ? setAiPrompt(e.target.value) : setKeyword(e.target.value)}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                        disabled={isLoading}
-                    />
-                    {/* The Aurora effect is placed inside the wrapper, behind the input */}
-                    {aiSearch &&
-                        (<div className="aurora">
-                            <div className="aurora__item"></div>
-                            <div className="aurora__item"></div>
-                            <div className="aurora__item"></div>
-                            <div className="aurora__item"></div>
-                        </div>)}
-
-                    {/* Optional: Add a subtle loading indicator */}
-                    {isLoading && <div className="spinner-border text-primary loading-spinner" role="status"></div>}
-                </div>
-
-                <div className="input-group-append py-0">
-                    <button type="submit" className={`btn search-btn ${darkButton ? 'text-black' : 'text-white'}`} disabled={isLoading}>
-                        {/* Search Icon */}
-                        {aiSearch ?
-                        (<HiOutlineSparkles className='text-black mx-0 px-0' size={20}/>)
-                        :
-                        (<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>)}
-                    </button>
-                </div>
-            </div>
-        </form>
-    );
-}
-
+'use client';
+import { FormEvent, useId, useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { trackEvent } from '@/lib/measurement';
 interface SearchProps {
-    classNames?: string;
-    headerSearch?: boolean;
-    darkButton?: boolean;
-    aiSearch?: boolean;
+  classNames?: string; headerSearch?: boolean; darkButton?: boolean; aiSearch?: boolean;
+  initialValue?: string; onSearch?: (value: string) => void; pending?: boolean;
 }
-
-export default Search;
+export default function Search({ aiSearch = false, classNames = '', initialValue = '', onSearch, pending = false }: SearchProps) {
+  const [value, setValue] = useState(initialValue);
+  const [navigating, startTransition] = useTransition();
+  const router = useRouter();
+  const id = useId();
+  const busy = pending || navigating;
+  function submit(event: FormEvent) {
+    event.preventDefault();
+    if (!value.trim() || busy) return;
+    trackEvent('search_submit', { search_mode: aiSearch ? 'ai' : 'standard' });
+    if (onSearch) onSearch(value.trim());
+    else startTransition(() => router.push(`${aiSearch ? '/search-with-ai' : '/search'}?search=${encodeURIComponent(value.trim())}`));
+  }
+  return <form onSubmit={submit} className={`property-search-form ${classNames}`} aria-busy={busy}>
+    <label htmlFor={id} className="form-label">{aiSearch ? 'What would you like in your home?' : 'Search properties or locations'}</label>
+    <div className="d-flex flex-wrap gap-2">
+      <input id={id} className="form-control" style={{ flex: '1 1 220px', minWidth: 0 }} name="search" maxLength={500} required
+        value={value} onChange={event => setValue(event.target.value)} placeholder={aiSearch ? 'A 4-bedroom house in Ikate with a pool' : 'Location or property keywords'} />
+      <button type="submit" className="btn btn-dark" disabled={busy}>{busy ? 'Finding homes…' : aiSearch ? 'Find matching homes' : 'Search'}</button>
+    </div>
+    {busy && <p role="status" className="small mt-2">Checking available properties…</p>}
+  </form>;
+}

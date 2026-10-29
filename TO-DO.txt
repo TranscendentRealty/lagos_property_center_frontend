@@ -1,0 +1,5 @@
+A new leads funnel:
+- A modal pops up after user has been on the website for about 5-10 minutes, it's a simple modal asking the users to enter their email to get periodic newletter of good real estate deals they might like. 
+- Optional field to also enter phone number
+- Newsletter to be mostly AI generated
+- even those who do not sign-up for news letter should be tracked, location and whatever other preferences can be extracted from cookies and browsing history should be logged

@@ -12,6 +12,7 @@ const nextConfig = {
 
     async headers() {
         return [
+            { source: '/:path*', headers: [{ key: 'Referrer-Policy', value: 'no-referrer' }] },
             {
                 // Public folder images (/public/images/*) — safe to cache aggressively since
                 // they are versioned by filename and rarely change between deploys.

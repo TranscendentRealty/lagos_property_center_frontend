@@ -1,4 +1,6 @@
 import React from 'react';
+import ContactLink from './ContactLink';
+import { whatsappLink, contactNumber } from '@/lib/contact';
 import Image from 'next/image';
 import Link from 'next/link';
 // import Telephone from '../../assets/svgs/icons/telephone.svg';
@@ -6,9 +8,12 @@ import Link from 'next/link';
 // import Instagram from '../../assets/svgs/icons/instagram.svg';
 
 import { icons, images } from '@/exports/images';
+import { CookiePreferencesButton } from "@/components/user/layout/CookieConsentModal";
 
 
 const Footer = () => {
+    const whatsapp = whatsappLink(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, 'Hello! Could we discuss my property search?');
+    const call = contactNumber(process.env.NEXT_PUBLIC_CALL_NUMBER);
     return (
         <footer className="footer text-black pt-4 px-0">
 
@@ -76,20 +81,25 @@ const Footer = () => {
                     <div className="col-12 col-md-3 mt-2 mt-md-0">
                         <div className="footer-col">
                             <div className="footer-header mb-3">
-                                Support</div>
-                            <Link href="#!">
-                                <div className="footer-item mb-2">Customer Support</div></Link>
-                            <Link href="#!" className="footer-item mb-2">
-                                <div className="footer-item mb-2">Schedule a Consultation</div></Link>
+                                Legal & Support</div>
+                            <Link href="/privacy-policy" className="footer-item mb-2">
+                                <div className="footer-item mb-2">Privacy policy</div></Link>
+                            {call && <ContactLink href={`tel:+${call}`} channel="call" placement="footer" className="d-block footer-item mb-2">Call the agent</ContactLink>}
+                            {whatsapp && <ContactLink href={whatsapp} channel="whatsapp" placement="footer" className="d-block footer-item mb-2">Discuss your search</ContactLink>}
                         </div>
                     </div>
+
                 </div>
 
             </div>
 
-            <div className="py-3 copyright container-fluid d-flex justify-content-end align-items-center mx-0">
+            <div className="privacy-controls text-center">
+                <CookiePreferencesButton />
+            </div>
+
+            <div className="py-1 copyright container-fluid d-flex justify-content-end align-items-center mx-0">
                 <div className="px-3 px-md-5 justify-content-md-center fg-subtle">
-                    Transcendent Realty &copy; 2025
+                    Transcendent Realty &copy; 2025 - 2026
                 </div>
 
             </div>
