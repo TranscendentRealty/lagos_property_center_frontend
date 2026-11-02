@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
 import { contactNumber, whatsappLink } from '@/lib/contact';
 import { trackContact } from '@/lib/measurement';
-export default function FloatingContactButtons({ phoneNumber, callNumber, fixedLabel = 'Speak with Bukunmi', defaultMessage = 'Hello! I’d like help finding a property.', showAtScrollY = 0 }: {
+export default function FloatingContactButtons({ phoneNumber, callNumber, fixedLabel = 'Speak with Bukunmi', defaultMessage = "Hello! I'm interested in a property from your website.", showAtScrollY = 0 }: {
   phoneNumber?: string; callNumber?: string; fixedLabel?: string; defaultMessage?: string; showAtScrollY?: number;
 }) {
   const path = usePathname();
@@ -17,7 +17,7 @@ export default function FloatingContactButtons({ phoneNumber, callNumber, fixedL
     update(); window.addEventListener('scroll', update, { passive: true });
     return () => window.removeEventListener('scroll', update);
   }, [path, showAtScrollY]);
-  const message = context.id ? `Hello! I'd like to discuss ${context.title}: ${context.url}. Could we speak about availability and my needs before arranging a viewing?` : defaultMessage;
+  const message = context.id ? `Hello! I'm interested in this property from your website: ${context.title} ${context.url}` : defaultMessage;
   const whatsapp = whatsappLink(phoneNumber, message);
   const call = contactNumber(callNumber);
   if (!whatsapp && !call) return null;

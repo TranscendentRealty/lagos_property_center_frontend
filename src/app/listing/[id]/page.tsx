@@ -130,7 +130,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://transcendentrealty.com';
     const schemaMarkup = listingMetadata(product, baseUrl);
     const whatsapp = whatsappLink(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
-        `Hello! I'd like to discuss ${product.title}: ${baseUrl}/listing/${product._id}. Could we speak about availability and my needs before arranging a viewing?`);
+        `Hello! I'm interested in this property from your website: ${product.title} ${baseUrl}/listing/${product._id}`);
     const call = contactNumber(process.env.NEXT_PUBLIC_CALL_NUMBER);
 
     // product.photos.sort((a, b) => {
@@ -191,62 +191,62 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
                     {/* Gallery + details take the remaining 9 columns */}
                     <div className="col-lg-9 col-md-12">
-                <div className="row g-3 g-lg-4">
-                    <div className="col-xl-7 col-md-12">
-                        <ImageGallery galleryImages={galleryImagesForComponent} />
-                    </div>
+                        <div className="row g-3 g-lg-4">
+                            <div className="col-xl-7 col-md-12">
+                                <ImageGallery galleryImages={galleryImagesForComponent} />
+                            </div>
 
-                    <div className="col-xl-5 col-md-12 product-details-column">
-                        <p className="fw-semibold">Status: {product.status}</p>
-                        {product.status !== 'Available' && <p>This property is {product.status.toLowerCase()}. Ask us about available homes with similar features.</p>}
-                        <ProductInfo
-                            title={product.title}
-                            tags={product.amenities}
-                            price={product.price.toLocaleString()} // Format the price nicely
-                            location={`${product.location.street}, ${product.location.city}`}
-                        />
+                            <div className="col-xl-5 col-md-12 product-details-column">
+                                <p className="fw-semibold">Status: {product.status}</p>
+                                {product.status !== 'Available' && <p>This property is {product.status.toLowerCase()}. Ask us about available homes with similar features.</p>}
+                                <ProductInfo
+                                    title={product.title}
+                                    tags={product.amenities}
+                                    price={product.price.toLocaleString()} // Format the price nicely
+                                    location={`${product.location.street}, ${product.location.city}`}
+                                />
 
-                        {/*
+                                {/*
               AgentCard will need data. Assuming agent info is in `product.creator`
               Make sure your IProperty type includes a creator object with these fields.
             */}
-                        {product.creator && (
-                            <AgentCard
-                                agentName={`${product.creator.name}`}
-                                agentTitle={`Principal Broker — ${product.agency.name}`}
-                                agentImageUrl={product.creator.avatar || '/images/default_avatar.jpg'}
-                                agentPhone={product.creator.phone}
-                                rating={4.5} // This data needs to come from your API
-                            />
-                        )}
+                                {product.creator && (
+                                    <AgentCard
+                                        agentName={`${product.creator.name}`}
+                                        agentTitle={`Principal Broker — ${product.agency.name}`}
+                                        agentImageUrl={product.creator.avatar || '/images/default_avatar.jpg'}
+                                        agentPhone={product.creator.phone}
+                                        rating={4.5} // This data needs to come from your API
+                                    />
+                                )}
 
-                        <div className="my-3">
-                            <div className="d-flex flex-wrap gap-2" role="group" aria-label="Contact options">
-                                {whatsapp && <ListingWhatsAppButton href={whatsapp} propertyId={product._id} label={product.status === 'Available' ? 'Discuss a viewing' : 'Discuss available homes'} />}
-                                {call && <ListingCallButton href={`tel:+${call}`} propertyId={product._id} />}
-                            </div>
-                            <p className="small text-muted mt-2">Speak with the agent first to discuss your needs and arrange a suitable viewing.</p>
-                        </div>
+                                <div className="my-3">
+                                    <div className="d-flex flex-wrap gap-2" role="group" aria-label="Contact options">
+                                        {whatsapp && <ListingWhatsAppButton href={whatsapp} propertyId={product._id} label={product.status === 'Available' ? 'Discuss a viewing' : 'Discuss available homes'} />}
+                                        {call && <ListingCallButton href={`tel:+${call}`} propertyId={product._id} />}
+                                    </div>
+                                    <p className="small text-muted mt-2">Speak with the agent first to discuss your needs and arrange a suitable viewing.</p>
+                                </div>
 
-                        {/*
+                                {/*
               AmenitiesGrid would also need a mapping from product.features.
               For now, let's assume it's covered by the tags in ProductInfo.
               */}
-                        <AmenitiesGrid amenities={amenitiesForGrid} />
+                                <AmenitiesGrid amenities={amenitiesForGrid} />
 
-                    </div>
-                </div>
-
-                    {/* Product Description Section */}
-                    {product.description && product.amenities && (
-                        <div className="mt-4 mt-lg-5">
-                            <ProductDescription
-                                initialText={product.description}
-                                fullText={product.description}
-                                keyFeatures={product.amenities}
-                            />
+                            </div>
                         </div>
-                    )}
+
+                        {/* Product Description Section */}
+                        {product.description && product.amenities && (
+                            <div className="mt-4 mt-lg-5">
+                                <ProductDescription
+                                    initialText={product.description}
+                                    fullText={product.description}
+                                    keyFeatures={product.amenities}
+                                />
+                            </div>
+                        )}
                     </div> {/* col-lg-9 */}
                 </div> {/* outer row */}
 
