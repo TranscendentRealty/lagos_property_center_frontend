@@ -4,6 +4,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import AssistedContactLauncher from '../assisted-contact/AssistedContactLauncher';
+import { useAssistedContact } from '../assisted-contact/AssistedContactProvider';
 
 // The navLinks array can live here or be passed as a prop
 const navLinks = [
@@ -15,6 +17,7 @@ const navLinks = [
 
 const NavigationLinks = () => {
     const pathname = usePathname();
+    const assist = useAssistedContact();
 
     return (
         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -33,6 +36,11 @@ const NavigationLinks = () => {
                     </li>
                 );
             })}
+            {assist && <li className="nav-item">
+                <AssistedContactLauncher entryPoint="navigation" className={`nav-link mx-3 text-black fw-semibold ${pathname === '/get-a-shortlist' ? 'active' : ''}`}>
+                    Get a shortlist
+                </AssistedContactLauncher>
+            </li>}
         </ul>
     );
 };

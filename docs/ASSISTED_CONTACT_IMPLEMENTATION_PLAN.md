@@ -1,6 +1,12 @@
 # Assisted contact: implementation plan
 
-**Prepared:** 29 October 2026 (Africa/Lagos). **Status:** proposed implementation; application code has not been changed.
+**Prepared:** 29 October 2026 (Africa/Lagos). **Status:** revised by the owner on 29 October 2026; being implemented.
+
+**Owner revisions (29 October 2026):**
+
+1. Every property on the site is for sale. The plan, forms and copy never mention rent, and there is no buy/rent question.
+2. The form does not ask for a budget at all: no bands, no custom minimum/maximum, no "Other budget". Asking for a budget ceiling has hurt conversion before. Visitors anchor on a self-imposed upper limit even when they could afford the market price of what they want. (The price filters in search are commented out for the same reason; visitors can still sort by price.)
+3. Consent repair is deferred. `readConsent()` and `consentValues()` stay as they are; the owner will restore validated consent once satisfied with assisted contact. The new code still reads consent only through `readConsent()`, so it starts respecting real choices as soon as that function is restored. `eventNames` and `parameterNames` in `measurement.ts` are extended.
 
 Implement one reusable shortlist-request flow in the existing Next.js frontend, accessible whenever a visitor wants help. Add an immediate inline offer to verified empty searches. Once consent, lead storage and agent handling are working, experiment with a small proactive panel after two distinct listing views and 90 seconds of estimated active browsing.
 
@@ -22,7 +28,7 @@ Frontend paths below are relative to `C:/Users/HP/source/repos/Real_Estate/Trans
 | `src/components/user/search/PropertyResultsGrid.tsx`, `SearchContactHelp.tsx` | Empty arrays currently show an empty-state message and direct contact buttons. `SearchContactHelp` is also used in the error branch. The new immediate empty-search offer must be selected by successful search state and total count, not merely by this component's presence or array length. |
 | `src/lib/measurement.ts` | All main call/WhatsApp buttons share `trackContact`, but it has no local suppression signal. Analytics event/parameter allowlists need explicit extensions. Existing Google Ads click conversions use legacy USD 35 values; do not copy those values onto shortlist submissions. |
 | `src/components/user/layout/JourneyMeasurement.tsx` | Measures visible-page elapsed time using `Date.now()`. It has no recent-interaction idle cutoff and cannot supply the proposed active-browsing threshold unchanged. |
-| `src/lib/measurement.ts`, `CookieConsentModal.tsx`, `src/app/layout.tsx`, `Footer.tsx` | `readConsent()` currently returns both categories granted; consent mapping/initialization also grants consent unconditionally. Consent panel and footer preferences are commented out. Restore effective choices before collecting cross-page eligibility state or enabling proactive prompts. |
+| `src/lib/measurement.ts`, `CookieConsentModal.tsx`, `src/app/layout.tsx`, `Footer.tsx` | `readConsent()` currently returns both categories granted; consent mapping/initialization also grants consent unconditionally. Consent panel and footer preferences are commented out. **Owner decision: leave this unchanged for now** (see section 7). Assistance code reads consent only through `readConsent()`. |
 | `src/app/api/contact/route.ts`, `ContactHeroForm.tsx` | Current form requires five inputs in the UI; server checks four for presence and sends through Resend. No durable lead storage, idempotency or form-specific anti-abuse controls were found in that route. Do not use email success as the new lead record. |
 | Backend `backend/models`, `backend/app.js`; admin `admin_client/src/App.tsx` | MongoDB/Mongoose and authenticated admin UI exist, but no lead model/routes/resource were found in the inspected source. A durable intake and a minimal agent register are necessary companion changes outside the frontend. |
 
@@ -31,7 +37,7 @@ The frontend already contains local changes to layout, consent, footer, measurem
 ### Delivery boundaries
 
 - **Release A:** durable request handling, minimal agent register, shared form, manual entry points and contextual empty-search assistance. Tracking acceptance is not required to request help.
-- **Release B:** restored consent behavior, active-browsing eligibility, suppression and the proactive-prompt holdout experiment.
+- **Release B:** active-browsing eligibility, suppression and the proactive-prompt holdout experiment. Consent restoration is owner-managed and outside this plan.
 - **Deferred:** automated shortlisting, a chatbot, WhatsApp Business messaging integration, OTP verification, broad CRM/replay systems and automated marketing sequences. Add these only if subsequent evidence warrants them.
 
 ## 2. Visitor experience
@@ -41,14 +47,14 @@ The frontend already contains local changes to layout, consent, footer, measurem
 Use the report's copy consistently:
 
 > **Want help narrowing this down?**  
-> Tell us your preferred area and budget. Bukunmi can suggest a short list of suitable properties and explain the next steps.  
+> Tell us the area and type of home you have in mind. Bukunmi can suggest a short list of suitable properties and explain the next steps.  
 > **Get a shortlist** · **Keep browsing**
 
 | Surface | Planned behavior |
 |---|---|
 | Persistent contact group | Add a clearly labelled `Get a shortlist` button alongside the existing contact controls. Use a compact text action on mobile; reserve space so it cannot obscure pagination, forms or property facts. |
 | Navigation and footer | Add an assistance action opening the same form, with `/get-a-shortlist` as a real fallback destination. Collapse the mobile navbar before opening the form. |
-| Listing details | Add a secondary `Help me find similar properties` action below direct contact controls. Pass the listing ID, location, transaction type and property type as editable context. |
+| Listing details | Add a secondary `Help me find similar properties` action below direct contact controls. Pass the listing ID, location and property type as editable context. |
 | Verified zero search results | Show the offer inline immediately, in both standard and AI search. Retain change-filters/retry paths and direct call/WhatsApp actions. No timer or tracking consent is necessary for this contextual rendering. |
 | Search error / unsubmitted AI search / empty pagination page | Show the appropriate error, search-start or pagination recovery UI. Manual assistance remains possible, but do not claim the search has no matching properties. |
 | Proactive eligibility reached | Open a compact, nonmodal dismissible panel on supported browsing routes. Do not move keyboard focus or block reading. Clicking its CTA is what opens the form. |
@@ -63,13 +69,12 @@ Use a shared form in a user-opened drawer and on the dedicated `/get-a-shortlist
 
 | Field | Requirement and behavior |
 |---|---|
-| Buy or rent | Required enum; prefill only from explicit search/listing context. Include `Not sure yet`. Never mix sale prices and annual rent bands. |
 | Preferred area | Required choice, including `Not sure yet` and `Other area`. Reuse `availableLocations` in `src/exports/constants.ts`; allow up to three selected areas and a short bounded other-area value. |
-| Budget | Required band selection, with `Not sure yet` and `Other budget`. For other budget, accept numeric NGN min/max, at least one bound, and enforce min <= max. Sale and rent use separate band sets; annual rent must say `/year`. |
-| Buying/renting timeframe | `Within 1 month`, `1–3 months`, `3–6 months`, `Later`, `Researching`, `Not sure yet`. Required choice, including uncertain answers. |
+| Buying timeframe | `Within 1 month`, `1–3 months`, `3–6 months`, `Later`, `Researching`, `Not sure yet`. Required choice, including uncertain answers. |
 | Property type | Optional; reuse canonical existing types and make prefilled values editable. |
+| Bedrooms | Optional; reuse the search filter's values (`1`–`4`, `5+`). |
 
-Proposed seed sale bands: under NGN 100m, NGN 100m–under 200m, NGN 200m–under 400m, NGN 400m–under 700m, NGN 700m+. Proposed annual-rent bands: under NGN 5m, NGN 5m–under 10m, NGN 10m–under 20m, NGN 20m+. These are configuration proposals, not verified inventory-fit ranges. Confirm them against current stock before release; store stable IDs and a band-configuration version. If transaction type is uncertain, use a custom amount plus explicit period or `Not sure yet` instead of guessing a band.
+**No budget question.** The form never asks for a budget, price ceiling or price band (owner revision 2). Bukunmi discusses price during the conversation, once the visitor has seen what the market offers in their preferred area. A listing's price is never copied into the request as a budget.
 
 **Step 2 — How should Bukunmi reach you?**
 
@@ -83,7 +88,7 @@ Validate inline and on the server. Show a field-level error and focus an error s
 
 ### Context and success
 
-Prefill from explicit current search filters or the current listing, with a visible “Based on your current search/property” label. Do not treat a listing's price as the visitor's confirmed budget. Do not infer preferences from a raw AI prompt; copy only structured filters already available, otherwise ask the visitor. After a user edits a field, subsequent navigation must not overwrite it. Use a bounded list of explicitly selected/current property IDs; no full browsing history is required to fulfil a request.
+Prefill from explicit current search filters or the current listing, with a visible “Based on your current search/property” label. Never copy a listing's price into the request. Do not infer preferences from a raw AI prompt; copy only structured filters already available, otherwise ask the visitor. After a user edits a field, subsequent navigation must not overwrite it. Use a bounded list of explicitly selected/current property IDs; no full browsing history is required to fulfil a request.
 
 After the server confirms durable acceptance, display: “Your shortlist request has been received. Bukunmi will review your preferences and contact you through your chosen channel.” Show an opaque request reference and `Keep browsing`. Publish response hours only after the agent agrees to them. Never promise immediate delivery or an appointment.
 
@@ -110,7 +115,7 @@ flowchart TD
 | New frontend file | Responsibility |
 |---|---|
 | `src/types/assistedContact.ts` | Form DTO, discriminated contact channel, context, trigger and UI state types; no browser-only code. |
-| `src/lib/assistedContact/config.ts` | Versioned thresholds, route allowlist, bands and safe client-facing flags. |
+| `src/lib/assistedContact/config.ts` | Versioned thresholds, route allowlist, form enums and safe client-facing flags. |
 | `src/lib/assistedContact/eligibility.ts` | Pure eligibility/session transition functions accepting explicit clocks and state; no React or GA dependency. |
 | `src/lib/assistedContact/storage.ts` | Versioned, consent-aware bounded storage, expiry, corruption handling and cross-tab suppression messages. |
 | `src/lib/contactActivity.ts` | Local event publisher for direct contact actions, independent of analytics delivery. |
@@ -211,17 +216,10 @@ Example of a valid WhatsApp request; all enums and numerical ranges are server v
   "schemaVersion": 1,
   "idempotencyKey": "6feb96da-1778-4daa-a243-aacddce63a02",
   "preferences": {
-    "transactionType": "buy",
     "areas": ["Ikate", "Chevron"],
-    "budget": {
-      "kind": "band",
-      "bandId": "sale_200m_400m",
-      "bandVersion": "v1",
-      "currency": "NGN",
-      "period": "purchase"
-    },
     "timeframe": "one_to_three_months",
-    "propertyType": "Apartment"
+    "propertyType": "apartment",
+    "bedrooms": "3"
   },
   "contact": {
     "channel": "whatsapp",
@@ -257,7 +255,7 @@ Example of a valid WhatsApp request; all enums and numerical ranges are server v
 
 Define contact as one discriminated channel/value pair. For email, validate syntax and a maximum of 254 characters; do not rewrite the local part using provider-specific rules. For telephone channels, accept international numbers, normalize using a maintained parser or explicit country selector plus international validation, and display the normalized number for correction. The existing outbound `contactNumber()` helper only validates configured international-digit strings; it is not a complete inbound phone parser. Do not reject legitimate overseas prospects or require a Nigerian number.
 
-Use discriminated budget variants: `band`, `custom` or `unsure`. For custom, include bounded nonnegative NGN min/max with a period; for unsure, omit fabricated amounts. Restrict area entries and optional strings by count/length. Cap first name at 80 characters, other-area text at 100, notes at 500, property IDs at three and the JSON body at 16 KB. Limit paths to a safe route allowlist and strip query strings; never submit arbitrary page HTML, complete referrers or the raw AI query.
+There is no budget field; reject any `budget`, price or transaction-type key as an unsupported key. Restrict area entries and optional strings by count/length. Cap first name at 80 characters, other-area text at 100, notes at 500, property IDs at three and the JSON body at 16 KB. Limit paths to a safe route allowlist and strip query strings; never submit arbitrary page HTML, complete referrers or the raw AI query.
 
 ### Response contract and retries
 
@@ -314,25 +312,25 @@ Admin routes require authentication and verified access to the relevant agency/o
 
 ## 6. Agent workflow and existing contact form
 
-The smallest useful register is a protected list/detail view in the existing admin interface. It needs owner/stage filters, received time, contact channel, area/budget/timeframe, next action, possible duplicate flags and notification failures. Do not build a full CRM dashboard before validating demand.
+The smallest useful register is a protected list/detail view in the existing admin interface. It needs owner/stage filters, received time, contact channel, area/property type/timeframe, next action, possible duplicate flags and notification failures. Do not build a full CRM dashboard before validating demand.
 
-Use stages `New enquiry -> Contacted -> Qualified -> Viewing booked -> Viewing attended -> Offer/negotiation -> Closed`, with `Nurture`, `Duplicate`, `Spam` and `Lost` available separately. Record concrete lost reasons: budget mismatch, inventory mismatch, unreachable, already found a property or no longer looking. Record the first actual human reply, not when a notification email was sent. Require an agent action to mark a request qualified.
+Use stages `New enquiry -> Contacted -> Qualified -> Viewing booked -> Viewing attended -> Offer/negotiation -> Closed`, with `Nurture`, `Duplicate`, `Spam` and `Lost` available separately. Record concrete lost reasons: price mismatch (agent-observed during conversation), inventory mismatch, unreachable, already found a property or no longer looking. Record the first actual human reply, not when a notification email was sent. Require an agent action to mark a request qualified.
 
 Use timeframe to suggest queue order; do not reject research, overseas or later-stage requests automatically. A qualified opportunity requires an actionable requirement, a reachable person, plausible agency/inventory fit or an agreed alternative, and an agreed next step. Website time, an email address or a phone number alone do not establish that.
 
 Assign Bukunmi as the initial owner and show unassigned work as an explicit operational problem. Agree staffed hours, capacity and a limited follow-up process before release. The report's ten-minute staffed-hours target is an internal starting target; only publish it if sustainable. Track agent minutes and next-action due time, stop on refusal, and obtain separate permission for future property alerts.
 
-Improve `ContactHeroForm.tsx` in the same delivery sequence: first name optional, one preferred contact channel, message required. Stop requiring surname plus both phone and email. Keep this as a general enquiry rather than forcing area/budget questions onto every visitor. Adapt `/api/contact` to the same durable intake service using `requestType: general_contact`; preserve/validate the old DTO temporarily if older clients remain supported. Do not invent unknown preferences for general enquiries. Replace unsafe raw email interpolation and add the same idempotency/anti-abuse treatment. Publish a local suppression signal only after confirmed durable acceptance.
+Improve `ContactHeroForm.tsx` in the same delivery sequence: first name optional, one preferred contact channel, message required. Stop requiring surname plus both phone and email. Keep this as a general enquiry rather than forcing area/timeframe questions onto every visitor. Adapt `/api/contact` to the same durable intake service using `requestType: general_contact`; preserve/validate the old DTO temporarily if older clients remain supported. Do not invent unknown preferences for general enquiries. Replace unsafe raw email interpolation and add the same idempotency/anti-abuse treatment. Publish a local suppression signal only after confirmed durable acceptance.
 
 Decide and document an operational retention period before launch, together with deletion/access handling, responsible owner and notification-provider access. Apply deletion to the main record, duplicate linkage and queued notification data; document backup constraints. The existing privacy page already describes optional choices that the current implementation does not honor. Align both the implementation and notice, including shortlist processing, stored preferences, suppression and follow-up, before enabling the behavioral release. This plan proposes product behavior rather than making a legal-compliance determination.
 
 ## 7. Consent repair and measurement
 
-### Required repair before Release B
+### Consent: deferred by the owner
 
-Restore `readConsent()` to read validated, unexpired choices (or the current in-memory choice when storage fails), returning unknown before a choice. Restore category-sensitive consent values, with advertising personalization denied as the current notice describes. Initialize tags from the actual choice; do not replace one unconditional grant with another code path that still loads tags early.
+This plan does not repair consent. `readConsent()`, `consentValues()`, `initializeMeasurement()`, the commented-out consent panel and the footer preferences control stay unchanged; the owner will restore them separately.
 
-Re-enable the consent panel in the layout and the footer preferences control. Share an explicit consent-panel-open state so assistance can defer correctly, including when preferences are opened later. Test analytics-only, ads-only, both, neither, first visit, expired consent, storage exceptions and withdrawal. Analytics-only may enable behavioral eligibility; ads-only must not. No GA identifier is required for local eligibility if analytics consent exists, but the measured experiment must wait until event delivery is verified.
+Assistance code gets the analytics decision from `readConsent()?.analytics` and nowhere else. It also listens for the existing `tr-open-consent` and `CONSENT_EVENT` window events, so it defers while a consent panel is open and clears behavioral state on withdrawal. While `readConsent()` keeps returning both categories granted, eligibility treats analytics as granted. When the owner restores real choices, the gating described in section 4 takes effect with no further assistance changes.
 
 Keep the local contact-action publisher outside `trackEvent()` and outside any dependency on Google's scripts. This prevents ad blockers or consent refusal from breaking suppression or direct contact.
 
@@ -369,11 +367,11 @@ Choose sample size and review duration from measured baseline qualified-opportun
 
 | Phase | Work and dependencies | Completion evidence |
 |---|---|---|
-| 0. Baseline and contracts | Preserve local edits; confirm field/band enums against inventory; agree owner/hours/retention; document API, statuses, stage values and flags. Record current type/lint/build failures before changes. | Reviewed fixture requests, field copy and concrete acceptance checklist. No production credentials or enquiries required. |
+| 0. Baseline and contracts | Preserve local edits; confirm field enums against inventory; agree owner/hours/retention; document API, statuses, stage values and flags. Record current type/lint/build failures before changes. | Reviewed fixture requests, field copy and concrete acceptance checklist. No production credentials or enquiries required. |
 | 1. Durable intake and register | Implement lead model, atomic idempotency and notification job, protected admin views, retry worker, limits and Next adapter. Wire general-contact migration. | A staging request survives notification failure/restart; agent can retrieve/update it; unauthenticated access fails. |
 | 2. Manual assistance | Add provider, shared two-step form, drawer/page, listing context and all manual entry points. Implement keyboard/mobile layout and generic-contact simplification. | Email-only and WhatsApp-only requests succeed without optional consent; contextual fields stay editable; all launchers reach one flow. |
 | 3. Genuine empty-search offer | Add explicit search state/metadata validation and inline offer integration for both search modes. | Successful zero results show the offer; error/idle/out-of-range page states do not masquerade as inventory shortages. Release A may launch once phases 1–3 pass. |
-| 4. Consent and activity engine | Repair consent behavior, add shared active clock, pure eligibility reducer, bounded storage, cross-tab claims and contact suppression. Keep proactive flag off. | Deterministic timing/state tests and consent/network inspection pass. No timers/profile storage without analytics consent. |
+| 4. Activity engine | Add shared active clock, pure eligibility reducer, bounded storage, cross-tab claims and contact suppression. Keep proactive flag off. | Deterministic timing/state tests and consent/network inspection pass. No timers/profile storage without analytics consent. |
 | 5. Proactive experiment | Add deferred invitation rendering, treatment/control assignment, event allowlists and private outcome linkage. Validate with internal traffic first. | Both groups emit once-only eligibility; only treatment sees the invitation; no repeated/colliding prompts; measurement limitations documented. |
 | 6. Limited rollout and review | Enable for a small initial share of consented traffic, then expand if service/measurement stay healthy. Review agent queue daily during launch. | Rollback switches work; error, duplicate, response-time and workload evidence available; baseline/sample-size plan recorded. |
 
@@ -396,7 +394,7 @@ The frontend has Testing Library dependencies but no test runner script/configur
 
 ### Form/API/integration tests
 
-- Exactly one contact field required for each channel; overseas number support; uncertain area/budget/timeframe accepted. Buy/rent/custom budget periods validated. Back navigation and retry preserve entries; context updates never overwrite edited values.
+- Exactly one contact field required for each channel; overseas number support; uncertain area/timeframe accepted. Budget, price and transaction-type keys rejected as unsupported. Back navigation and retry preserve entries; context updates never overwrite edited values.
 - Malformed JSON, unexpected enums/types, oversized input, honeypot, injection-like text, unsupported keys and excessive array/string values are safely handled. Email rendering escapes user text and headers cannot be injected.
 - Concurrent identical submissions produce one lead/job/reference; a lost response plus retry returns the same reference. A changed payload with the same key conflicts. Similar contacts with different keys become reviewable potential duplicates rather than silent data loss.
 - Database failure cannot produce success. Provider failure after acceptance cannot erase the request. Worker retries, restart recovery and stale job-claim recovery work without duplicate leads.
@@ -415,7 +413,7 @@ React's documented development effect setup/cleanup cycle is a reason to verify 
 
 ## 10. Launch gates, rollback and decisions
 
-**Release A is ready** when a visitor can voluntarily request a shortlist with one contact channel, the request is durably stored and visible to the responsible agent, notification failure is recoverable, empty-search state is truthful, and the mobile/keyboard flow works. **Release B is ready** only when consent is effective, eligibility/suppression works across supported tabs, agent capacity exists, and the experiment's denominator and attribution limits have been verified.
+**Release A is ready** when a visitor can voluntarily request a shortlist with one contact channel, the request is durably stored and visible to the responsible agent, notification failure is recoverable, empty-search state is truthful, and the mobile/keyboard flow works. **Release B is ready** only when eligibility/suppression works across supported tabs, agent capacity exists, and the experiment's denominator and attribution limits have been verified.
 
 Rollback the proactive flag first if prompting misbehaves or handling capacity is exceeded. Retain manual/inline access if intake remains healthy. If intake is unavailable, disable submission with a clear message and existing contact alternatives; preserve already accepted records and retry pending notifications. Do not delete leads or revert schema data as part of UI rollback.
 
@@ -428,10 +426,41 @@ Proposed decisions to confirm during phase 0, with defaults that permit implemen
 | Shortlist production | Human review and selection from current available stock. |
 | Response promise | General receipt confirmation; publish specific staffed-hours promises only after operational agreement. |
 | Timing | Two distinct listings AND 90 seconds estimated active browsing; 60-second activity window, 30-minute inactivity session, seven-day dismissal/submission suppression. Version these as test settings. |
-| Budget bands | Proposed sale/rent seed bands above, adjusted to current stock before release. |
+| Budget | Not asked (owner revision 2). |
 | Marketing | No marketing signup/automated nurture in the first release. Later permission remains separate. |
 | Rollout | Manual/inline service first; proactive experiment off until its own gates pass. |
 | Operational retention | Explicit owner-approved period required before public collection; no unverified numeric retention promise is invented here. |
 
 Implementation should finish the manual, reliable service before optimizing the timer. The business result to establish is whether assistance creates additional useful conversations and qualified opportunities at a manageable amount of agent work.
 
+
+## 11. Implementation status (29 October 2026)
+
+Implemented in both repositories with the owner revisions above. All flags default to off, so nothing changes for visitors until they are set.
+
+### Configuration
+
+| Variable | Where | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_ASSISTED_CONTACT_ENABLED=true` | Frontend (build time) | Launchers (nav, footer, floating, listing), inline zero-results offer, drawer and `/get-a-shortlist` form. |
+| `NEXT_PUBLIC_ASSISTED_CONTACT_PROACTIVE_ENABLED=true` | Frontend (build time) | Release B proactive experiment. Leave off until Release A is healthy. |
+| `ASSISTED_CONTACT_PROACTIVE_KILL_SWITCH=on` | Frontend (runtime) | Stops the proactive offer within about 60 seconds, without a rebuild. |
+| `ASSISTED_CONTACT_INTAKE_ENABLED=true`, `LEAD_BACKEND_URL`, `LEAD_INTAKE_SERVICE_SECRET` | Frontend (server only) | Turns on durable intake. Until all three are set, the shortlist form shows "unavailable" plus direct contact options, and `/api/contact` keeps using the legacy Resend email path. |
+| `LEAD_INTAKE_SERVICE_SECRET` (≥32 chars), optional `LEAD_INTAKE_SERVICE_SECRET_PREVIOUS` | Backend | Same secret as the frontend; the previous one allows rotation. |
+| `LEAD_DEFAULT_AGENCY_ID` (required), `LEAD_DEFAULT_OWNER_ID` (Bukunmi's admin ID) | Backend | Agency scoping for the register; intake returns 503 without an agency. |
+| `LEAD_LOOKUP_SECRET` | Backend | HMAC key for possible-duplicate linkage. Without it, duplicates are not flagged. |
+| `RESEND_API_KEY`, `LEAD_NOTIFICATION_TO`, `LEAD_NOTIFICATION_FROM`, `ADMIN_DASHBOARD_URL` | Backend | Agent alert emails. Missing settings leave jobs retrying with `not_configured`, visible in the register. |
+| `LEAD_RATE_LIMIT_IP_MAX` (5/10 min), `LEAD_RATE_LIMIT_CONTACT_MAX` (3/hour), `LEAD_NOTIFICATION_WORKER=off` | Backend (optional) | Limit tuning; disables the in-process worker if it runs elsewhere. |
+
+### Verification done
+
+- Frontend: `tsc` clean, `next build` (including lint) passes, and 17 Vitest tests cover timing, eligibility, sessions, claims and validation (`npm test`). Runtime checks: `/get-a-shortlist` renders; the adapter returns 403 cross-origin, 503 when intake is off, and 400/422 for malformed or invalid bodies.
+- Backend: 12 new `node --test` tests (validation, replay hashing, lookup keys, email escaping, backoff, secret comparison). The full suite (49) passes. HTTP smoke tests without a database: 401 without the service secret, 400 for malformed/non-JSON bodies, 413 when oversized, 503 (never success) when the database is unavailable.
+
+### Not yet done
+
+- No end-to-end run against a real MongoDB: concurrent idempotency, rate-limit counters, worker claims and restart recovery are untested against a database.
+- The admin client was not type-checked or built locally (it has no `node_modules`). Run `npm run build` in `admin_client` before deploying.
+- `JourneyMeasurement` still uses its own wall-clock timing. It was not migrated to the shared active clock.
+- The retention period, staffed hours and response promise still need owner decisions before public collection.
+- Browser QA is still to do: 360 px, keyboard-only, screen reader, 200% zoom, and multi-tab behavior.

@@ -9,6 +9,7 @@ import Link from 'next/link';
 
 import { icons, images } from '@/exports/images';
 import { CookiePreferencesButton } from "@/components/user/layout/CookieConsentModal";
+import AssistedContactLauncher from '../assisted-contact/AssistedContactLauncher';
 
 
 const Footer = () => {
@@ -84,6 +85,7 @@ const Footer = () => {
                                 Legal & Support</div>
                             <Link href="/privacy-policy" className="footer-item mb-2">
                                 <div className="footer-item mb-2">Privacy policy</div></Link>
+                            <AssistedContactLauncher entryPoint="footer" className="d-block footer-item mb-2">Get a shortlist</AssistedContactLauncher>
                             {call && <ContactLink href={`tel:+${call}`} channel="call" placement="footer" className="d-block footer-item mb-2">Call the agent</ContactLink>}
                             {whatsapp && <ContactLink href={whatsapp} channel="whatsapp" placement="footer" className="d-block footer-item mb-2">Discuss your search</ContactLink>}
                         </div>

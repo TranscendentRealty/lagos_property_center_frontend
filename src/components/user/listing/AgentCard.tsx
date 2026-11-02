@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { FiStar } from 'react-icons/fi'; // For star ratings
 import { Button } from 'react-bootstrap';
+import { publishContactActivity } from '@/lib/contactActivity';
 
 interface AgentCardProps {
   agentName: string;
@@ -19,6 +20,8 @@ const AgentCard: React.FC<AgentCardProps> = ({ agentName, agentTitle, agentImage
 
   const handleCopyPhone = () => {
     navigator.clipboard.writeText(agentPhone).then(() => {
+      // A copy is a conservative signal of intent to contact, not proof of a call.
+      publishContactActivity('phone_copy');
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -58,15 +61,15 @@ const AgentCard: React.FC<AgentCardProps> = ({ agentName, agentTitle, agentImage
         <div className="agent-details flex-grow-1">
           <h6 className="agent-name fw-semibold mb-0">{agentName}</h6>
           <p className="agent-title text-muted small mb-1">{agentTitle}</p>
-          <p
-            className="fw-normal agent-phone mb-0 text-dark"
+          <button
+            type="button"
+            className="btn btn-link p-0 text-start text-decoration-none fw-normal agent-phone mb-0 text-dark"
             onClick={handleCopyPhone}
-            style={{ cursor: 'pointer' }}
-            title="Click to copy"
+            title="Copy phone number"
           >
             Call or Whatsapp: {agentPhone}{' '}
-            <span className="text-muted small">{copied ? '✓ Copied!' : '(tap to copy)'}</span>
-          </p>
+            <span className="text-muted small" aria-live="polite">{copied ? '✓ Copied!' : '(tap to copy)'}</span>
+          </button>
         </div>
         {/* <div className="agent-rating text-end ms-auto">
           <div className="stars-container d-flex mb-1">

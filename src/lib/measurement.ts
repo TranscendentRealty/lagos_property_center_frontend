@@ -1,3 +1,4 @@
+import { publishContactActivity } from './contactActivity';
 export type Consent = { analytics: boolean; ads: boolean };
 export const CONSENT_KEY = 'tr-consent-v1';
 export const CONSENT_EVENT = 'tr-consent-change';
@@ -92,8 +93,11 @@ export function saveConsent(consent: Consent) {
   if (initialized) window.location.reload();
   else initializeMeasurement();
 }
-const eventNames = new Set(['page_view', 'page_engagement', 'ai_section_view', 'search_submit', 'search_results', 'search_error', 'contact_intent']);
-const parameterNames = new Set(['search_mode', 'result_count', 'page_number', 'channel', 'placement', 'property_id', 'engagement_time_msec']);
+const eventNames = new Set(['page_view', 'page_engagement', 'ai_section_view', 'search_submit', 'search_results', 'search_error', 'contact_intent',
+  'assistance_eligible', 'assistance_offer_view', 'assistance_offer_dismiss', 'assistance_open', 'assistance_step_complete',
+  'assistance_submit_success', 'assistance_submit_error']);
+const parameterNames = new Set(['search_mode', 'result_count', 'page_number', 'channel', 'placement', 'property_id', 'engagement_time_msec',
+  'trigger', 'entry_point', 'variant', 'experiment_version', 'step', 'error_code', 'elapsed_band', 'reason']);
 export function trackEvent(name: string, params: Record<string, string | number> = {}, pathname?: string) {
   if (!eventNames.has(name) || !readConsent()?.analytics || !GA_ID) return;
   initializeMeasurement();
@@ -101,7 +105,9 @@ export function trackEvent(name: string, params: Record<string, string | number>
     (typeof value === 'number' ? Number.isFinite(value) : /^[a-z\d_-]{1,50}$/i.test(value))));
   window.gtag?.('event', name, { ...safe, ...pageContext(pathname), send_to: GA_ID, event_time: new Date().toISOString() });
 }
-export function trackContact(channel: 'whatsapp' | 'call', placement: 'listing' | 'floating' | 'empty' | 'footer' | 'agent' | 'contact_page', propertyId?: string) {
+export function trackContact(channel: 'whatsapp' | 'call', placement: 'listing' | 'floating' | 'empty' | 'footer' | 'agent' | 'contact_page' | 'assist', propertyId?: string) {
+  // Suppress proactive offers locally before any consent/GA/Ads early return.
+  publishContactActivity(channel);
   trackEvent('contact_intent', { channel, placement, ...(propertyId ? { property_id: propertyId } : {}) });
   if (!readConsent()?.ads) return;
   initializeMeasurement();

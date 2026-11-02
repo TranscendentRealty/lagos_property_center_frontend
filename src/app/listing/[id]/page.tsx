@@ -18,6 +18,7 @@ import ListingWhatsAppButton from '@/components/user/listing/ListingWhatsAppButt
 import ListingCallButton from '@/components/user/listing/ListingCallButton';
 import { IProperty } from '@/types/property'; // Assuming you have this type defined
 import AmenitiesGrid, { Amenity } from '@/components/user/listing/AmenitiesGrid';
+import ListingAssistanceContext from '@/components/user/assisted-contact/ListingAssistanceContext';
 
 // Read current inventory on every request; edits never wait for a stale ISR entry.
 export const dynamic = 'force-dynamic';
@@ -226,6 +227,8 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                                 {call && <ListingCallButton href={`tel:+${call}`} propertyId={product._id} />}
                             </div>
                             <p className="small text-muted mt-2">Speak with the agent first to discuss your needs and arrange a suitable viewing.</p>
+                            <ListingAssistanceContext propertyId={product._id} city={product.location?.city} propertyType={product.propertyType}
+                                propertySubtype={product.propertySubtype} bedrooms={product.details?.bedrooms} />
                         </div>
 
                         {/*

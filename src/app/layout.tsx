@@ -9,6 +9,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import CookieConsentModal from "@/components/user/layout/CookieConsentModal";
 import FloatingContactButtons from "@/components/user/layout/FloatingWhatsAppButton";
 
+import AssistedContactProvider from "@/components/user/assisted-contact/AssistedContactProvider";
 import AOSAnimation from "@/utils/AosInit";
 import Header from "@/components/user/layout/Header";
 import Footer from "@/components/user/layout/Footer";
@@ -114,23 +115,25 @@ export default function RootLayout({
         />
 
         <JourneyMeasurement />
-        <Header />
+        {/* Client provider wrapping server children; it doesn't turn the pages into client components. */}
+        <AssistedContactProvider>
+          <Header />
 
-        <AOSAnimation>
-          {children}
-        </AOSAnimation>
+          <AOSAnimation>
+            {children}
+          </AOSAnimation>
 
-        {/* --- FIX 1: Moved fixed/absolute components OUTSIDE the animation wrapper --- */}
-        {/* <CookieConsentModal /> */}
-        {(whatsappNumber || callNumber) && (
+          {/* --- FIX 1: Moved fixed/absolute components OUTSIDE the animation wrapper --- */}
+          {/* <CookieConsentModal /> */}
+          {/* Renders nothing when there's no phone number and assisted contact is off. */}
           <FloatingContactButtons
             phoneNumber={whatsappNumber}
             callNumber={callNumber}
             fixedLabel="Speak with Bukunmi now."
           />
-        )}
 
-        <Footer />
+          <Footer />
+        </AssistedContactProvider>
 
       </body>
     </html>

@@ -1,0 +1,129 @@
+// Assisted contact: floating shortlist action, offers, drawer and form.
+
+.floating-contact-container .floating-shortlist-btn {
+  margin-top: 0.5rem;
+  background-color: $black;
+  color: $white;
+  padding: 0.45rem 1rem;
+  border-radius: $border-radius-pill;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba($black, 0.2);
+
+  &:hover,
+  &:focus-visible {
+    color: $white;
+    background-color: lighten($black, 15%);
+  }
+}
+
+// Nonmodal invitation, placed above the floating contact group so neither covers the other.
+.assist-offer--proactive {
+  position: fixed;
+  right: 2rem;
+  bottom: calc(2rem + 9.5rem + env(safe-area-inset-bottom, 0px));
+  z-index: 1049; // Below the floating buttons and Bootstrap overlays.
+  width: min(22rem, calc(100vw - 2rem));
+  background: $white;
+  border: 1px solid rgba($black, 0.12);
+  border-radius: $border-radius-lg;
+  box-shadow: 0 8px 24px rgba($black, 0.18);
+  padding: 1rem;
+  animation: assist-offer-in 0.25s ease-out;
+
+  .assist-offer__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+@keyframes assist-offer-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.assist-offer--inline {
+  max-width: 36rem;
+  margin: 1.5rem auto 0.5rem;
+  padding: 1.25rem;
+  text-align: center;
+  background: $gray-100;
+  border-radius: $border-radius-lg;
+}
+
+.assist-drawer {
+  --bs-offcanvas-width: min(32rem, 100vw);
+
+  .offcanvas-body {
+    // Leave room to scroll the last field above an on-screen keyboard.
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+    overscroll-behavior: contain;
+  }
+}
+
+.assist-form {
+  .assist-area-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    gap: 0.25rem 1rem;
+  }
+
+  fieldset[aria-invalid='true'] legend {
+    color: $danger;
+  }
+
+  h3:focus {
+    outline: none;
+  }
+}
+
+.assist-context-label {
+  background: $gray-100;
+  border-left: 3px solid $black;
+  padding: 0.4rem 0.6rem;
+}
+
+.assist-service-text {
+  color: $gray-700;
+}
+
+.assist-success h3:focus {
+  outline: none;
+}
+
+// Honeypot field: off-screen rather than display:none, so naive bots still fill it in.
+.assist-hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+@include media-breakpoint-down(sm) {
+  .floating-contact-container .floating-shortlist-btn {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .assist-offer--proactive {
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+    bottom: calc(1.5rem + 8.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  // Reserve space so the floating group never hides the last footer links or pagination.
+  footer.footer {
+    padding-bottom: 9rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .assist-offer--proactive {
+    animation: none;
+  }
+}

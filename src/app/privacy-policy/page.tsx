@@ -2,9 +2,13 @@ import { CookiePreferencesButton } from '@/components/user/layout/CookieConsentM
 export const metadata = { title: 'Privacy and cookie choices', alternates: { canonical: '/privacy-policy' } };
 export default function PrivacyPolicy() {
   return <main className="container py-5" style={{ maxWidth: 850 }}>
-    <h1>Privacy and cookie choices</h1><p>Updated 28 October 2026 · Transcendent Realty</p>
+    <h1>Privacy and cookie choices</h1><p>Updated 29 October 2026 · Transcendent Realty</p>
     <h2 className="h4 mt-4">Browsing and contacting us</h2>
     <p>You can browse properties, call us or open WhatsApp without accepting optional measurement. When you contact us, we use the information you choose to share to respond and help with your property search. A contact-button click does not tell us whether you sent a message or completed a call.</p>
+    <h2 className="h4 mt-4">Shortlist requests and enquiries</h2>
+    <p>When you ask for a shortlist or send an enquiry, we store what you give us: your preferred areas, timeframe and property type, the one contact method you choose, your first name if you give it, any note, and which page or property you asked from. We use it to prepare suggestions and contact you about that request. Our agent records follow-up notes and the outcome of the conversation. We don’t sign you up for marketing, and we never send your contact details, notes or request reference to analytics or advertising providers.</p>
+    <p>If you choose WhatsApp, a phone call or email, we contact you that way about your request. If you’d like us to stop, tell us and we will. A new-request alert is sent to our agent by email through our email provider.</p>
+    <p>With website analytics accepted, this browser keeps a small record of which property pages you’ve viewed and your recent browsing time. We use it to decide whether to offer help with a shortlist. It also records whether you dismissed that offer, so we don’t show it again for seven days. It contains no contact details, stays in this browser, and is deleted when you withdraw analytics.</p>
     <h2 className="h4 mt-4">Your choices</h2>
     <p>Website analytics and advertising measurement are separate, optional choices. Both start off for every visitor. Your choice is stored in this browser for up to 180 days before we ask again. You can change or withdraw it here or through the footer.</p>
     <CookiePreferencesButton />

@@ -1,17 +1,16 @@
 import React from 'react';
 import PropertyCard from '../fragments/PropertyCard';
-import { Property } from '@/types/common';
 import { IProperty } from '@/types/property';
-import EmptyStateMessage from '../fragments/EmptyStateMessage';
-import SearchContactHelp from './SearchContactHelp';
 
 interface PropertyResultsGridProps {
   properties: IProperty[];
   loading?: boolean;
   aiSearch?: boolean;
+  // The parent decides what an empty grid means (not yet searched, genuinely no matches, or an empty page).
+  empty?: React.ReactNode;
 }
 
-const PropertyResultsGrid: React.FC<PropertyResultsGridProps> = ({ properties, loading, aiSearch = false }) => {
+const PropertyResultsGrid: React.FC<PropertyResultsGridProps> = ({ properties, loading, aiSearch = false, empty = null }) => {
   if (loading) {
     return (
       <div className="text-center py-5">
@@ -23,16 +22,7 @@ const PropertyResultsGrid: React.FC<PropertyResultsGridProps> = ({ properties, l
     );
   }
 
-  if (!properties || properties.length === 0) {
-    return (
-      <div className='px-3 px-lg-0'>
-        <EmptyStateMessage
-          title="No Properties Found"
-          message="We couldn’t find available properties matching this request. Try a different location or property type, or let an agent help." />
-        <SearchContactHelp />
-      </div>
-    );
-  }
+  if (!properties || properties.length === 0) return <>{empty}</>;
 
   return (
     <div className="row g-4 property-results-grid mx-0">
