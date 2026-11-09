@@ -28,7 +28,7 @@ const HeroSection = () => {
     const [price, setPrice] = useState({ min: '', max: '' });
 
 
-    useEffect(() => {}, [activeTab, location, propertyType, bedrooms]);
+    useEffect(() => { }, [activeTab, location, propertyType, bedrooms]);
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -56,14 +56,14 @@ const HeroSection = () => {
             className="position-relative hero-section-wrapper" // Added a class for easier targeting
             data-aos="fade-down"
             data-aos-ease="ease-in"
-            data-aos-duration="500"
+            data-aos-duration="1000"
             data-aos-once
         >
             <Carousel
                 fade
                 controls={false}
                 indicators={false} // Hide indicators for a clean background look
-                interval={1000}
+                interval={5000}
                 className="property-showcase-carousel"
             >
                 {backgroundImages.map((image, index) => (

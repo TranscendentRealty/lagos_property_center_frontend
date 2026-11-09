@@ -103,6 +103,8 @@ export function trackEvent(name: string, params: Record<string, string | number>
 }
 export function trackContact(channel: 'whatsapp' | 'call', placement: 'listing' | 'floating' | 'empty' | 'footer' | 'agent' | 'contact_page', propertyId?: string) {
   trackEvent('contact_intent', { channel, placement, ...(propertyId ? { property_id: propertyId } : {}) });
+  // These Ads actions measure only listing and floating buttons; other placements remain GA4-only.
+  if (placement !== 'listing' && placement !== 'floating') return;
   if (!readConsent()?.ads) return;
   initializeMeasurement();
   const labels = {
@@ -110,7 +112,7 @@ export function trackContact(channel: 'whatsapp' | 'call', placement: 'listing' 
     floating: { whatsapp: 'fMnfCIjkmZwcEKOApqlD', call: 'jTWDCN-VyZ4cEKOApqlD' }
   };
   window.gtag?.('event', 'conversion', {
-    ...pageContext(), send_to: `${ADS_ID}/${labels[placement === 'listing' ? 'listing' : 'floating'][channel]}`,
+    ...pageContext(), send_to: `${ADS_ID}/${labels[placement][channel]}`,
     value: 35, currency: 'USD'
   }); // Preserve legacy value pending account audit; not verified revenue.
 }

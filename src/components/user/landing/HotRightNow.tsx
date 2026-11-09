@@ -6,7 +6,7 @@ import { IProperty } from '@/types/property';
 
 const HotRightNow = ({
     properties
-} : HotRightNowProps) => {
+}: HotRightNowProps) => {
 
     const dummyProperties = [
         {
@@ -45,7 +45,7 @@ const HotRightNow = ({
     ];
 
     return (
-        <section className={` ${styles.landingSection}`} id='hot-right-now'>
+        <section className={` ${styles.landingSection} mt-5 mt-md-0`} id='hot-right-now'>
             <hgroup className="section-heading">
                 <h2>Hot Right Now</h2>
                 <p>Our hot selling properties</p>
@@ -71,5 +71,5 @@ const HotRightNow = ({
 export default HotRightNow
 
 interface HotRightNowProps {
-  properties: Array<IProperty>;
+    properties: Array<IProperty>;
 }
